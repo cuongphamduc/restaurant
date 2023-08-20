@@ -19,9 +19,6 @@ const billApi = {
 
   add(data) {
     const url = '/themhoadon';
-    const formData = new FormData();
-    console.log("vta", data)
-    formData.append("ma", data)
     return axiosClient.post(url, data);
   },
 

@@ -59,7 +59,8 @@ const CreateForm = (props) => {
         const { data } = await billApi.add({
           sdt: values.sdt,
           list_monan: _list_monan,
-          list_soluong: _list_soluong
+          list_soluong: _list_soluong,
+          tennguoidung: "admin"
         });
       } catch (error) {
         console.log('Failed to fetch bill list: ', error);
