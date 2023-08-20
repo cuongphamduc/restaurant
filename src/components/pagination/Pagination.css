@@ -1,0 +1,105 @@
+
+.paginition-container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 5px;
+}
+
+.paginition-container .paginition-container__info-view-small{
+  width: 15% !important;
+}
+
+.paginition-container .paginition-container__handle-box-view-small{
+  width: 85% !important;
+}
+
+
+.paginition-container .info {
+  width: 30%;
+  font-weight: bold;
+  margin-left: 10px;
+  box-sizing: border-box;
+
+  display: flex;
+  align-items: center;
+}
+
+.paginition-container .info .info__item {
+  margin-right: 20px;
+  color: #0F172B;
+  font-weight: 400;
+}
+
+.paginition-container .info .info__drop-down {
+  min-width: 50px;
+  width: max-content;
+}
+
+.paginition-container .handle-box {
+  width: 70%;
+  margin-right: 10px;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.paginition-container .handle-box .buttons .button{
+  min-width: 30px;
+  height: 30px;
+  border-radius: 3px;
+  margin: 5px;
+  background-color: transparent;
+  color: #0F172B;
+  border: none;
+  text-align: center;
+  cursor: pointer;
+}
+
+.paginition-container .handle-box .buttons .button-active {
+  background-color: #0F172B;
+  color: #b7b9bf    !important;
+}
+
+.paginition-container .handle-box .buttons .button:hover {
+  background-color: #0F172B;
+  color: #b7b9bf    !important;
+}
+
+.paginition-container .handle-box .jump {
+  margin-left: 20px;
+  box-sizing: border-box;
+}
+
+.paginition-container .handle-box .jump span {
+  margin: 0 5px;
+  color: #0F172B;
+}
+
+.paginition-container .handle-box .jump input {
+  width: 48px;
+  height: 30px;
+  border-radius: 5px;
+  border: 1px solid #0F172B;
+  text-align: center;
+  color: #303030;
+  background-color: #b7b9bf;
+}
+
+.paginition-container .handle-box .jump input:focus {
+  outline: none;
+}
+
+.paginition-container .btn-next-page .btn-pre-page {
+  background-color: #ebf3ff;
+  color: #141ed2;
+}
+
+.paginition-container input[type='number'] {
+  -moz-appearance: textfield;
+}
+
+.paginition-container input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}

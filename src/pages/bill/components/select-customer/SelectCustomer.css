@@ -1,0 +1,103 @@
+.select-customer-container{
+    width: 100%;
+}
+
+.select-customer-container__search{
+    width: 100%;
+
+    display: flex;
+    flex-direction: row;
+}
+
+.select-customer-container__search input{
+    width: 300px;
+    height: 30px;
+    border: 1px solid #BDBDBD;
+    border-radius: 6px;
+    padding: 5px;
+    box-sizing: border-box;
+}
+
+.select-customer-container__search button{
+    width: 30px;
+    height: 30px;
+    margin-left: 10px;
+    border: 1px solid #BDBDBD;
+    border-radius: 6px;
+    padding: 5px;
+    box-sizing: border-box;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.select-customer-container__list{
+    margin-top: 10px;
+    width: 100%;
+}
+
+.select-customer-container__list .list-customer__header{
+    display: flex;
+    flex-direction: row;
+    height: 40px;
+    width: 100%;
+    background-color: #0F172B;
+    border-radius: 10px 10px 0 0;
+}
+
+.select-customer-container__list .list-customer__content{
+    max-height: 60vh;
+    width: 100%;
+    overflow: auto;
+}
+
+.select-customer-container__list .list-customer__line{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    border-bottom: 1px solid #BDBDBD;
+}
+
+.select-customer-container__list .list-customer__header__item{
+    height: 100%;
+
+    display: flex;
+    /* justify-content: center; */
+    padding: 10px;
+    align-items: center;
+    color: #b7b9bf;
+    text-align: left;
+}
+
+.select-customer-container__list .list-customer__content__item{
+    height: 100%;
+
+    display: flex;
+    /* justify-content: center; */
+    padding: 10px;
+    align-items: center;
+    color: #0F172B;
+    text-align: left;
+}
+
+.select-customer-container__list .list-customer__line:hover{
+    background-color: #CFD8DC;
+    user-select: none;
+}
+
+.select-customer-container__list .name{
+    width: 20%;
+}
+
+.select-customer-container__list .birthday{
+    width: 20%;
+}
+
+.select-customer-container__list .phone-number{
+    width: 20%;
+}
+
+.select-customer-container__list .address{
+    width: 40%;
+}
