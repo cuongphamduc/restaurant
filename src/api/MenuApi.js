@@ -29,14 +29,26 @@ const menuApi = {
     });
   },
 
-  update(data) {
-    const url = `/products/${data.id}`;
-    return axiosClient.patch(url, data);
+  update(name, data, file) {
+    const url = '/suamonan';
+    const formData = new FormData();
+    formData.append("old_tenmonan", name)
+    formData.append("tenmonan", data.tenmonan)
+    formData.append("gia", data.gia)
+    formData.append("mota", data.mota)
+    if (file !== undefined){
+      formData.append("in_file", file)
+    }
+    return axiosClient.post(url, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
   },
 
-  remove(id) {
-    const url = `/products/${id}`;
-    return axiosClient.delete(url);
+  remove(name) {
+    const url = `/xoamonan`;
+    return axiosClient.post(url, {tenmonan: name},)
   },
 };
 

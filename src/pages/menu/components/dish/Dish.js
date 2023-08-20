@@ -2,11 +2,19 @@ import React from 'react'
 import './Dish.css'
 import avater from './../../../../assets/img/about-4.jpg'
 
-const Dish = ({data, onClick}) => {
+const Dish = ({isEdit, data, onClick, onRemove, onEdit}) => {
   const handleClick = () => {
     if (onClick){
       onClick()
     }
+  }
+
+  const handleEdit = () => {
+    onEdit(data)
+  }
+
+  const handleRemove = () => {
+    onRemove(data)
   }
 
   return (
@@ -19,7 +27,12 @@ const Dish = ({data, onClick}) => {
             </div>
             <div className="dish-container__bottom">
                 <div className="dish-container__description">{data?.mota}</div>
-                <button className="dish-container__add bg-danger">Thêm</button>
+                {
+                  isEdit && <div>
+                    <button type='button' onClick={handleEdit} className="dish-container__add bg-success">Sửa</button>
+                    <button type='button' onClick={handleRemove} className="dish-container__add bg-danger">Xóa</button>
+                  </div>
+                }
             </div>
 
         </div>

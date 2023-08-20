@@ -11,7 +11,8 @@ import UploadFileField from '../../../../components/form-controls/upload-file-fi
 const CreateForm = (props) => {
   const schema = yup.object().shape({
     ten: yup.string().required('Chưa nhập tên!'),
-    sdt: yup.string().required('Chưa nhập số điện thoại!')
+    sdt: yup.string().required('Chưa nhập số điện thoại!').matches(/(0[3|5|7|8|9])+([0-9]{8})\b/g, "Nhập sai định dạng!"),
+    email: yup.string().matches(/^\S+@\S+\.\S+$/, "Nhập sai định dạng!")
   });
 
   const form = useForm({

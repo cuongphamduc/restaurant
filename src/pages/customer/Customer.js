@@ -114,6 +114,7 @@ const Customer = () => {
         console.log('Failed to remove customer: ', error);
       }
     })();
+    getCustomerData()
   }
 
   useEffect(() => {

@@ -7,11 +7,14 @@ import CreateForm from './components/create-form/CreateForm'
 import Modal from './../../components/modal/Modal'
 import { useState } from 'react'
 import menuApi from './../../api/MenuApi'
+import UpdateForm from './components/update-form/UpdateForm'
 
 const Menu = () => {
   const [search, setSearch] = useState("")
   const [menuList, setMenuList] = useState([])
   const [isVisibleCreateForm, setIsVisibleCreateForm] = useState(false)
+  const [isVisibleUpdateForm, setIsVisibleUpdateForm] = useState(false)
+  const [currentDish, setCurrentDish] = useState('')
 
   const paginition1 = {
       page: 1,
@@ -40,6 +43,30 @@ const Menu = () => {
     })();
   }
 
+  const onChangeSearch = (e) => {
+    setSearch(e.target.value)
+  }
+
+  const handleSearch = () => {
+    getMenuData()
+  }
+
+  const handleEdit = (dish) => {
+    setCurrentDish(dish)
+    setIsVisibleUpdateForm(true)
+  }
+
+  const handleRemove = (dish) => {
+    (async () => {
+      try {
+        const { data } = await menuApi.remove(dish.tenmonan);
+      } catch (error) {
+        console.log('Failed to remove menu: ', error);
+      }
+    })();
+    getMenuData()
+  }
+
   useEffect(() => {
     getMenuData()
   }, [])
@@ -51,9 +78,9 @@ const Menu = () => {
         <div className="menu-container__title">Thực đơn</div>
         <div className="menu-container__tool-bar">
           <div className="menu-container__search">
-            <input className="menu-container__input-search"></input>
+            <input onChange={onChangeSearch} className="menu-container__input-search"></input>
             <button className="menu-container__button-search"
-              
+              onClick={handleSearch}
             >
               <i class="bi bi-search me-3"></i>
             </button>
@@ -68,7 +95,7 @@ const Menu = () => {
           {
             menuList.map((menu, index) => {
               return (
-                <Dish data={menu}></Dish>
+                <Dish isEdit={true} onRemove={handleRemove} onEdit={handleEdit} data={menu}></Dish>
               )
             })
           }
@@ -85,6 +112,12 @@ const Menu = () => {
         visible={isVisibleCreateForm}
         setVisible={setIsVisibleCreateForm}
       ></CreateForm>
+      <UpdateForm
+        data={currentDish}
+        getMenuData={getMenuData}
+        visible={isVisibleUpdateForm}
+        setVisible={setIsVisibleUpdateForm}
+      ></UpdateForm>
     </div>
   )
 }
