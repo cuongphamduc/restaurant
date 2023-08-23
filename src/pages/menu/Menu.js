@@ -12,6 +12,12 @@ import UpdateForm from './components/update-form/UpdateForm'
 const Menu = () => {
   const [search, setSearch] = useState("")
   const [menuList, setMenuList] = useState([])
+  const [menuPaginition, setMenuPaginition] = useState({
+    page: 1,
+    limit: 0,
+    total_records: 0,
+    total_pages: 0
+  })
   const [isVisibleCreateForm, setIsVisibleCreateForm] = useState(false)
   const [isVisibleUpdateForm, setIsVisibleUpdateForm] = useState(false)
   const [currentDish, setCurrentDish] = useState('')
@@ -24,19 +30,54 @@ const Menu = () => {
   }
 
   function handlePageChange(newPage){
-      console.log(newPage)
+    (async () => {
+      try {
+        const { data, paginition } = await menuApi.getAll({
+          key: search,
+          lower: "",
+          upper: "",
+          idhoadon: "",
+          page: newPage,
+          limit: menuPaginition.limit
+        });
+        setMenuList(data);
+        setMenuPaginition(paginition)
+      } catch (error) {
+        console.log('Failed to fetch menu list: ', error);
+      }
+    })();
+  }
+
+  function onNumberItemChange(newNumberItem){
+    (async () => {
+      try {
+        const { data, paginition } = await menuApi.getAll({
+          key: search,
+          lower: "",
+          upper: "",
+          idhoadon: "",
+          page: menuPaginition.page,
+          limit: newNumberItem
+        });
+        setMenuList(data);
+        setMenuPaginition(paginition)
+      } catch (error) {
+        console.log('Failed to fetch menu list: ', error);
+      }
+    })();
   }
 
   const getMenuData = () => {
     (async () => {
       try {
-        const { data } = await menuApi.getAll({
+        const { data, paginition } = await menuApi.getAll({
           key: search,
           lower: "",
           upper: "",
           idhoadon: ""
         });
         setMenuList(data);
+        setMenuPaginition(paginition)
       } catch (error) {
         console.log('Failed to fetch menu list: ', error);
       }
@@ -101,12 +142,13 @@ const Menu = () => {
           }
         </div>
       </div>
-      {/* <div className="menu-container__paginition">
+      <div className="menu-container__paginition">
         <Pagination
-          pagination={paginition1}
+          pagination={menuPaginition}
           onPageChange={handlePageChange}
+          onNumberItemChange={onNumberItemChange}
         ></Pagination>
-      </div> */}
+      </div>
       <CreateForm
         getMenuData={getMenuData}
         visible={isVisibleCreateForm}

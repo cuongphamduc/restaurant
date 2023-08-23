@@ -7,7 +7,10 @@ const Table = ({
   columns,
   dataSource,
   isShowNum,
-  isShowPaginition
+  isShowPaginition,
+  onPageChange,
+  onNumberItemChange,
+  paginition
 }) => {
 
   const dataTable = dataSource?.map((row, index) => {
@@ -46,7 +49,11 @@ const Table = ({
   }
 
   function handlePageChange(newPage){
-      console.log(newPage)
+    onPageChange(newPage)
+  }
+
+  function handleNumberItemChange(newNumber){
+    onNumberItemChange(newNumber)
   }
 
   return (
@@ -64,17 +71,18 @@ const Table = ({
       </div>
       <div className="table-container__content">
         {dataSource && dataSource.length >= 1 && dataTable}
+        {(!dataSource || dataSource.length < 1) && (
+          <div className="empty">
+            <div className="logo"></div>
+            <div className="text">Không có dữ liệu</div>
+          </div>
+        )}
         {isShowPaginition && <Pagination
-          pagination={paginition1}
+          pagination={paginition}
           onPageChange={handlePageChange}
+          onNumberItemChange={handleNumberItemChange}
         ></Pagination>}
       </div>
-      {(!dataSource || dataSource.length < 1) && (
-        <div className="empty">
-          <div className="logo"></div>
-          <div className="text">Không có dữ liệu</div>
-        </div>
-      )}
     </div>
   );
 };

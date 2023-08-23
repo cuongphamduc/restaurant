@@ -81,19 +81,64 @@ const Customer = () => {
   const [search, setSearch] = useState('')
   const [currentCustomer, setCurrentCustomer] = useState('')
   const [listCustomer, setListCustomer] = useState([])
+  const [customerpaginition, setCustomerPaginition] = useState({
+    page: 1,
+    limit: 0,
+    total_records: 0,
+    total_pages: 0
+  })
 
   const getCustomerData = () => {
     (async () => {
       try {
-        const { data } = await customerApi.getAll({
+        const { data, paginition } = await customerApi.getAll({
           key: search,
           lower: "",
           upper: "",
           idhoadon: ""
         });
         setListCustomer(data);
+        setCustomerPaginition(paginition)
       } catch (error) {
         console.log('Failed to fetch customer list: ', error);
+      }
+    })();
+  }
+
+  function handlePageChange(newPage){
+    (async () => {
+      try {
+        const { data, paginition } = await customerApi.getAll({
+          key: search,
+          lower: "",
+          upper: "",
+          idhoadon: "",
+          page: newPage,
+          limit: customerpaginition.limit
+        });
+        setListCustomer(data)
+        setCustomerPaginition(paginition)
+      } catch (error) {
+        console.log('Failed to fetch menu list: ', error);
+      }
+    })();
+  }
+
+  function onNumberItemChange(newNumberItem){
+    (async () => {
+      try {
+        const { data, paginition } = await customerApi.getAll({
+          key: search,
+          lower: "",
+          upper: "",
+          idhoadon: "",
+          page: customerpaginition.page,
+          limit: newNumberItem
+        });
+        setListCustomer(data)
+        setCustomerPaginition(paginition)
+      } catch (error) {
+        console.log('Failed to fetch menu list: ', error);
       }
     })();
   }
@@ -136,7 +181,7 @@ const Customer = () => {
         </div>
       </div>
       <div className="customer-container__content">
-        <Table columns={columns} dataSource={listCustomer}></Table>
+      <Table onNumberItemChange={onNumberItemChange} onPageChange={handlePageChange} paginition={customerpaginition} isShowPaginition={true} columns={columns} dataSource={listCustomer}></Table>
       </div>
       <CreateForm
         getCustomerData={getCustomerData}

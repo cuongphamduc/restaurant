@@ -9,6 +9,7 @@ const Input = (props) => {
             <div className="input-container__info">
                 <input
                     id={props.id}
+                    placeholder={props.placeholder}
                     className={`${(props.error) ? "input-container__error" : ""}`}
                     type={props.type}
                     onChange={(e) => {

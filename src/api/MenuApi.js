@@ -6,7 +6,8 @@ const menuApi = {
 
     // Build response and return
     return {
-      data: menuList
+      data: menuList.data,
+      paginition: menuList.info
     };
   },
 

@@ -1,11 +1,12 @@
 import React from 'react'
 import hero from './../../assets/img/hero.png'
-import { Route, Router, RouterProvider, createBrowserRouter } from 'react-router-dom'
+import { Route, Router, RouterProvider, Routes, createBrowserRouter } from 'react-router-dom'
 import Home from '../../pages/home/Home'
 import Menu from '../../pages/menu/Menu'
 import './Main.css'
 import Customer from '../../pages/customer/Customer'
 import Bill from '../../pages/bill/Bill'
+import Login from '../../pages/login/Login'
 
 const Main = () => {
     const router = createBrowserRouter([
@@ -25,11 +26,21 @@ const Main = () => {
         path: "/bill",
         element: <Bill></Bill>,
     },
+    {
+        path: "/login",
+        element: <Login></Login>,
+    },
     ]);
 
     return (
         <div className="main-container">
-            <RouterProvider router={router} />
+            <Routes>
+                <Route path="/" element={<Home></Home>}/> {/* 👈 Renders at /app/ */}
+                <Route path="/menu" element={<Menu></Menu>}/> {/* 👈 Renders at /app/ */}
+                <Route path="/customer" element={<Customer></Customer>}/> {/* 👈 Renders at /app/ */}
+                <Route path="/bill" element={<Bill></Bill>}/> {/* 👈 Renders at /app/ */}
+                <Route path="/login" element={<Login></Login>}/> {/* 👈 Renders at /app/ */}
+            </Routes>
         </div>
     )
 }

@@ -1,6 +1,7 @@
 import React from 'react'
 import hero from './../../assets/img/hero.png'
 import logo from './../../assets/logo/logo.png'
+import { Link } from 'react-router-dom'
 
 const Header = () => {
   return (
@@ -14,10 +15,10 @@ const Header = () => {
             </button>
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <div class="navbar-nav ms-auto py-0 pe-4">
-                    <a href="/" class="nav-item nav-link active">Trang chủ</a>
-                    <a href="/menu" class="nav-item nav-link">Thực đơn</a>
-                    <a href="/customer" class="nav-item nav-link">Khách hàng</a>
-                    <a href="/bill" class="nav-item nav-link">Hóa đơn</a>
+                    <Link to="/" class="nav-item nav-link">Trang chủ</Link>
+                    <Link to="/menu" class="nav-item nav-link">Thực đơn</Link>
+                    <Link to="/customer" class="nav-item nav-link">Khách hàng</Link>
+                    <Link to="/bill" class="nav-item nav-link">Hóa đơn</Link>
                     {/* <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
                         <div class="dropdown-menu m-0">
@@ -26,7 +27,7 @@ const Header = () => {
                             <a href="testimonial.html" class="dropdown-item">Testimonial</a>
                         </div>
                     </div> */}
-                    <a href="contact.html" class="nav-item nav-link">Liên lạc</a>
+                    {/* <a href="contact.html" class="nav-item nav-link">Liên lạc</a> */}
                 </div>
                 {/* <a href="" class="btn btn-primary py-2 px-4">Book A Table</a> */}
             </div>

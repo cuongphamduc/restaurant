@@ -20,6 +20,7 @@ const InputField = (props) => {
                     onChange={onChange}
                     value={value}
                     type={type}
+                    placeholder={props.placeholder}
                     error={!!errors[name]}
                     errorMessage={errors[name] && errors[name].message}
                 />

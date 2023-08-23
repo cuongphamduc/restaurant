@@ -99,18 +99,63 @@ const Bill = () => {
   const [fromTime, setFromTime] = useState('')
   const [toTime, setToTime] = useState('')
   const [listBill, setListBill] = useState([])
+  const [billPaginition, setBillPaginition] = useState({
+    page: 1,
+    limit: 0,
+    total_records: 0,
+    total_pages: 0
+  })
 
   const getBillData = () => {
     (async () => {
       try {
-        const { data } = await billApi.getAll({
+        const { data, paginition } = await billApi.getAll({
           key:search,
           lower: fromTime,
           upper: toTime
         });
-        setListBill(data);
+        setListBill(data)
+        setBillPaginition(paginition)
       } catch (error) {
         console.log('Failed to fetch bill list: ', error);
+      }
+    })();
+  }
+
+  function handlePageChange(newPage){
+    (async () => {
+      try {
+        const { data, paginition } = await billApi.getAll({
+          key: search,
+          lower: "",
+          upper: "",
+          idhoadon: "",
+          page: newPage,
+          limit: billPaginition.limit
+        });
+        setListBill(data)
+        setBillPaginition(paginition)
+      } catch (error) {
+        console.log('Failed to fetch menu list: ', error);
+      }
+    })();
+  }
+
+  function onNumberItemChange(newNumberItem){
+    (async () => {
+      try {
+        const { data, paginition } = await billApi.getAll({
+          key: search,
+          lower: "",
+          upper: "",
+          idhoadon: "",
+          page: billPaginition.page,
+          limit: newNumberItem
+        });
+        setListBill(data)
+        setBillPaginition(paginition)
+      } catch (error) {
+        console.log('Failed to fetch menu list: ', error);
       }
     })();
   }
@@ -150,7 +195,7 @@ const Bill = () => {
         </div>
       </div>
       <div className="bill-container__content">
-        <Table isShowPaginition={false} columns={columns} dataSource={listBill}></Table>
+        <Table onNumberItemChange={onNumberItemChange} onPageChange={handlePageChange} paginition={billPaginition} isShowPaginition={true} columns={columns} dataSource={listBill}></Table>
       </div>
       <CreateForm
         getBillData={getBillData}
