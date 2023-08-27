@@ -17,12 +17,12 @@ const Pagination = ({
   if (!pagination) {
     pagination = {
       page: 0,
-      size: 0,
+      limit: 0,
       totalPage: 0,
       totalItem: 0,
     };
   }
-  const { page, size, totalPage, totalItem } = pagination;
+  const { page, limit, totalPage, totalItem } = pagination;
 
   const numberOfPages = [];
   for (let i = 1; i <= totalPage; i++) {
@@ -33,7 +33,7 @@ const Pagination = ({
   const [currentPage, setCurrentPage] = useState(page);
   const [arrOfCurrentPage, setArrOfCurrentPage] = useState([]);
   const [toastList, setToastList] = useState([]);
-  const [numberShow, setNumberShow] = useState(size);
+  const [numberShow, setNumberShow] = useState(limit);
   const [showTotal, setShowTotal] = useState(true);
   let toastProperties = null;
 
@@ -47,8 +47,8 @@ const Pagination = ({
   }, [refContainer]);
 
   useEffect(() => {
-    setNumberShow(size);
-  }, [size]);
+    setNumberShow(limit);
+  }, [limit]);
 
   const showToast = (type, title, message) => {
     toastProperties = {
@@ -184,9 +184,9 @@ const Pagination = ({
       >
         {showTotal && (
           <div className="info__item">
-            Hiển thị {totalItem > 0 ? (page - 1) * size + 1 : 0}-
-            {(page - 1) * size + size < totalItem
-              ? (page - 1) * size + size
+            Hiển thị {totalItem > 0 ? (page - 1) * limit + 1 : 0}-
+            {(page - 1) * limit + limit < totalItem
+              ? (page - 1) * limit + limit
               : totalItem}{' '}
             của {totalItem}
           </div>

@@ -12,8 +12,8 @@ const CreateForm = (props) => {
   const schema = yup.object().shape({
     tenmonan: yup.string().required('Chưa nhập tên món ăn!'),
     gia: yup.number("Giá phải là số!").integer().min(1, "Giá phải lớn hơn 0!").required('Chưa nhập giá!'),
-    hinhanh: yup.string().required('Chưa chọn hình ảnh!'),
-    mota: yup.string().required('Chưa nhập mô tả!'),
+    hinhanh: yup.string(),
+    mota: yup.string(),
   });
 
   const form = useForm({

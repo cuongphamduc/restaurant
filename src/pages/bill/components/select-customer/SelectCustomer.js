@@ -35,7 +35,9 @@ const SelectCustomer = ({onSelect, close}) => {
               key: search,
               lower: "",
               upper: "",
-              idhoadon: ""
+              idhoadon: "",
+              page: 1,
+              limit: 0
             });
             setListCustomer(data);
           } catch (error) {

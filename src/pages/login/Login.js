@@ -42,9 +42,13 @@ const Login = () => {
           tennguoidung: values.tennguoidung,
           matkhau: values.matkhau
         }
-        const { data } = await loginApi.add(formData);
-        dispatch(setIsLogin())
-        setIsError(false)
+        const data = await loginApi.login(formData);
+        console.log(data)
+        if (data.quyen != null){
+          dispatch(setIsLogin())
+          setIsError(false)
+        }
+        setIsError(true)
       } catch (error) {
         setIsError(true)
         console.log('Failed to fetch customer list: ', error);

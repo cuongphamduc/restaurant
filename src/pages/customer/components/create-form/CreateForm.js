@@ -12,8 +12,9 @@ const CreateForm = (props) => {
   const schema = yup.object().shape({
     ten: yup.string().required('Chưa nhập tên!'),
     sdt: yup.string().required('Chưa nhập số điện thoại!').matches(/(0[3|5|7|8|9])+([0-9]{8})\b/g, "Nhập sai định dạng!"),
-    email: yup.string().matches(/^\S+@\S+\.\S+$/, "Nhập sai định dạng!")
-  });
+    email: yup.string(),
+    congty: yup.string()
+  },  [['email']]);
 
   const form = useForm({
     defaultValues: {
@@ -21,24 +22,24 @@ const CreateForm = (props) => {
       sdt: '',
       ngaysinh: '',
       diachi: '',
-      email: ''
+      email: '',
+      congty: ''
     },
     resolver: yupResolver(schema),
   })
 
   const handleSubmit = (values) => {
-    (async () => {
-      try {
-        let formData = {...values, ...{old_sdt: ""}}
-        console.log(formData)
-        const { data } = await customerApi.add(formData);
-      } catch (error) {
-        console.log('Failed to fetch customer list: ', error);
-      }
-    })();
-    props.getCustomerData()
-    form.reset()
-    props.setVisible(false)
+    try {
+      let formData = {...values}
+      console.log(formData)
+      const { data } = customerApi.add(formData).then((data) => {
+          props.getCustomerData()
+            form.reset()
+            props.setVisible(false)
+      })
+    } catch (error) {
+      console.log('Failed to fetch customer list: ', error);
+    }
   }
 
   const handleCancel = () => {
@@ -49,7 +50,7 @@ const CreateForm = (props) => {
   return (
     <form onSubmit={form.handleSubmit(handleSubmit)}>
       <Modal
-          title={`Thêm mới món ăn`}
+          title={`Thêm mới khách hàng`}
           visible={props.visible}
           width={"900px"}
           onCancel={handleCancel}
@@ -87,7 +88,11 @@ const CreateForm = (props) => {
               <div className="create-form-customer-container__line__lable">Email:</div>
               <InputField name="email" form={form} type="text"></InputField>
             </div>
-            <button type='submit' id="button-submit-form-customer" style={{display: "none"}}></button>
+            <div className="create-form-customer-container__line">
+              <div className="create-form-customer-container__line__lable">Công ty:</div>
+              <InputField name="congty" form={form} type="text"></InputField>
+            </div>
+            <button type='submit' id="create-submit-form-customer" style={{display: "none"}}></button>
         </div>
       </Modal>
     </form>

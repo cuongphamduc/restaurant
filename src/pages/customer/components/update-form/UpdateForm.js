@@ -11,7 +11,8 @@ const UpdateForm = (props) => {
   const schema = yup.object().shape({
     ten: yup.string().required('Chưa nhập tên!'),
     sdt: yup.string().required('Chưa nhập số điện thoại!').matches(/(0[3|5|7|8|9])+([0-9]{8})\b/g, "Nhập sai định dạng!"),
-    email: yup.string().matches(/^\S+@\S+\.\S+$/, "Nhập sai định dạng!")
+    email: yup.string()
+      
   });
 
   const form = useForm({
@@ -20,7 +21,8 @@ const UpdateForm = (props) => {
       sdt: props.data.sdt,
       ngaysinh: props.data.ngaysinh,
       diachi: props.data.diachi,
-      email: props.data.email
+      email: props.data.email,
+      congty: props.data.congty
     },
     resolver: yupResolver(schema),
   })
@@ -51,6 +53,7 @@ const UpdateForm = (props) => {
     form.setValue('ngaysinh', props.data.ngaysinh)
     form.setValue('diachi', props.data.diachi)
     form.setValue('email', props.data.email)
+    form.setValue('congty', props.data.congty)
   }, [props.data])
 
   return (
@@ -93,6 +96,10 @@ const UpdateForm = (props) => {
             <div className="create-form-customer-container__line">
               <div className="create-form-customer-container__line__lable">Email:</div>
               <InputField name="email" form={form} type="text"></InputField>
+            </div>
+            <div className="create-form-customer-container__line">
+              <div className="create-form-customer-container__line__lable">Công ty:</div>
+              <InputField name="congty" form={form} type="text"></InputField>
             </div>
             <button type='submit' id="button-submit-form-customer" style={{display: "none"}}></button>
         </div>

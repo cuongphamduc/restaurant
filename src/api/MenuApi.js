@@ -22,7 +22,12 @@ const menuApi = {
     formData.append("tenmonan", data.tenmonan)
     formData.append("gia", data.gia)
     formData.append("mota", data.mota)
-    formData.append("in_file", file)
+    if (file !== undefined){
+          formData.append("in_file", file)      
+    }
+    else{
+          formData.append("in_file", '')      
+    }
     return axiosClient.post(url, formData, {
       headers: {
         'Content-Type': 'multipart/form-data'

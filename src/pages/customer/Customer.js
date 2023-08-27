@@ -35,8 +35,8 @@ const Customer = () => {
       width: '15%',
     },
     {
-      title: 'Ngày sinh',
-      dataIndex: 'ngaysinh',
+      title: 'Công ty',
+      dataIndex: 'congty',
       render: (text, data) => {
         return (
           <span>
@@ -44,19 +44,7 @@ const Customer = () => {
           </span>
         );
       },
-      width: '15%',
-    },
-    {
-      title: 'Địa chỉ',
-      dataIndex: 'diachi',
-      render: (text, data) => {
-        return (
-          <span>
-            {text}
-          </span>
-        );
-      },
-      width: '30%',
+      width: '45%',
     },
     {
       title: '',
@@ -83,7 +71,7 @@ const Customer = () => {
   const [listCustomer, setListCustomer] = useState([])
   const [customerpaginition, setCustomerPaginition] = useState({
     page: 1,
-    limit: 0,
+    limit: 10,
     total_records: 0,
     total_pages: 0
   })
@@ -95,10 +83,17 @@ const Customer = () => {
           key: search,
           lower: "",
           upper: "",
-          idhoadon: ""
+          idhoadon: "",
+          page: customerpaginition.page,
+          limit: customerpaginition.limit
         });
         setListCustomer(data);
-        setCustomerPaginition(paginition)
+        setCustomerPaginition({
+          page: paginition.page,
+          limit: paginition.limit,
+          totalPage: paginition.total_pages,
+          totalItem: paginition.total_records
+        })
       } catch (error) {
         console.log('Failed to fetch customer list: ', error);
       }
@@ -117,7 +112,12 @@ const Customer = () => {
           limit: customerpaginition.limit
         });
         setListCustomer(data)
-        setCustomerPaginition(paginition)
+        setCustomerPaginition({
+          page: paginition.page,
+          limit: paginition.limit,
+          totalPage: paginition.total_pages,
+          totalItem: paginition.total_records
+        })
       } catch (error) {
         console.log('Failed to fetch menu list: ', error);
       }
@@ -136,7 +136,12 @@ const Customer = () => {
           limit: newNumberItem
         });
         setListCustomer(data)
-        setCustomerPaginition(paginition)
+        setCustomerPaginition({
+          page: paginition.page,
+          limit: paginition.limit,
+          totalPage: paginition.total_pages,
+          totalItem: paginition.total_records
+        })
       } catch (error) {
         console.log('Failed to fetch menu list: ', error);
       }

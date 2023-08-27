@@ -49,7 +49,9 @@ const SelectDish = ({onSelect, close}) => {
               key: search,
               lower: "",
               upper: "",
-              idhoadon: ""
+              idhoadon: "",
+              page: 1,
+              limit: 0
             });
             setMenuList(data);
           } catch (error) {

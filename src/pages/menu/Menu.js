@@ -14,7 +14,7 @@ const Menu = () => {
   const [menuList, setMenuList] = useState([])
   const [menuPaginition, setMenuPaginition] = useState({
     page: 1,
-    limit: 0,
+    limit: 10,
     total_records: 0,
     total_pages: 0
   })
@@ -41,7 +41,12 @@ const Menu = () => {
           limit: menuPaginition.limit
         });
         setMenuList(data);
-        setMenuPaginition(paginition)
+        setMenuPaginition({
+          page: paginition.page,
+          limit: paginition.limit,
+          totalPage: paginition.total_pages,
+          totalItem: paginition.total_records
+        })
       } catch (error) {
         console.log('Failed to fetch menu list: ', error);
       }
@@ -60,7 +65,12 @@ const Menu = () => {
           limit: newNumberItem
         });
         setMenuList(data);
-        setMenuPaginition(paginition)
+        setMenuPaginition({
+          page: paginition.page,
+          limit: paginition.limit,
+          totalPage: paginition.total_pages,
+          totalItem: paginition.total_records
+        })
       } catch (error) {
         console.log('Failed to fetch menu list: ', error);
       }
@@ -68,16 +78,24 @@ const Menu = () => {
   }
 
   const getMenuData = () => {
+    console.log("update data");
     (async () => {
       try {
         const { data, paginition } = await menuApi.getAll({
           key: search,
           lower: "",
           upper: "",
-          idhoadon: ""
+          idhoadon: "",
+          page: menuPaginition.page,
+          limit: menuPaginition.limit
         });
         setMenuList(data);
-        setMenuPaginition(paginition)
+        setMenuPaginition({
+          page: paginition.page,
+          limit: paginition.limit,
+          totalPage: paginition.total_pages,
+          totalItem: paginition.total_records
+        })
       } catch (error) {
         console.log('Failed to fetch menu list: ', error);
       }

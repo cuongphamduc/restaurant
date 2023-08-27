@@ -19,7 +19,7 @@ const Dish = ({isEdit, data, onClick, onRemove, onEdit}) => {
 
   return (
     <div className='dish-container' onClick={handleClick}>
-        <img className="dish-container__avatar" src={data?.hinhanh} alt='dish-avatar'></img>
+        <img className="dish-container__avatar" src={'data:image/png;base64,' + data?.hinhanh} alt='dish-avatar'></img>
         <div className="dish-container__content">
             <div className="dish-container__top">
                 <div className="dish-container__name">{data?.tenmonan}</div>

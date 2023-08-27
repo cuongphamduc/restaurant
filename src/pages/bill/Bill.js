@@ -101,7 +101,7 @@ const Bill = () => {
   const [listBill, setListBill] = useState([])
   const [billPaginition, setBillPaginition] = useState({
     page: 1,
-    limit: 0,
+    limit: 10,
     total_records: 0,
     total_pages: 0
   })
@@ -112,10 +112,17 @@ const Bill = () => {
         const { data, paginition } = await billApi.getAll({
           key:search,
           lower: fromTime,
-          upper: toTime
+          upper: toTime,
+          page: billPaginition.page,
+          limit: billPaginition.limit,
         });
         setListBill(data)
-        setBillPaginition(paginition)
+        setBillPaginition({
+          page: paginition.page,
+          limit: paginition.limit,
+          totalPage: paginition.total_pages,
+          totalItem: paginition.total_records
+        })
       } catch (error) {
         console.log('Failed to fetch bill list: ', error);
       }
@@ -134,7 +141,12 @@ const Bill = () => {
           limit: billPaginition.limit
         });
         setListBill(data)
-        setBillPaginition(paginition)
+        setBillPaginition({
+          page: paginition.page,
+          limit: paginition.limit,
+          totalPage: paginition.total_pages,
+          totalItem: paginition.total_records
+        })
       } catch (error) {
         console.log('Failed to fetch menu list: ', error);
       }
@@ -153,7 +165,12 @@ const Bill = () => {
           limit: newNumberItem
         });
         setListBill(data)
-        setBillPaginition(paginition)
+        setBillPaginition({
+          page: paginition.page,
+          limit: paginition.limit,
+          totalPage: paginition.total_pages,
+          totalItem: paginition.total_records
+        })
       } catch (error) {
         console.log('Failed to fetch menu list: ', error);
       }
@@ -174,6 +191,7 @@ const Bill = () => {
   }
 
   useEffect(() => {
+    console.log("bill")
     getBillData()
   }, [])
 

@@ -12,7 +12,7 @@ const UpdateForm = (props) => {
     tenmonan: yup.string().required('Chưa nhập tên món ăn!'),
     gia: yup.number("Giá phải là số!").integer().min(1, "Giá phải lớn hơn 0!").required('Chưa nhập giá!'),
     hinhanh: yup.string(),
-    mota: yup.string().required('Chưa nhập mô tả!'),
+    mota: yup.string(),
   });
 
   const form = useForm({
@@ -28,8 +28,8 @@ const UpdateForm = (props) => {
   const handleSubmit = (values) => {
     (async () => {
       try {
-        let imagefile = document.getElementById("create-menu-upload-file")
-        console.log(imagefile)
+        let imagefile = document.getElementById("update-menu-upload-file")
+        console.log(imagefile.files)
         const { data } = await menuApi.update(props.data.tenmonan, values, imagefile.files[0]);
       } catch (error) {
         console.log('Failed to fetch menu list: ', error);
@@ -63,7 +63,7 @@ const UpdateForm = (props) => {
               <button
                 className='button-add'
                 type='submit'
-              >Thêm</button>
+              >Cập nhật</button>
               <button
                 className='button-cancel'
                 onClick={handleCancel}
@@ -86,7 +86,7 @@ const UpdateForm = (props) => {
             </div>
             <div className="create-form-menu-container__line">
               <div className="create-form-menu-container__line__lable">Ảnh:</div>
-              <UploadFileField id="create-menu-upload-file" name="hinhanh" form={form} type="file"></UploadFileField>
+              <UploadFileField id="update-menu-upload-file" name="hinhanh" form={form} type="file"></UploadFileField>
             </div>
             <button type='submit' id="button-submit-form-menu" style={{display: "none"}}></button>
         </div>
