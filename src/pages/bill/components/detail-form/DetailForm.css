@@ -1,0 +1,62 @@
+.detail-form-container{
+    width: 100%;
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
+.detail-form-container .detail-form-container__customer{
+    width: 100%;
+}
+
+.detail-form-container .detail-form-container__customer .customer-lable{
+    width: 100%;
+    text-align: left;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.detail-form-container .detail-form-container__customer .customer-content{
+    width: 100%;
+    padding: 10px;
+}
+
+.detail-form-container .detail-form-container__customer .customer-line{
+    width: 100%;
+    display: flex;
+}
+
+.detail-form-container .detail-form-container__customer .customer-line__label{
+    width: 20%;
+    text-align: left;
+    font-size: 14px;
+}
+
+.detail-form-container .detail-form-container__customer .customer-line__content{
+    width: 80%;
+    text-align: left;
+    font-size: 14px;
+}
+
+.detail-form-container .detail-form-container__list-dish{
+    width: 100%;
+}
+
+
+.detail-form-container .detail-form-container__list-dish .dish-lable{
+    width: 100%;
+    text-align: left;
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+
+.detail-form-container__total{
+    display: flex;
+    justify-content: space-between;
+}
+
+.detail-form-container__total .total-lable{
+    text-align: left;
+    font-size: 16px;
+    font-weight: 500;
+}

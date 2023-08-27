@@ -7,6 +7,14 @@ import Table from './../../components/table/Table'
 import CreateForm from './components/create-form/CreateForm'
 import customerApi from '../../api/CustomerApi';
 import UpdateForm from './components/update-form/UpdateForm';
+import DetailForm from './components/detail-form/DetailForm';
+
+const dataTest = [{
+  ten: "vu tuan anh",
+  sdt: "01234",
+  ngaysinh: "23/09/123",
+  diachi: "123"
+}]
 
 const Customer = () => {
   const columns = [
@@ -52,6 +60,10 @@ const Customer = () => {
       render: (text, data) => {
         return (
           <div className='bill-container__action'>
+            <button className='bill-container__action-button bg-primary' onClick={() => {
+              setCurrentCustomer(data)
+              setIsVisibleDetailForm(true)
+            }}><i class="bi bi-eye-fill"></i></button>
             <button className='bill-container__action-button bg-success' onClick={() => {
               setCurrentCustomer(data)
               setIsVisibleUpdateForm(true)
@@ -66,6 +78,7 @@ const Customer = () => {
 
   const [isVisibleCreateForm, setIsVisibleCreateForm] = useState(false)
   const [isVisibleUpdateForm, setIsVisibleUpdateForm] = useState(false)
+  const [isVisibleDetailForm, setIsVisibleDetailForm] = useState(false)
   const [search, setSearch] = useState('')
   const [currentCustomer, setCurrentCustomer] = useState('')
   const [listCustomer, setListCustomer] = useState([])
@@ -75,6 +88,7 @@ const Customer = () => {
     total_records: 0,
     total_pages: 0
   })
+  var typingTimer;
 
   const getCustomerData = () => {
     (async () => {
@@ -150,7 +164,14 @@ const Customer = () => {
 
   const onChangeSearch = (e) => {
     setSearch(e.target.value)
+    clearTimeout(typingTimer);
+    typingTimer = setTimeout(doneTyping, 3000);
   }
+
+  function doneTyping () {
+    getCustomerData()
+  }
+
 
   const handleSearch = () => {
     getCustomerData()
@@ -186,7 +207,7 @@ const Customer = () => {
         </div>
       </div>
       <div className="customer-container__content">
-      <Table onNumberItemChange={onNumberItemChange} onPageChange={handlePageChange} paginition={customerpaginition} isShowPaginition={true} columns={columns} dataSource={listCustomer}></Table>
+      <Table onNumberItemChange={onNumberItemChange} onPageChange={handlePageChange} paginition={customerpaginition} isShowPaginition={true} columns={columns} dataSource={dataTest}></Table>
       </div>
       <CreateForm
         getCustomerData={getCustomerData}
@@ -199,6 +220,7 @@ const Customer = () => {
         visible={isVisibleUpdateForm}
         setVisible={setIsVisibleUpdateForm}
       ></UpdateForm>
+      <DetailForm data={currentCustomer} visible={isVisibleDetailForm} setVisible={setIsVisibleDetailForm}></DetailForm>
     </div>
   )
 }

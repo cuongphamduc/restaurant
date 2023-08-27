@@ -14,6 +14,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import SelectCustomer from '../select-customer/SelectCustomer';
 import SelectDish from '../select-dish/SelectDish';
 import billApi from '../../../../api/BillApi';
+import InputSearch from '../../../../components/input-search/InputSearch';
 
 const CreateForm = (props) => {
     const [visibleSelectCustomer, setVisibleSelectCustomer] = useState(false)
@@ -57,7 +58,7 @@ const CreateForm = (props) => {
     (async () => {
       try {
         const { data } = await billApi.add({
-          sdt: values.sdt,
+          sdt: valuePhoneNumber,
           list_monan: _list_monan,
           list_soluong: _list_soluong,
           tennguoidung: "admin"
@@ -113,6 +114,22 @@ const CreateForm = (props) => {
         setListDish(newListDish)
     }
 
+    const [valuePhoneNumber, setValuePhoneNumber] = useState('')
+    const [valueCustomerName, setValueCustomerName] = useState('')
+    const [listCustomer, setListCustomer] = useState([])
+    const handleOnSelectPhoneNumber = (item) => {
+      setValuePhoneNumber(item.sdt)
+      setValueCustomerName(item.ten)
+    }
+
+    const handleChangePhoneNumber = (value) => {
+
+    }
+
+    const handleChangeNameCustomer = (value) => {
+      
+    }
+
   return (
     <form onSubmit={form.handleSubmit(handleSubmit)}>
       <Modal
@@ -136,16 +153,11 @@ const CreateForm = (props) => {
         <div className='create-form-bill-container'>
             <div className="create-form-bill-container__line">
               <div className="create-form-bill-container__line__lable">Số điện thoại:</div>
-              <InputField id="create-form-bill-input-phone-number" name="sdt" form={form} type="text"></InputField>
-              <button
-                type='button'
-                className='button-search'
-                onClick={() => setVisibleSelectCustomer(true)}
-            ><FontAwesomeIcon icon={faSearch} /></button>
+              <InputSearch setValue={setValuePhoneNumber} onChange={handleChangePhoneNumber} onSelect={handleOnSelectPhoneNumber} value={valuePhoneNumber} data={listCustomer}></InputSearch>
             </div>
             <div className="create-form-bill-container__line">
               <div className="create-form-bill-container__line__lable">Tên khách hàng:</div>
-              <InputField id="create-form-bill-input-name" name="ten" form={form} type="text"></InputField>
+              <InputSearch setValue={setValueCustomerName} onChange={handleChangeNameCustomer} onSelect={handleOnSelectPhoneNumber} value={valueCustomerName} data={listCustomer}></InputSearch>
             </div>
             <div className="create-form-bill-container__list">
                 {

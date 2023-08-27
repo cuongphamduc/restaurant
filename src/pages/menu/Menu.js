@@ -21,6 +21,7 @@ const Menu = () => {
   const [isVisibleCreateForm, setIsVisibleCreateForm] = useState(false)
   const [isVisibleUpdateForm, setIsVisibleUpdateForm] = useState(false)
   const [currentDish, setCurrentDish] = useState('')
+  var typingTimer;
 
   const paginition1 = {
       page: 1,
@@ -104,6 +105,12 @@ const Menu = () => {
 
   const onChangeSearch = (e) => {
     setSearch(e.target.value)
+    clearTimeout(typingTimer);
+    typingTimer = setTimeout(doneTyping, 3000);
+  }
+
+  function doneTyping () {
+    getMenuData()
   }
 
   const handleSearch = () => {

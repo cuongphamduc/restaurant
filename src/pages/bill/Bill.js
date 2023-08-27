@@ -7,6 +7,7 @@ import Table from './../../components/table/Table'
 import CreateForm from './components/create-form/CreateForm';
 import { DatePicker } from 'antd';
 import billApi from '../../api/BillApi';
+import DetailForm from '../bill/components/detail-form/DetailForm';
 
 const columns = [
   {
@@ -95,6 +96,7 @@ for (let i = 0; i < 5; i++) {
 
 const Bill = () => {
   const [isVisibleCreateForm, setIsVisibleCreateForm] = useState(false)
+  const [isVisibleDetailForm, setIsVisibleDetailForm] = useState(false)
   const [search, setSearch] = useState('')
   const [fromTime, setFromTime] = useState('')
   const [toTime, setToTime] = useState('')
@@ -177,13 +179,21 @@ const Bill = () => {
     })();
   }
 
+  var typingTimer;
   const onChangeSearch = (e) => {
     setSearch(e.target.value)
+    clearTimeout(typingTimer);
+    typingTimer = setTimeout(doneTyping, 3000);
+  }
+
+  function doneTyping () {
+    getBillData()
   }
 
   const onChangeDate = (dayjs, dayString) => {
     setFromTime(dayString[0])
     setToTime(dayString[1])
+    getBillData()
   }
 
   const handleSearch = () => {
@@ -220,6 +230,18 @@ const Bill = () => {
         visible={isVisibleCreateForm}
         setVisible={setIsVisibleCreateForm}
       ></CreateForm>
+      <DetailForm
+        visible={isVisibleDetailForm}
+        setVisible={setIsVisibleDetailForm}
+        data={{
+          ten: "Vu Tuan Anh",
+          sdt: "12323123",
+          ngaysinh: "23/09/2323",
+          diachi: "thanh mai, thanh oai, ha noi",
+          email: "asdfsadf@fasdf",
+          congty: "cong ty TNHH"
+        }}
+      ></DetailForm>
     </div>
   )
 }

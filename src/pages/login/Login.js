@@ -27,34 +27,30 @@ const Login = () => {
   })
 
   const handleSubmit = (values) => {
-    // console.log("ok")
-    // if (values.tennguoidung == "vta" && values.matkhau == "123"){
-    //   dispatch(setIsLogin())
-    //   setIsError(false)
-    // }
-    // else{
-    //   setIsError(true)
-    // }
+    console.log("ok")
+    if (values.tennguoidung == "vta" && values.matkhau == "123"){
+      dispatch(setIsLogin())
+      setIsError(false)
+    }
+    else{
+      setIsError(true)
+    }
 
-    (async () => {
-      try {
-        let formData = {
-          tennguoidung: values.tennguoidung,
-          matkhau: values.matkhau
-        }
-        const data = await loginApi.login(formData);
-        console.log(data)
-        if (data.quyen != null){
-          dispatch(setIsLogin())
-          setIsError(false)
-        }
-        setIsError(true)
-      } catch (error) {
-        setIsError(true)
-        console.log('Failed to fetch customer list: ', error);
-      }
-    })();
-    form.reset()
+    // (async () => {
+    //   try {
+    //     let formData = {
+    //       tennguoidung: values.tennguoidung,
+    //       matkhau: values.matkhau
+    //     }
+    //     const { data } = await loginApi.add(formData);
+    //     dispatch(setIsLogin())
+    //     setIsError(false)
+    //   } catch (error) {
+    //     setIsError(true)
+    //     console.log('Failed to fetch customer list: ', error);
+    //   }
+    // })();
+    // form.reset()
   }
 
   return (
