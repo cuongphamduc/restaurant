@@ -16,6 +16,7 @@ const Input = (props) => {
                 id={props.id}
                 className={`${(props.error) ? "input-container__error" : ""}`}
                 type={props.type}
+                accept="image/png, image/jpeg"
                 onChange={(e) => {
                     // setValue(e.target.value)
                     console.log(e.target.files[0].name)

@@ -9,7 +9,9 @@ import { DatePicker } from 'antd';
 import billApi from '../../api/BillApi';
 import DetailForm from '../bill/components/detail-form/DetailForm';
 
-const columns = [
+
+const Bill = () => {
+  const columns = [
   {
     title: 'Mã hóa đơn',
     dataIndex: 'idhoadon',
@@ -70,18 +72,21 @@ const columns = [
     },
     width: '15%',
   },
-  // {
-  //   title: '',
-  //   dataIndex: 'name',
-  //   render: (text, data) => {
-  //     return (
-  //       <div className='bill-container__action'>
-  //         <button className='bill-container__action-button bg-danger'><i class="bi bi-trash"></i></button>
-  //       </div>
-  //     );
-  //   },
-  //   width: '15%',
-  // },
+  {
+    title: '',
+    dataIndex: 'name',
+    render: (text, data) => {
+      return (
+        <div className='bill-container__action'>
+          <button onClick={() => {
+              setCurrentBill(data)
+              setIsVisibleDetailForm(true)
+            }} className='bill-container__action-button bg-primary'><i class="bi bi-eye-fill"></i></button>
+        </div>
+      );
+    },
+    width: '15%',
+  },
 ]
 
 const data = [];
@@ -94,9 +99,9 @@ for (let i = 0; i < 5; i++) {
   });
 }
 
-const Bill = () => {
   const [isVisibleCreateForm, setIsVisibleCreateForm] = useState(false)
   const [isVisibleDetailForm, setIsVisibleDetailForm] = useState(false)
+  const [currentBill, setCurrentBill] = useState('')
   const [search, setSearch] = useState('')
   const [fromTime, setFromTime] = useState('')
   const [toTime, setToTime] = useState('')
@@ -163,7 +168,7 @@ const Bill = () => {
           lower: "",
           upper: "",
           idhoadon: "",
-          page: billPaginition.page,
+          page: 1,
           limit: newNumberItem
         });
         setListBill(data)
@@ -183,17 +188,57 @@ const Bill = () => {
   const onChangeSearch = (e) => {
     setSearch(e.target.value)
     clearTimeout(typingTimer);
-    typingTimer = setTimeout(doneTyping, 3000);
+    typingTimer = setTimeout(function() {
+      doneTyping(e.target.value);
+    }, 1000);
   }
 
-  function doneTyping () {
-    getBillData()
+  function doneTyping (value) {
+    (async () => {
+      try {
+        const { data, paginition } = await billApi.getAll({
+          key:value,
+          lower: fromTime,
+          upper: toTime,
+          page: 1,
+          limit: billPaginition.limit,
+        });
+        setListBill(data)
+        setBillPaginition({
+          page: paginition.page,
+          limit: paginition.limit,
+          totalPage: paginition.total_pages,
+          totalItem: paginition.total_records
+        })
+      } catch (error) {
+        console.log('Failed to fetch bill list: ', error);
+      }
+    })();
   }
 
   const onChangeDate = (dayjs, dayString) => {
-    setFromTime(dayString[0])
-    setToTime(dayString[1])
-    getBillData()
+    setFromTime(dayString[0]);
+    setToTime(dayString[1]);
+    (async () => {
+      try {
+        const { data, paginition } = await billApi.getAll({
+          key:search,
+          lower: dayString[0],
+          upper: dayString[1],
+          page: 1,
+          limit: billPaginition.limit,
+        });
+        setListBill(data)
+        setBillPaginition({
+          page: paginition.page,
+          limit: paginition.limit,
+          totalPage: paginition.total_pages,
+          totalItem: paginition.total_records
+        })
+      } catch (error) {
+        console.log('Failed to fetch bill list: ', error);
+      }
+    })();
   }
 
   const handleSearch = () => {
@@ -213,9 +258,6 @@ const Bill = () => {
           <div className="bill-container__search">
             <DatePicker.RangePicker onChange={onChangeDate} status="warning" style={{ width: '100%', "background-color": "#b7b9bf"}}/>
             <input onChange={onChangeSearch} className="bill-container__input-search"></input>
-            <button className="bill-container__button-search" onClick={handleSearch}>
-              <i class="bi bi-search me-3"></i>
-            </button>
           </div>
           <button className="bill-container__add"
             onClick={() => setIsVisibleCreateForm(true)}
@@ -233,14 +275,7 @@ const Bill = () => {
       <DetailForm
         visible={isVisibleDetailForm}
         setVisible={setIsVisibleDetailForm}
-        data={{
-          ten: "Vu Tuan Anh",
-          sdt: "12323123",
-          ngaysinh: "23/09/2323",
-          diachi: "thanh mai, thanh oai, ha noi",
-          email: "asdfsadf@fasdf",
-          congty: "cong ty TNHH"
-        }}
+        data={currentBill}
       ></DetailForm>
     </div>
   )

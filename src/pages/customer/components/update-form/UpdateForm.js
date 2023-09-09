@@ -6,6 +6,9 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import Modal from '../../../../components/modal/Modal';
 import customerApi from '../../../../api/CustomerApi';
+import { DatePicker } from 'antd';
+import dayjs from 'dayjs';
+import 'dayjs/locale/zh-cn';
 
 const UpdateForm = (props) => {
   const schema = yup.object().shape({
@@ -19,7 +22,6 @@ const UpdateForm = (props) => {
     defaultValues: {
       ten: props.data.ten,
       sdt: props.data.sdt,
-      ngaysinh: props.data.ngaysinh,
       diachi: props.data.diachi,
       email: props.data.email,
       congty: props.data.congty
@@ -30,7 +32,7 @@ const UpdateForm = (props) => {
   const handleSubmit = (values) => {
     (async () => {
       try {
-        let formData = {...values, ...{old_sdt: props.data.sdt}}
+        let formData = {...values, ...{old_sdt: props.data.sdt, ngaysinh: birthday}}
         console.log(formData)
         const { data } = await customerApi.update(formData);
       } catch (error) {
@@ -47,13 +49,20 @@ const UpdateForm = (props) => {
     props.setVisible(false)
   }
 
+  const [birthday, setBirthday] = useState('2000-10-10')
+  const onChangeDate = (dayjs, dayString) => {
+    console.log(dayString)
+    setBirthday(dayString)
+  }
+
   useEffect(() => {
+    console.log(props.data.ngaysinh)
     form.setValue('ten', props.data.ten)
     form.setValue('sdt', props.data.sdt)
-    form.setValue('ngaysinh', props.data.ngaysinh)
     form.setValue('diachi', props.data.diachi)
     form.setValue('email', props.data.email)
     form.setValue('congty', props.data.congty)
+    setBirthday(props.data.ngaysinh)
   }, [props.data])
 
   return (
@@ -87,7 +96,7 @@ const UpdateForm = (props) => {
             </div>
             <div className="create-form-customer-container__line">
               <div className="create-form-customer-container__line__lable">Ngày sinh:</div>
-              <InputField name="ngaysinh" form={form} type="text"></InputField>
+              {birthday != "" ? <DatePicker value={dayjs(birthday, 'YYYY-MM-DD')} placeholder="Chọn ngày" onChange={onChangeDate}/> : <DatePicker placeholder="Chọn ngày" onChange={onChangeDate}/>}
             </div>
             <div className="create-form-customer-container__line">
               <div className="create-form-customer-container__line__lable">Địa chỉ:</div>

@@ -60,3 +60,9 @@
     font-size: 16px;
     font-weight: 500;
 }
+
+.detail-form-container__total .total-content{
+    text-align: left;
+    font-size: 16px;
+    font-weight: 500;
+}

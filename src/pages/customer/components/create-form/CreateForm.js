@@ -7,6 +7,7 @@ import * as yup from 'yup';
 import Modal from '../../../../components/modal/Modal';
 import customerApi from '../../../../api/CustomerApi';
 import UploadFileField from '../../../../components/form-controls/upload-file-field/UploadFileField';
+import { DatePicker } from 'antd';
 
 const CreateForm = (props) => {
   const schema = yup.object().shape({
@@ -30,7 +31,7 @@ const CreateForm = (props) => {
 
   const handleSubmit = (values) => {
     try {
-      let formData = {...values}
+      let formData = {...values, ...{ngaysinh: birthday}}
       console.log(formData)
       const { data } = customerApi.add(formData).then((data) => {
           props.getCustomerData()
@@ -45,6 +46,12 @@ const CreateForm = (props) => {
   const handleCancel = () => {
     form.reset()
     props.setVisible(false)
+  }
+
+  const [birthday, setBirthday] = useState('')
+  const onChangeDate = (dayjs, dayString) => {
+    console.log(dayString)
+    setBirthday(dayString)
   }
 
   return (
@@ -78,7 +85,7 @@ const CreateForm = (props) => {
             </div>
             <div className="create-form-customer-container__line">
               <div className="create-form-customer-container__line__lable">Ngày sinh:</div>
-              <InputField name="ngaysinh" form={form} type="text"></InputField>
+              <DatePicker placeholder="Chọn ngày" onChange={onChangeDate}/>
             </div>
             <div className="create-form-customer-container__line">
               <div className="create-form-customer-container__line__lable">Địa chỉ:</div>

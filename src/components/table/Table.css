@@ -55,7 +55,7 @@
 }
 
 .table-container .table-container__content{
-  max-height: calc(100% - 50px);
+  max-height: calc(100% - 100px);
   overflow: auto;
 }
 

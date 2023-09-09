@@ -13,14 +13,27 @@ const billApi = {
     };
   },
 
-  get(id) {
-    const url = `/products/${id}`;
-    return axiosClient.get(url);
+  async getDetail(id) {
+    const params = {
+      idhoadon: id
+    }
+    const url = `/chitiethoadon`;
+    const menuList = await axiosClient.get(url, {params});
+    return {
+      customer: menuList.khachhang,
+      dish: menuList.monan
+    };
   },
 
-  add(data) {
+  async add(data) {
     const url = '/themhoadon';
-    return axiosClient.post(url, data);
+    const response = await axiosClient.post(url, data).catch(function (error) {
+      if (error.response) {
+        console.log(error.response.data);
+        console.log(error.response.status);
+      }
+    });
+    return response
   },
 
   update(data) {

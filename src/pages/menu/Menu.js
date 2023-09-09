@@ -62,7 +62,7 @@ const Menu = () => {
           lower: "",
           upper: "",
           idhoadon: "",
-          page: menuPaginition.page,
+          page: 1,
           limit: newNumberItem
         });
         setMenuList(data);
@@ -106,11 +106,33 @@ const Menu = () => {
   const onChangeSearch = (e) => {
     setSearch(e.target.value)
     clearTimeout(typingTimer);
-    typingTimer = setTimeout(doneTyping, 3000);
+    typingTimer = setTimeout(function() {
+      doneTyping(e.target.value);
+    }, 1000);
   }
 
-  function doneTyping () {
-    getMenuData()
+  function doneTyping (value) {
+    (async () => {
+      try {
+        const { data, paginition } = await menuApi.getAll({
+          key: value,
+          lower: "",
+          upper: "",
+          idhoadon: "",
+          page: 1,
+          limit: menuPaginition.limit
+        });
+        setMenuList(data);
+        setMenuPaginition({
+          page: paginition.page,
+          limit: paginition.limit,
+          totalPage: paginition.total_pages,
+          totalItem: paginition.total_records
+        })
+      } catch (error) {
+        console.log('Failed to fetch menu list: ', error);
+      }
+    })();
   }
 
   const handleSearch = () => {
@@ -145,11 +167,6 @@ const Menu = () => {
         <div className="menu-container__tool-bar">
           <div className="menu-container__search">
             <input onChange={onChangeSearch} className="menu-container__input-search"></input>
-            <button className="menu-container__button-search"
-              onClick={handleSearch}
-            >
-              <i class="bi bi-search me-3"></i>
-            </button>
           </div>
           <button className="menu-container__add"
             onClick={() => setIsVisibleCreateForm(true)}

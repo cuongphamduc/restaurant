@@ -77,12 +77,13 @@ const Table = ({
             <div className="text">Không có dữ liệu</div>
           </div>
         )}
-        {isShowPaginition && <Pagination
+        
+      </div>
+      {isShowPaginition && <Pagination
           pagination={paginition}
           onPageChange={handlePageChange}
           onNumberItemChange={handleNumberItemChange}
         ></Pagination>}
-      </div>
     </div>
   );
 };

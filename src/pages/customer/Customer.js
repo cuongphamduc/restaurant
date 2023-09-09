@@ -146,7 +146,7 @@ const Customer = () => {
           lower: "",
           upper: "",
           idhoadon: "",
-          page: customerpaginition.page,
+          page: 1,
           limit: newNumberItem
         });
         setListCustomer(data)
@@ -165,11 +165,33 @@ const Customer = () => {
   const onChangeSearch = (e) => {
     setSearch(e.target.value)
     clearTimeout(typingTimer);
-    typingTimer = setTimeout(doneTyping, 3000);
+    typingTimer = setTimeout(function() {
+      doneTyping(e.target.value);
+    }, 1000);
   }
 
-  function doneTyping () {
-    getCustomerData()
+  function doneTyping (value) {
+    (async () => {
+      try {
+        const { data, paginition } = await customerApi.getAll({
+          key: value,
+          lower: "",
+          upper: "",
+          idhoadon: "",
+          page: 1,
+          limit: customerpaginition.limit
+        });
+        setListCustomer(data);
+        setCustomerPaginition({
+          page: paginition.page,
+          limit: paginition.limit,
+          totalPage: paginition.total_pages,
+          totalItem: paginition.total_records
+        })
+      } catch (error) {
+        console.log('Failed to fetch customer list: ', error);
+      }
+    })();
   }
 
 
@@ -199,15 +221,12 @@ const Customer = () => {
         <div className="customer-container__tool-bar">
           <div className="customer-container__search">
             <input className="customer-container__input-search" onChange={onChangeSearch}></input>
-            <button className="customer-container__button-search" onClick={handleSearch}>
-              <i class="bi bi-search me-3"></i>
-            </button>
           </div>
           <button className="customer-container__add" onClick={() => setIsVisibleCreateForm(true)}>Thêm mới</button>
         </div>
       </div>
       <div className="customer-container__content">
-      <Table onNumberItemChange={onNumberItemChange} onPageChange={handlePageChange} paginition={customerpaginition} isShowPaginition={true} columns={columns} dataSource={dataTest}></Table>
+      <Table onNumberItemChange={onNumberItemChange} onPageChange={handlePageChange} paginition={customerpaginition} isShowPaginition={true} columns={columns} dataSource={listCustomer}></Table>
       </div>
       <CreateForm
         getCustomerData={getCustomerData}

@@ -16,6 +16,7 @@ axiosClient.interceptors.request.use(
   },
   function (error) {
     // Do something with request error
+    console.log(error)
     return Promise.reject(error);
   }
 );
@@ -40,7 +41,8 @@ axiosClient.interceptors.response.use(
       throw new Error(firstMessage.message);
     }
 
-    return Promise.reject(error);
+    alert(data.detail)
+    // return Promise.reject(error);
   }
 );
 

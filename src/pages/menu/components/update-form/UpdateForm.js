@@ -26,18 +26,17 @@ const UpdateForm = (props) => {
   })
 
   const handleSubmit = (values) => {
-    (async () => {
-      try {
-        let imagefile = document.getElementById("update-menu-upload-file")
-        console.log(imagefile.files)
-        const { data } = await menuApi.update(props.data.tenmonan, values, imagefile.files[0]);
-      } catch (error) {
-        console.log('Failed to fetch menu list: ', error);
-      }
-    })();
-    props.getMenuData()
-    form.reset()
-    props.setVisible(false)
+    try {
+      let imagefile = document.getElementById("update-menu-upload-file")
+      console.log(imagefile.files)
+      const { data } = menuApi.update(props.data.tenmonan, values, imagefile.files[0]).then((data) => {
+          props.getMenuData()
+          form.reset()
+          props.setVisible(false)
+      })
+    } catch (error) {
+      console.log('Failed to fetch menu list: ', error);
+    }
   }
 
   const handleCancel = () => {

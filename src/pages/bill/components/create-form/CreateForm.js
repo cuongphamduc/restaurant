@@ -14,6 +14,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import SelectCustomer from '../select-customer/SelectCustomer';
 import SelectDish from '../select-dish/SelectDish';
 import billApi from '../../../../api/BillApi';
+import customerApi from '../../../../api/CustomerApi';
 import InputSearch from '../../../../components/input-search/InputSearch';
 
 const CreateForm = (props) => {
@@ -31,7 +32,6 @@ const CreateForm = (props) => {
     }
 
   const schema = yup.object().shape({
-    sdt: yup.string().required('Chưa nhập số điện thoại!'),
     list_monan: yup.array().required().min(1)
   });
 
@@ -59,6 +59,7 @@ const CreateForm = (props) => {
       try {
         const { data } = await billApi.add({
           sdt: valuePhoneNumber,
+          ten: valueCustomerName,
           list_monan: _list_monan,
           list_soluong: _list_soluong,
           tennguoidung: "admin"
@@ -69,20 +70,21 @@ const CreateForm = (props) => {
     })();
     props.getBillData()
     form.reset()
+    setListDish([])
     props.setVisible(false)
   }
 
   const handleCancel = () => {
-    document.getElementById("create-form-bill-input-phone-number").value = '';
-    document.getElementById("create-form-bill-input-name").value = '';
+    // document.getElementById("create-form-bill-input-phone-number").value = '';
+    // document.getElementById("create-form-bill-input-name").value = '';
     form.reset()
     setListDish([])
     props.setVisible(false)
   }
 
   const handleSelectCustomer = (data) => {
-    document.getElementById("create-form-bill-input-phone-number").value = data.sdt;
-    document.getElementById("create-form-bill-input-name").value = data.ten;
+    setValuePhoneNumber('')
+      setValueCustomerName('')
     form.setValue("sdt", data.sdt)
     form.setValue("ten", data.ten)
   }
@@ -123,11 +125,39 @@ const CreateForm = (props) => {
     }
 
     const handleChangePhoneNumber = (value) => {
-
+        (async () => {
+              try {
+                const { data, paginition } = await customerApi.getAll({
+                  key: value,
+                  lower: "",
+                  upper: "",
+                  idhoadon: "",
+                  page: 1,
+                  limit: 0
+                });
+                setListCustomer(data);
+              } catch (error) {
+                console.log('Failed to fetch customer list: ', error);
+              }
+            })();
     }
 
     const handleChangeNameCustomer = (value) => {
-      
+      (async () => {
+              try {
+                const { data, paginition } = await customerApi.getAll({
+                  key: value,
+                  lower: "",
+                  upper: "",
+                  idhoadon: "",
+                  page: 1,
+                  limit: 0
+                });
+                setListCustomer(data);
+              } catch (error) {
+                console.log('Failed to fetch customer list: ', error);
+              }
+            })();
     }
 
   return (

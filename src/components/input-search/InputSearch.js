@@ -19,6 +19,11 @@ const InputSearch = (props) => {
         setIsOpen(false)
     }
 
+    const handleUnselect = () => {
+        setIsOpen(false)
+        console.log("click")
+    }
+
     const handleOnChange = (event) => {
         props.setValue(event.target.value)
         props.onChange(event.target.value)
@@ -28,9 +33,9 @@ const InputSearch = (props) => {
         <div className={`inputsearch-container `}>
             <div
                 className={`inputsearch-container__overlay ${
-                data.length > 0 ? 'inputsearch-container__overlay__active' : ''
+                isOpen ? 'inputsearch-container__overlay__active' : ''
                 }`}
-                onClick={() => setIsOpen(false)}
+                onClick={handleUnselect}
             ></div>
             <input
             className={`inputsearch-container__header`}
@@ -38,7 +43,7 @@ const InputSearch = (props) => {
             onChange={handleOnChange}
             value={props.value}
             ></input>
-           {<div
+           {isOpen && <div
             className={`inputsearch-container__select-box open`}
             >
             {isOpen && props.data?.map((item, index) => (
