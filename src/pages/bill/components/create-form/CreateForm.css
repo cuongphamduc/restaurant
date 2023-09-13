@@ -168,7 +168,7 @@
 .create-form-bill-container__list .list-line__number__value{
     margin-left: 10px;
     margin-right: 10px;
-    width: max-content;
+    width: 40px;
 }
 
 .create-form-bill-container__list .list-line__number button{
@@ -180,4 +180,39 @@
 
 .create-form-bill-container i{
     color: #C62828; 
+}
+
+.create-form-bill-container__header{
+    width: 100%;
+    height: 30px;
+    border-radius: 6px 6px 0 0;
+    background-color: #CFD8DC;
+    display: flex;
+    flex-direction: row;
+}
+
+.create-form-bill-container__header .header__name{
+    width: 35%;
+    margin-left: 5px;
+    display: flex;
+    align-items: center;
+    text-align: left;
+}
+
+.create-form-bill-container__header .header__price{
+    width: 35%;
+    margin-right: 5px;
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    text-align: right;
+}
+
+.create-form-bill-container__header .header__number{
+    width: 30%;
+    margin-right: 5px;
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    text-align: right;
 }

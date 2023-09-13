@@ -41,7 +41,7 @@
   }
 
   &__select-box {
-    width: 100%;
+    width: 600px;
     margin-top: 10px;
     border-radius: 6px;
     border: none;
@@ -64,6 +64,8 @@
       text-align: left;
       white-space: nowrap;
       overflow: hidden;
+      display: flex;
+      flex-direction: row;
 
       &:hover {
         background-color: #CFD8DC;
@@ -80,5 +82,53 @@
   .open {
     display: block;
     opacity: 1;
+  }
+}
+
+.select-box__header{
+  width: 100%;
+  height: 40px;
+  display: flex;
+  flex-direction: row;
+  background-color: #CFD8DC;
+
+  &-name{
+    width: 20%;
+    display: flex;
+    align-items: center;
+    margin-left: 5px;
+  }
+  &-phone-number{
+    width: 20%;
+    display: flex;
+    align-items: center;
+    margin-left: 5px;
+  }
+  &-company{
+    width: 20%;
+    display: flex;
+    align-items: center;
+    margin-left: 5px;
+  }
+}
+
+.item{
+  &__name{
+    width: 20%;
+    display: flex;
+    align-items: center;
+    margin-left: 5px;
+  }
+  &__phone-number{
+    width: 20%;
+    display: flex;
+    align-items: center;
+    margin-left: 5px;
+  }
+  &__company{
+    width: 20%;
+    display: flex;
+    align-items: center;
+    margin-left: 5px;
   }
 }

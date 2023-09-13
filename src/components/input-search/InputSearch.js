@@ -46,6 +46,12 @@ const InputSearch = (props) => {
            {isOpen && <div
             className={`inputsearch-container__select-box open`}
             >
+            {isOpen && <div className="select-box__header">
+                    <div className="select-box__header-name">Tên</div>
+                    <div className="select-box__header-phone-number">Sđt</div>
+                    <div className="select-box__header-company">Công ty</div>
+                </div>
+            }
             {isOpen && props.data?.map((item, index) => (
                 <div
                     key={index}
@@ -55,7 +61,9 @@ const InputSearch = (props) => {
                     data-placement="bottom"
                     onClick={() => handleSelect(item)}
                 >
-                    {item.ten} - {item.sdt}
+                    <div className="item__name">{item.ten}</div>
+                    <div className="item__phone-number">{item.sdt}</div>
+                    <div className="item__company">{item.congty}</div>
                 </div>
             ))}
             </div>}

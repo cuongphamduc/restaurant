@@ -7,6 +7,7 @@ import * as yup from 'yup';
 import Modal from '../../../../components/modal/Modal';
 import menuApi from '../../../../api/MenuApi';
 import UploadFileField from '../../../../components/form-controls/upload-file-field/UploadFileField';
+import DropDown from '../../../../components/dropdown/DropDown';
 
 const CreateForm = (props) => {
   const schema = yup.object().shape({
@@ -46,6 +47,12 @@ const CreateForm = (props) => {
     props.setVisible(false)
   }
 
+  const listDish = [
+    "Đồ ăn",
+    "Đồ ăn kèm",
+    "Đồ uống"
+  ]
+
   return (
     <form onSubmit={form.handleSubmit(handleSubmit)}>
       <Modal
@@ -74,6 +81,10 @@ const CreateForm = (props) => {
             <div className="create-form-menu-container__line">
               <div className="create-form-menu-container__line__lable">Mô tả:</div>
               <InputField name="mota" form={form} type="text"></InputField>
+            </div>
+            <div className="create-form-menu-container__line">
+              <div className="create-form-menu-container__line__lable">Nhóm món ăn:</div>
+              <DropDown listItem={listDish}></DropDown>
             </div>
             <div className="create-form-menu-container__line">
               <div className="create-form-menu-container__line__lable">Giá(VNĐ):</div>

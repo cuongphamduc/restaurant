@@ -210,6 +210,17 @@ const Customer = () => {
     getCustomerData()
   }
 
+  const handleExport = () => {
+    var uri = "";
+    var name = "danhsachmonan"
+    var link = document.createElement("a");
+    link.download = name;
+    link.href = uri;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
   useEffect(() => {
     getCustomerData()
   }, [])
@@ -223,6 +234,9 @@ const Customer = () => {
             <input className="customer-container__input-search" onChange={onChangeSearch}></input>
           </div>
           <button className="customer-container__add" onClick={() => setIsVisibleCreateForm(true)}>Thêm mới</button>
+          <button className="menu-container__export"
+            onClick={() => handleExport()}
+          >Trích xuất dữ liệu</button>
         </div>
       </div>
       <div className="customer-container__content">

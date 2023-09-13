@@ -54,6 +54,10 @@
     background-color: #b7b9bf;
 }
 
+.dropdown-container {
+    width: 220px !important;
+}
+
 .menu-container__button-search{
     width: 30px;
     height: 30px;
@@ -90,6 +94,20 @@
     border: none;
     border-radius: 6px;
     background-color: #00796B;
+
+    color: white;
+
+    margin-right: 10px;
+    font-weight: 500;
+    font-family: "Nunito",sans-serif;
+}
+
+.menu-container__export{
+    width: max-content;
+    height: 30px;
+    border: none;
+    border-radius: 6px;
+    background-color: #FEA116;
 
     color: white;
 

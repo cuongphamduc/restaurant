@@ -42,6 +42,8 @@ const SelectDish = ({onSelect, close}) => {
     const [search, setSearch] = useState("")
     const [menuList, setMenuList] = useState([])
 
+    console.log("select dish render")
+
     const getMenuData = () => {
         (async () => {
           try {
@@ -67,10 +69,11 @@ const SelectDish = ({onSelect, close}) => {
       const handleSearch = () => {
         getMenuData()
       }
-
+      
+      
     useEffect(() => {
-        getMenuData()
-    }, [])
+          getMenuData()
+    }, [search])
 
     const handleSelect = (dataDish) => {
         onSelect(dataDish)
@@ -80,8 +83,8 @@ const SelectDish = ({onSelect, close}) => {
     return (
         <div className='select-dish-container'>
             <div className="select-dish-container__search">
-                <input onChange={onChangeSearch}></input>
-                <button onClick={handleSearch}><FontAwesomeIcon icon={faSearch} /></button>
+                <input id="select-dish-container__search" onChange={onChangeSearch}></input>
+                {/* <button onClick={handleSearch}><FontAwesomeIcon icon={faSearch} /></button> */}
             </div>
             <div className="select-dish-container__content">
                 <div className="select-dish-container__list">

@@ -245,6 +245,17 @@ for (let i = 0; i < 5; i++) {
     getBillData()
   }
 
+  const handleExport = () => {
+    var uri = "";
+    var name = "danhsachmonan"
+    var link = document.createElement("a");
+    link.download = name;
+    link.href = uri;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
   useEffect(() => {
     console.log("bill")
     getBillData()
@@ -262,6 +273,9 @@ for (let i = 0; i < 5; i++) {
           <button className="bill-container__add"
             onClick={() => setIsVisibleCreateForm(true)}
           >Thêm mới</button>
+          <button className="menu-container__export"
+            onClick={() => handleExport()}
+          >Trích xuất dữ liệu</button>
         </div>
       </div>
       <div className="bill-container__content">

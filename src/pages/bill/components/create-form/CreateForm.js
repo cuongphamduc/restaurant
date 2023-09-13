@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import InputField from '../../../../components/form-controls/input-field/InputField'
 import './CreateForm.css'
@@ -16,11 +16,17 @@ import SelectDish from '../select-dish/SelectDish';
 import billApi from '../../../../api/BillApi';
 import customerApi from '../../../../api/CustomerApi';
 import InputSearch from '../../../../components/input-search/InputSearch';
+import { event } from 'jquery';
 
 const CreateForm = (props) => {
     const [visibleSelectCustomer, setVisibleSelectCustomer] = useState(false)
     const [visibleSelectDish, setVisibleSelectDish] = useState(false)
-    const [lishDish, setListDish] = useState([])
+    const [lishDish, setListDish] = useState([{dish:{
+        tenmonan: "Ga",
+        hinhanh: "", 
+        gia: 100000,
+        mota: "Ga nuong"
+    }}])
 
     const getTotalMoney = () => {
         let total = 0
@@ -101,20 +107,30 @@ const CreateForm = (props) => {
 
     const handleAddNumberDish = (index) => {
         let newListDish = [...lishDish]
-        newListDish[index].number += 1
+        newListDish[index].number = Number(newListDish[index].number) + 1
         form.setValue('list_monan', newListDish)
         setListDish(newListDish)
     }
 
     const handleSubNumberDish = (index) => {
         let newListDish = [...lishDish]
-        newListDish[index].number -= 1
+        newListDish[index].number = Number(newListDish[index].number) - 1
         if (newListDish[index].number === 0){
             newListDish.splice(index, 1)
         }
         form.setValue('list_monan', newListDish)
         setListDish(newListDish)
     }
+
+    const handleSetNumberDish = (index, number) => {
+      let newListDish = [...lishDish]
+      newListDish[index].number = number
+      if (newListDish[index].number === 0){
+          newListDish.splice(index, 1)
+      }
+      form.setValue('list_monan', newListDish)
+      setListDish(newListDish)
+  }
 
     const [valuePhoneNumber, setValuePhoneNumber] = useState('')
     const [valueCustomerName, setValueCustomerName] = useState('')
@@ -160,6 +176,11 @@ const CreateForm = (props) => {
             })();
     }
 
+    useEffect(() => {
+      var textbox = document.getElementById("select-dish-container__search");
+      textbox.focus();
+    })
+
   return (
     <form onSubmit={form.handleSubmit(handleSubmit)}>
       <Modal
@@ -185,11 +206,12 @@ const CreateForm = (props) => {
               <div className="create-form-bill-container__line__lable">Số điện thoại:</div>
               <InputSearch setValue={setValuePhoneNumber} onChange={handleChangePhoneNumber} onSelect={handleOnSelectPhoneNumber} value={valuePhoneNumber} data={listCustomer}></InputSearch>
             </div>
-            <div className="create-form-bill-container__line">
-              <div className="create-form-bill-container__line__lable">Tên khách hàng:</div>
-              <InputSearch setValue={setValueCustomerName} onChange={handleChangeNameCustomer} onSelect={handleOnSelectPhoneNumber} value={valueCustomerName} data={listCustomer}></InputSearch>
-            </div>
             <div className="create-form-bill-container__list">
+              <div className="create-form-bill-container__header">
+                <div className="header__name">Tên món ăn</div>
+                <div className="header__price">Giá</div>
+                <div className="header__number">Số lượng</div>
+              </div>
                 {
                     lishDish.map((dish, index) => {
                         return (
@@ -200,7 +222,7 @@ const CreateForm = (props) => {
                                 </div>
                                 <div className="list-line__number">
                                     <button type='button' onClick={() => handleSubNumberDish(index)}><FontAwesomeIcon icon={faSubtract} /></button>
-                                    <div className='list-line__number__value'>{dish.number}</div>
+                                    <input type='number' className='list-line__number__value' value={dish.number} onChange={(event) => handleSetNumberDish(index, event.target.value)}></input>
                                     <button type='button' onClick={() => handleAddNumberDish(index)}><FontAwesomeIcon icon={faPlus} /></button>
                                 </div>
                             </div>
@@ -212,7 +234,9 @@ const CreateForm = (props) => {
             <button
                 type='button'
                 className='button-add'
-                onClick={() => setVisibleSelectDish(true)}
+                onClick={() => {
+                  setVisibleSelectDish(true)
+                }}
             >Thêm món <FontAwesomeIcon icon={faPlus} /></button>
             <div className="create-form-bill-container__total">
                 <div className="total-money">

@@ -1,5 +1,6 @@
 .create-form-menu-container{
     width: 100%;
+    height: 300px;
     padding-left: 50px;
     padding-right: 50px;
     font-family: "Nunito",sans-serif;
@@ -37,4 +38,8 @@
     outline: none;
     border: 1px solid #0F172B;
     box-sizing: border-box;
+}
+
+.dropdown-container {
+    width: 400px;
 }

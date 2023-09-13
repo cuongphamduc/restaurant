@@ -8,6 +8,7 @@ import Modal from './../../components/modal/Modal'
 import { useState } from 'react'
 import menuApi from './../../api/MenuApi'
 import UpdateForm from './components/update-form/UpdateForm'
+import DropDown from '../../components/dropdown/DropDown'
 
 const Menu = () => {
   const [search, setSearch] = useState("")
@@ -155,9 +156,26 @@ const Menu = () => {
     getMenuData()
   }
 
+  const handleExport = () => {
+    var uri = "";
+    var name = "danhsachmonan"
+    var link = document.createElement("a");
+    link.download = name;
+    link.href = uri;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
   useEffect(() => {
     getMenuData()
   }, [])
+
+  const listDish = [
+    "Đồ ăn",
+    "Đồ ăn kèm",
+    "Đồ uống"
+  ]
 
 
   return (
@@ -165,12 +183,16 @@ const Menu = () => {
       <div className="menu-container__header">
         <div className="menu-container__title">Thực đơn</div>
         <div className="menu-container__tool-bar">
+          <DropDown listItem={listDish}></DropDown>
           <div className="menu-container__search">
             <input onChange={onChangeSearch} className="menu-container__input-search"></input>
           </div>
           <button className="menu-container__add"
             onClick={() => setIsVisibleCreateForm(true)}
           >Thêm món</button>
+          <button className="menu-container__export"
+            onClick={() => handleExport()}
+          >Trích xuất dữ liệu</button>
         </div>
       </div>
       <div className="menu-container__content">

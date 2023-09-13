@@ -10,9 +10,9 @@ import { BrowserRouter } from "react-router-dom";
 const Layout = () => {
   const isLogin = useSelector((state) => state.login.isLogin)
 
-  if (!isLogin){
-    return <Login></Login>
-  }
+  // if (!isLogin){
+  //   return <Login></Login>
+  // }
 
   return (
     <div className="layout-container">
