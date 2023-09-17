@@ -2,6 +2,16 @@ import axiosClient from './AxiosClient';
 
 const menuApi = {
   async getAll(params) {
+    // return {
+    //   data: [],
+    //   paginition: {
+    //     page: 1,
+    //     limit: 1,
+    //     total_pages: 1,
+    //     total_records: 1
+    //   }
+    // }
+
     const menuList = await axiosClient.get('/timkiemmonan', {params});
 
     // Build response and return
@@ -22,6 +32,7 @@ const menuApi = {
     formData.append("tenmonan", data.tenmonan)
     formData.append("gia", data.gia)
     formData.append("mota", data.mota)
+    formData.append("nhommonan", data.nhommonan)
     if (file !== undefined){
           formData.append("in_file", file)      
     }

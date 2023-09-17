@@ -12,7 +12,6 @@ const Table = ({
   onNumberItemChange,
   paginition
 }) => {
-  console.log(dataSource)
   const dataTable = dataSource?.map((row, index) => {
     let rowDatas = [];
     let i = 0;

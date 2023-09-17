@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import './InputSearch.scss'
 
 const InputSearch = (props) => {
+    const [currentItem, setCurrentItem] = useState(null)
     const [isOpen, setIsOpen] = useState(false)  
 
 
@@ -21,7 +22,6 @@ const InputSearch = (props) => {
 
     const handleUnselect = () => {
         setIsOpen(false)
-        console.log("click")
     }
 
     const handleOnChange = (event) => {
@@ -29,8 +29,43 @@ const InputSearch = (props) => {
         props.onChange(event.target.value)
     }
 
+    const handleMove = (e) => {
+        console.log("input search", e.keyCode)
+        if(e.keyCode == '13'){
+            // e.preventDefault()
+            handleSelect(data[currentItem])
+        }
+        if (e.keyCode == '38'){
+            if (currentItem === null){
+                setCurrentItem(0)
+            }
+            else if (currentItem > 0){
+                setCurrentItem(currentItem - 1)
+            }
+        }
+        if (e.keyCode == '40'){
+            if (currentItem === null){
+                setCurrentItem(0)
+            }
+            else if (currentItem < data.length - 1){
+                setCurrentItem(currentItem + 1)
+            }
+        }
+    }
+
+    // useEffect(()=> {
+    //     var searchContainer = document.getElementById("inputsearch-container")
+    //     searchContainer.removeEventListener("keyup", handleMove, true)
+    //     // searchContainer.addEventListener("keyup", handleMove)
+    // }, [currentItem, data])
+
+    // useEffect(()=> {
+    //     var searchContainer = document.getElementById("inputsearch-container")
+    //     searchContainer.addEventListener("keyup", handleMove)
+    // }, [])
+
     return (
-        <div className={`inputsearch-container `}>
+        <div id="inputsearch-container" className={`inputsearch-container `} onKeyDown={handleMove} tabIndex="0">
             <div
                 className={`inputsearch-container__overlay ${
                 isOpen ? 'inputsearch-container__overlay__active' : ''
@@ -38,10 +73,12 @@ const InputSearch = (props) => {
                 onClick={handleUnselect}
             ></div>
             <input
+            id={props.id}
             className={`inputsearch-container__header`}
             onFocus={() => setIsOpen(true)}
             onChange={handleOnChange}
             value={props.value}
+            autocomplete="off"
             ></input>
            {isOpen && <div
             className={`inputsearch-container__select-box open`}
@@ -52,10 +89,10 @@ const InputSearch = (props) => {
                     <div className="select-box__header-company">Công ty</div>
                 </div>
             }
-            {isOpen && props.data?.map((item, index) => (
+            {isOpen && data?.map((item, index) => (
                 <div
                     key={index}
-                    className="inputsearch-container__select-box__item ocr-designer__tooltip"
+                    className={`inputsearch-container__select-box__item ocr-designer__tooltip ${currentItem == Number(index) ? "inputsearch-container__active-item" : ""}`}
                     data-style="tooltip"
                     data-tip={item}
                     data-placement="bottom"

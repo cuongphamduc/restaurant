@@ -256,8 +256,17 @@ for (let i = 0; i < 5; i++) {
     document.body.removeChild(link);
   }
 
+  const handleShorcutBill = (e) => {
+    // Neu la Alt + O
+    if (e.altKey && e.which == 79) {
+        if (window.location.pathname == "/bill"){
+            setIsVisibleCreateForm(true)
+        }
+    }
+  }
+
   useEffect(() => {
-    console.log("bill")
+    document.addEventListener("keyup", handleShorcutBill)
     getBillData()
   }, [])
 

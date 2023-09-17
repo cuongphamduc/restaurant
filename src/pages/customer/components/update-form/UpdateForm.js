@@ -33,7 +33,6 @@ const UpdateForm = (props) => {
     (async () => {
       try {
         let formData = {...values, ...{old_sdt: props.data.sdt, ngaysinh: birthday}}
-        console.log(formData)
         const { data } = await customerApi.update(formData);
       } catch (error) {
         console.log('Failed to fetch customer list: ', error);
@@ -51,12 +50,10 @@ const UpdateForm = (props) => {
 
   const [birthday, setBirthday] = useState('2000-10-10')
   const onChangeDate = (dayjs, dayString) => {
-    console.log(dayString)
     setBirthday(dayString)
   }
 
   useEffect(() => {
-    console.log(props.data.ngaysinh)
     form.setValue('ten', props.data.ten)
     form.setValue('sdt', props.data.sdt)
     form.setValue('diachi', props.data.diachi)

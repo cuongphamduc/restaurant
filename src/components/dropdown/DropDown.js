@@ -33,12 +33,12 @@ const DropDown = ({
   // }, [listItem]);
   return (
     <div className={`${className ? className : ''} dropdown-container `}>
-      <div
+      {isOpen && <div
         className={`dropdown-container__overlay ${
           isOpen ? 'dropdown-container__overlay__active' : ''
         }`}
         onClick={() => setIsOpen(!isOpen)}
-      ></div>
+      ></div>}
       <div
         className={`${headerClassName ? headerClassName : ''} dropdown-container__header`}
         onClick={() => setIsOpen(!isOpen)}

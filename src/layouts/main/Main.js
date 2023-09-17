@@ -1,12 +1,14 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import hero from './../../assets/img/hero.png'
-import { Route, Router, RouterProvider, Routes, createBrowserRouter } from 'react-router-dom'
+import { Route, Router, RouterProvider, Routes, createBrowserRouter, useNavigate } from 'react-router-dom'
 import Home from '../../pages/home/Home'
 import Menu from '../../pages/menu/Menu'
 import './Main.css'
 import Customer from '../../pages/customer/Customer'
 import Bill from '../../pages/bill/Bill'
 import Login from '../../pages/login/Login'
+import { useDispatch, useSelector } from 'react-redux'
+import { setIsCreateFormMenu } from '../../pages/menu/MenuSlice'
 
 const Main = () => {
     const router = createBrowserRouter([
@@ -31,6 +33,7 @@ const Main = () => {
         element: <Login></Login>,
     },
     ]);
+
 
     return (
         <div className="main-container">

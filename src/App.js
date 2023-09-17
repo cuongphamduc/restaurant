@@ -5,8 +5,13 @@ import './assets/style/style.css'
 import { ConfigProvider } from 'antd';
 import vi_VN from 'antd/lib/locale/vi_VN'
 import '@fortawesome/fontawesome-free/css/all.min.css';
+import { useContext, useEffect, useState } from 'react';
+import { createContext } from 'react';
+
 
 function App() {
+
+  
   return (
     <ConfigProvider locale={vi_VN}
       theme={{
@@ -15,9 +20,9 @@ function App() {
         },
       }}
     >
-      <div className="App">
-        <Layout></Layout>
-      </div>
+        <div className="App">
+          <Layout></Layout>
+        </div>
     </ConfigProvider>
   );
 }

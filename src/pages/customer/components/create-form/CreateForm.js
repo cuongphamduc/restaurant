@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import InputField from '../../../../components/form-controls/input-field/InputField'
 import './CreateForm.css'
@@ -8,8 +8,9 @@ import Modal from '../../../../components/modal/Modal';
 import customerApi from '../../../../api/CustomerApi';
 import UploadFileField from '../../../../components/form-controls/upload-file-field/UploadFileField';
 import { DatePicker } from 'antd';
+import DropDown from '../../../../components/dropdown/DropDown';
 
-const CreateForm = (props) => {
+const CreateFormCustomer = (props) => {
   const schema = yup.object().shape({
     ten: yup.string().required('Chưa nhập tên!'),
     sdt: yup.string().required('Chưa nhập số điện thoại!').matches(/(0[3|5|7|8|9])+([0-9]{8})\b/g, "Nhập sai định dạng!"),
@@ -29,14 +30,17 @@ const CreateForm = (props) => {
     resolver: yupResolver(schema),
   })
 
-  const handleSubmit = (values) => {
+  const handleSubmit = (values, event) => {
+    // console.log("event", event)
+    // event.preventDefault()
+    // event.stopPropagation();
     try {
-      let formData = {...values, ...{ngaysinh: birthday}}
-      console.log(formData)
+      let formData = {...values, ...{ngaysinh: birthday, danhxung: sex}}
       const { data } = customerApi.add(formData).then((data) => {
           props.getCustomerData()
             form.reset()
             props.setVisible(false)
+            event.preventDefault()
       })
     } catch (error) {
       console.log('Failed to fetch customer list: ', error);
@@ -48,11 +52,56 @@ const CreateForm = (props) => {
     props.setVisible(false)
   }
 
+  const [sex, setSex] = useState('Anh')
   const [birthday, setBirthday] = useState('')
   const onChangeDate = (dayjs, dayString) => {
-    console.log(dayString)
     setBirthday(dayString)
   }
+
+  const listSex = [
+    "Anh",
+    "Chị"
+  ]
+
+  const onSelectSex = (name, value) => {
+    setSex(value)
+  }
+
+  const handleShorcutCreateCustomer = (e) => {
+    if (window.location.pathname == "/customer"){
+      // Neu la nut ESC
+      if (e.which == 27){
+        handleCancel()
+      }
+      // Neu la Alt + S
+      if (e.altKey && e.which == 83) {
+          if (props.visible){
+              document.getElementById(props.id ? props.id + "-button-add-customer" : "button-add-customer").click()
+          }
+      }
+    }
+  }
+
+
+  useEffect(() => {
+      document.removeEventListener("keyup", handleShorcutCreateCustomer)
+      document.addEventListener("keyup", handleShorcutCreateCustomer)
+      var textbox = document.getElementById("create-form-customer-container__name");
+      textbox.focus();
+  }, [props.visible])
+
+  useEffect(() => {
+    if (props.name !== null && props.name !== ""){
+
+      const regex = new RegExp("^[0-9]{1,45}$")
+      if (regex.test(props.name)){
+        form.setValue("sdt", props.name)
+      }
+      else{
+        form.setValue("ten", props.name)
+      }
+    }
+  }, [props.name])
 
   return (
     <form onSubmit={form.handleSubmit(handleSubmit)}>
@@ -64,6 +113,7 @@ const CreateForm = (props) => {
           footer={(
             <div className='create-form-customer-footer'>
               <button
+                id={props.id ? props.id + "-button-add-customer" : "button-add-customer"}
                 className='button-add'
                 type='submit'
               >Thêm</button>
@@ -74,14 +124,18 @@ const CreateForm = (props) => {
             </div>
           )}
         >
-        <div className='create-form-customer-container'>
+        <div className='create-form-customer-container' id={props.id ? props.id : ""}>
             <div className="create-form-customer-container__line">
               <div className="create-form-customer-container__line__lable">Tên khách hàng:</div>
-              <InputField name="ten" form={form} type="text"></InputField>
+              <InputField id="create-form-customer-container__name" name="ten" form={form} type="text"></InputField>
             </div>
             <div className="create-form-customer-container__line">
               <div className="create-form-customer-container__line__lable">Số điện thoại:</div>
               <InputField name="sdt" form={form} type="text"></InputField>
+            </div>
+            <div className="create-form-customer-container__line">
+              <div className="create-form-customer-container__line__lable">Danh xưng:</div>
+              <DropDown name={"name-dish"} selected={sex} listItem={listSex} onSelected={onSelectSex}></DropDown>
             </div>
             <div className="create-form-customer-container__line">
               <div className="create-form-customer-container__line__lable">Ngày sinh:</div>
@@ -106,4 +160,4 @@ const CreateForm = (props) => {
   )
 }
 
-export default CreateForm
+export default CreateFormCustomer

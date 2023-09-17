@@ -17,8 +17,13 @@ import billApi from '../../../../api/BillApi';
 import customerApi from '../../../../api/CustomerApi';
 import InputSearch from '../../../../components/input-search/InputSearch';
 import { event } from 'jquery';
+import CreateFormMenu from '../../../menu/components/create-form/CreateForm';
+import CreateFormCustomer from '../../../customer/components/create-form/CreateForm';
 
 const CreateForm = (props) => {
+    const [isVisibleCreateFormMenu, setIsVisibleCreateFormMenu] = useState(false)
+    const [isShowAddCustomer, setIsShowAddCustomer] = useState(false)
+    const [nameCustomer, setNameCustomer] = useState(null)
     const [visibleSelectCustomer, setVisibleSelectCustomer] = useState(false)
     const [visibleSelectDish, setVisibleSelectDish] = useState(false)
     const [lishDish, setListDish] = useState([{dish:{
@@ -136,8 +141,10 @@ const CreateForm = (props) => {
     const [valueCustomerName, setValueCustomerName] = useState('')
     const [listCustomer, setListCustomer] = useState([])
     const handleOnSelectPhoneNumber = (item) => {
+      if (item !== null && item !== undefined)
+      console.log(item)
       setValuePhoneNumber(item.sdt)
-      setValueCustomerName(item.ten)
+      // setValueCustomerName(item.ten)
     }
 
     const handleChangePhoneNumber = (value) => {
@@ -152,6 +159,16 @@ const CreateForm = (props) => {
                   limit: 0
                 });
                 setListCustomer(data);
+                if (!data || data.length < 1){
+                  if (value !== ""){
+                    setNameCustomer(value)
+                    setIsShowAddCustomer(true)
+                  }
+                  else{
+                    setIsShowAddCustomer(false)
+                  }
+                  
+                }
               } catch (error) {
                 console.log('Failed to fetch customer list: ', error);
               }
@@ -176,13 +193,35 @@ const CreateForm = (props) => {
             })();
     }
 
+    const handleShorcutCreateBill = (e) => {
+      if (window.location.pathname == "/bill"){
+        // Neu la nut ESC
+        if (e.which == 27){
+          handleCancel()
+        }
+        // Neu la Alt + S
+        if (e.altKey && e.which == 83) {
+            if (props.visible){
+              let createCustomer = document.getElementById("create-customer-in-bill")
+              console.log(createCustomer)
+              if (createCustomer === null || createCustomer === undefined){
+                // document.getElementById("button-add-bill").click()
+              }
+            }
+        }
+      }
+    }
+  
     useEffect(() => {
-      var textbox = document.getElementById("select-dish-container__search");
-      textbox.focus();
-    })
+        document.removeEventListener("keyup", handleShorcutCreateBill)
+        document.addEventListener("keyup", handleShorcutCreateBill)
+        var textbox = document.getElementById("create-form-bill-container__name");
+        textbox.focus();
+    }, [props.visible])
+
 
   return (
-    <form onSubmit={form.handleSubmit(handleSubmit)}>
+    // <form onSubmit={form.handleSubmit(handleSubmit)}>
       <Modal
           title={`Thêm mới hóa đơn`}
           visible={props.visible}
@@ -191,6 +230,7 @@ const CreateForm = (props) => {
           footer={(
             <div className='create-form-bill-footer'>
               <button
+              id="button-add-bill"
                 className='button-add'
                 type='submit'
               >Thêm</button>
@@ -203,8 +243,24 @@ const CreateForm = (props) => {
         >
         <div className='create-form-bill-container'>
             <div className="create-form-bill-container__line">
-              <div className="create-form-bill-container__line__lable">Số điện thoại:</div>
-              <InputSearch setValue={setValuePhoneNumber} onChange={handleChangePhoneNumber} onSelect={handleOnSelectPhoneNumber} value={valuePhoneNumber} data={listCustomer}></InputSearch>
+              <div className="create-form-bill-container__line__lable">Tên/ Số điện thoại:</div>
+              <InputSearch id="create-form-bill-container__name" setValue={setValuePhoneNumber} onChange={handleChangePhoneNumber} onSelect={handleOnSelectPhoneNumber} value={valuePhoneNumber} data={listCustomer}></InputSearch>
+              {/* {isShowAddCustomer && <button onClick={() => {
+                setIsVisibleCreateFormMenu(true)
+                setIsShowAddCustomer(false)
+              }}>Thêm khách hàng</button>} */}
+            </div>
+            <div className="create-form-bill-container__line">
+              <div className="create-form-bill-container__line__lable">Tên:</div>
+              <div className="">Vu Tuan Anh</div>
+            </div>
+            <div className="create-form-bill-container__line">
+              <div className="create-form-bill-container__line__lable">Sđt:</div>
+              <div className="">012346679</div>
+            </div>
+            <div className="create-form-bill-container__line">
+              <div className="create-form-bill-container__line__lable">Công ty:</div>
+              <div className="">Cong ty ABC</div>
             </div>
             <div className="create-form-bill-container__list">
               <div className="create-form-bill-container__header">
@@ -268,8 +324,15 @@ const CreateForm = (props) => {
                 close={() => setVisibleSelectDish(false)}
             ></SelectDish>
         </Modal>
+          {/* {isVisibleCreateFormMenu &&  <CreateFormCustomer
+              id="create-customer-in-bill"
+              name={nameCustomer}
+              getCustomerData={() => {}}
+              visible={isVisibleCreateFormMenu}
+              setVisible={setIsVisibleCreateFormMenu}
+          ></CreateFormCustomer>} */}
       </Modal>
-    </form>
+    // </form>
   )
 }
 

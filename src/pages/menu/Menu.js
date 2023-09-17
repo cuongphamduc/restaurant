@@ -1,16 +1,22 @@
-import React, { useEffect } from 'react'
+import React, { useContext, useEffect } from 'react'
 import './Menu.css'
 import Dish from './components/dish/Dish'
 import vi_VN from 'antd/lib/locale/vi_VN'
 import Pagination from '../../components/pagination/Pagination'
-import CreateForm from './components/create-form/CreateForm'
+import CreateFormMenu from './components/create-form/CreateForm'
 import Modal from './../../components/modal/Modal'
 import { useState } from 'react'
 import menuApi from './../../api/MenuApi'
 import UpdateForm from './components/update-form/UpdateForm'
 import DropDown from '../../components/dropdown/DropDown'
+import { useNavigate } from 'react-router-dom'
+import { Shortcut } from '../../App'
+import { useDispatch, useSelector } from 'react-redux'
+import { setIsCreateFormMenu } from './MenuSlice'
 
 const Menu = () => {
+  const [isShowAddDish, setIsShowAddDish] = useState(false)
+  const [nameDish, setNameDish] = useState(null)
   const [search, setSearch] = useState("")
   const [menuList, setMenuList] = useState([])
   const [menuPaginition, setMenuPaginition] = useState({
@@ -19,9 +25,16 @@ const Menu = () => {
     total_records: 0,
     total_pages: 0
   })
-  const [isVisibleCreateForm, setIsVisibleCreateForm] = useState(false)
+  const isVisibleCreateForm = useSelector((state) => state.menu.isCreateFormMenu)
   const [isVisibleUpdateForm, setIsVisibleUpdateForm] = useState(false)
   const [currentDish, setCurrentDish] = useState('')
+  const dispatch = useDispatch()
+
+  const handleSetIsShowCreateForm = (value) => {
+    setIsShowAddDish(false)
+    dispatch(setIsCreateFormMenu(value))
+  }
+
   var typingTimer;
 
   const paginition1 = {
@@ -80,7 +93,6 @@ const Menu = () => {
   }
 
   const getMenuData = () => {
-    console.log("update data");
     (async () => {
       try {
         const { data, paginition } = await menuApi.getAll({
@@ -88,6 +100,7 @@ const Menu = () => {
           lower: "",
           upper: "",
           idhoadon: "",
+          nhommonan: 10,
           page: menuPaginition.page,
           limit: menuPaginition.limit
         });
@@ -130,6 +143,10 @@ const Menu = () => {
           totalPage: paginition.total_pages,
           totalItem: paginition.total_records
         })
+        if (!data || data.length < 1){
+          setNameDish(value)
+          setIsShowAddDish(true)
+        }
       } catch (error) {
         console.log('Failed to fetch menu list: ', error);
       }
@@ -167,35 +184,119 @@ const Menu = () => {
     document.body.removeChild(link);
   }
 
+  const handleShorcutMenu = (e) => {
+    // Neu la Alt + O
+    if (e.altKey && e.which == 79) {
+        if (window.location.pathname == "/menu"){
+            dispatch(setIsCreateFormMenu(true))
+        }
+    }
+  }
+
   useEffect(() => {
-    getMenuData()
+      document.addEventListener("keyup", handleShorcutMenu)
+      getMenuData()
+  }, [])
+
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    function doc_keyUp_1(e) {
+
+        // this would test for whichever key is 40 (down arrow) and the ctrl key at the same time
+        if (e.altKey && e.which == 49) {
+            // call your function to do the thing
+            navigate("/")
+        }
+        if (e.altKey && e.which == 50) {
+        // call your function to do the thing
+        navigate("/menu")
+        }
+        if (e.altKey && e.which == 51) {
+        // call your function to do the thing
+        navigate("/customer")
+        }
+        if (e.altKey && e.which == 52) {
+        // call your function to do the thing
+        navigate("/bill")
+        }
+    }
+
+    document.addEventListener('keyup', doc_keyUp_1)
   }, [])
 
   const listDish = [
+    "Tất cả",
     "Đồ ăn",
     "Đồ ăn kèm",
     "Đồ uống"
   ]
 
+  const [typeDish, setTypeDish] = useState("Tất cả")
+
+  const onSelectDish = (name, value) => {
+    console.log("change")
+    setTypeDish(value);
+    (async () => {
+      try {
+        let _typeDish = 0
+        if (value == "Đồ ăn"){
+          _typeDish = 0
+        }
+        if (value == "Đồ ăn kèm"){
+          _typeDish = 1
+        }
+        if (value == "Đồ uống"){
+          _typeDish = 2
+        }
+        if (value == "Tất cả"){
+          _typeDish = 10
+        }
+        console.log("ok")
+
+        const { data, paginition } = await menuApi.getAll({
+          key: value,
+          lower: "",
+          upper: "",
+          idhoadon: "",
+          nhommonan: _typeDish,
+          page: 1,
+          limit: menuPaginition.limit
+        });
+        setMenuList(data);
+        setMenuPaginition({
+          page: paginition.page,
+          limit: paginition.limit,
+          totalPage: paginition.total_pages,
+          totalItem: paginition.total_records
+        })
+      } catch (error) {
+        console.log('Failed to fetch menu list: ', error);
+      }
+    })();
+  }
 
   return (
-    <div className="menu-container">
+    <div tabindex="0" id="menu-container" className="menu-container">
       <div className="menu-container__header">
-        <div className="menu-container__title">Thực đơn</div>
+        <div id="menu-container__title" className="menu-container__title">Thực đơn</div>
         <div className="menu-container__tool-bar">
-          <DropDown listItem={listDish}></DropDown>
+          <DropDown headerClassName="menu-container-filter" selected={typeDish} listItem={listDish} onSelected={onSelectDish}></DropDown>
           <div className="menu-container__search">
             <input onChange={onChangeSearch} className="menu-container__input-search"></input>
           </div>
+          {isShowAddDish &&  <button className="menu-container__add"
+            onClick={() => handleSetIsShowCreateForm(true)}
+          >Thêm món vừa nhập</button>}
           <button className="menu-container__add"
-            onClick={() => setIsVisibleCreateForm(true)}
+            onClick={() => handleSetIsShowCreateForm(true)}
           >Thêm món</button>
           <button className="menu-container__export"
             onClick={() => handleExport()}
           >Trích xuất dữ liệu</button>
         </div>
       </div>
-      <div className="menu-container__content">
+      <div id="menu-container__content" className="menu-container__content">
         <div className="menu-container__list">
           {
             menuList.map((menu, index) => {
@@ -213,11 +314,12 @@ const Menu = () => {
           onNumberItemChange={onNumberItemChange}
         ></Pagination>
       </div>
-      <CreateForm
+      <CreateFormMenu
+        name={nameDish}
         getMenuData={getMenuData}
         visible={isVisibleCreateForm}
-        setVisible={setIsVisibleCreateForm}
-      ></CreateForm>
+        setVisible={handleSetIsShowCreateForm}
+      ></CreateFormMenu>
       <UpdateForm
         data={currentDish}
         getMenuData={getMenuData}

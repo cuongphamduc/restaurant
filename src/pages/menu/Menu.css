@@ -12,6 +12,11 @@
     max-width: 1320px;
 }
 
+.menu-container:focus{
+    border: none;
+    outline: none;
+}
+
 .menu-container__header{
     height: 50px;
     width: 100%;
@@ -41,6 +46,7 @@
     flex-direction: row;
 
     align-items: center;
+    margin-left: 10px;
 }
 
 .menu-container__input-search{
@@ -54,8 +60,10 @@
     background-color: #b7b9bf;
 }
 
-.dropdown-container {
+.menu-container-filter {
     width: 220px !important;
+    height: 30px !important;
+    border: 1px solid #b7b9bf !important;
 }
 
 .menu-container__button-search{
@@ -137,35 +145,24 @@
     
 }
 
-.menu-container .ant-pagination-item-active{
-    background-color: #FEA116 !important;
-    color: white !important;
-    border: none !important;
-}
-
-
-.menu-container .ant-pagination-total-text{
-    color: white !important;
-}
-
-.menu-container .ant-pagination-options-quick-jumper{
-    color: white !important;
-}
-
-.menu-container .ant-select-selection-item{
-    color: #0F172B !important;
-}
-
-.menu-container .ant-select-selection{
-    border: none !important;
-    color: #0F172B !important;
-}
-
-.menu-container .ant-select-arrow{
-    color: #0F172B !important;
-}
-
 .menu-container .paginition-container .info .info__item {
+    color: #b7b9bf !important;
+}
+
+.menu-container .paginition-container .dropdown-container .dropdown-container__header {
+    border: 1px solid #b7b9bf !important;
+    color: #b7b9bf !important;
+}
+
+.menu-container .dropdown-container__header__icon{
+    color: #b7b9bf !important;
+}
+
+.menu-container  .dropdown-container__select-box__item{
+    color: #0F172B !important;
+}
+
+.menu-container  .dropdown-container__select-box__item:hover{
     color: #b7b9bf !important;
 }
 
@@ -186,18 +183,6 @@
     background-color: #b7b9bf !important;
     color: #0F172B  !important;
   }
-
-.menu-container .dropdown-container .dropdown-container__header {
-    border: 1px solid #b7b9bf;
-}
-
-.menu-container .dropdown-container .dropdown-container__header .dropdown-container__header__icon {
-    color: #b7b9bf;
-}
-
-.menu-container .dropdown-container .dropdown-container__select-box .dropdown-container__select-box__item {
-    color: #0F172B;
-}
 
 .create-form-menu-footer{
     width: 100%;

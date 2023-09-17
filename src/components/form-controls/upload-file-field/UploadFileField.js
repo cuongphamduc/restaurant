@@ -19,7 +19,6 @@ const Input = (props) => {
                 accept="image/png, image/jpeg"
                 onChange={(e) => {
                     // setValue(e.target.value)
-                    console.log(e.target.files[0].name)
                     
                     props.onChange(e)
                 }}

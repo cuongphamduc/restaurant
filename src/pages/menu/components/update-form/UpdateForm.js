@@ -28,7 +28,6 @@ const UpdateForm = (props) => {
   const handleSubmit = (values) => {
     try {
       let imagefile = document.getElementById("update-menu-upload-file")
-      console.log(imagefile.files)
       const { data } = menuApi.update(props.data.tenmonan, values, imagefile.files[0]).then((data) => {
           props.getMenuData()
           form.reset()

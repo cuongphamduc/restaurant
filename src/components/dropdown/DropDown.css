@@ -9,7 +9,7 @@
     bottom: 0;
     left: 0;
     z-index: 1;
-    display: none;
+    /* display: none; */
 }
 
 .dropdown-container .dropdown-container__overlay .dropdown-container__overlay__active {

@@ -83,6 +83,12 @@
     display: block;
     opacity: 1;
   }
+
+  &__active-item{
+    background-color: #CFD8DC;
+    color: #0F172B;
+    cursor: pointer;
+  }
 }
 
 .select-box__header{

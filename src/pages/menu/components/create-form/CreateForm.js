@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import InputField from '../../../../components/form-controls/input-field/InputField'
 import './CreateForm.css'
@@ -8,14 +8,16 @@ import Modal from '../../../../components/modal/Modal';
 import menuApi from '../../../../api/MenuApi';
 import UploadFileField from '../../../../components/form-controls/upload-file-field/UploadFileField';
 import DropDown from '../../../../components/dropdown/DropDown';
+import { useDispatch } from 'react-redux';
 
-const CreateForm = (props) => {
+const CreateFormMenu = (props) => {
   const schema = yup.object().shape({
     tenmonan: yup.string().required('Chưa nhập tên món ăn!'),
     gia: yup.number("Giá phải là số!").integer().min(1, "Giá phải lớn hơn 0!").required('Chưa nhập giá!'),
     hinhanh: yup.string(),
     mota: yup.string(),
   });
+  const [typeDish, setTypeDish] = useState("Đồ ăn")
 
   const form = useForm({
     defaultValues: {
@@ -31,8 +33,20 @@ const CreateForm = (props) => {
     (async () => {
       try {
         let imagefile = document.getElementById("create-menu-upload-file")
-        console.log(imagefile)
-        const { data } = await menuApi.add(values, imagefile.files[0]);
+        let _typeDish = 0
+        if (typeDish == "Đồ ăn"){
+          _typeDish = 0
+        }
+        if (typeDish == "Đồ ăn kèm"){
+          _typeDish = 1
+        }
+        if (typeDish == "Đồ uống"){
+          _typeDish = 2
+        }
+
+        let formData = {...values, ...{nhommonan: _typeDish}}
+        console.log(formData)
+        const { data } = await menuApi.add(formData, imagefile.files[0]);
       } catch (error) {
         console.log('Failed to fetch menu list: ', error);
       }
@@ -53,6 +67,40 @@ const CreateForm = (props) => {
     "Đồ uống"
   ]
 
+  const onSelectDish = (name, value) => {
+    setTypeDish(value)
+  }
+
+  const dispatch = useDispatch()
+
+  const handleShorcutCreateMenu = (e) => {
+    if (window.location.pathname == "/menu"){
+      // Neu la nut ESC
+      if (e.which == 27){
+        handleCancel()
+      }
+      // Neu la Alt + S
+      if (e.altKey && e.which == 83) {
+          if (props.visible){
+              document.getElementById("button-add-dish").click()
+          }
+      }
+    }
+  }
+
+  useEffect(() => {
+      document.removeEventListener("keyup", handleShorcutCreateMenu)
+      document.addEventListener("keyup", handleShorcutCreateMenu)
+      var textbox = document.getElementById("create-form-menu-container__name");
+      textbox.focus();
+  }, [props.visible])
+
+  useEffect(() => {
+    if (props.name !== null && props.name !== ""){
+      form.setValue("tenmonan", props.name)
+    }
+  }, [props.name])
+
   return (
     <form onSubmit={form.handleSubmit(handleSubmit)}>
       <Modal
@@ -63,6 +111,7 @@ const CreateForm = (props) => {
           footer={(
             <div className='create-form-menu-footer'>
               <button
+                id="button-add-dish"
                 className='button-add'
                 type='submit'
               >Thêm</button>
@@ -73,10 +122,10 @@ const CreateForm = (props) => {
             </div>
           )}
         >
-        <div className='create-form-menu-container'>
+        <div id="create-form-menu-container" className='create-form-menu-container'>
             <div className="create-form-menu-container__line">
               <div className="create-form-menu-container__line__lable">Tên:</div>
-              <InputField name="tenmonan" form={form} type="text"></InputField>
+              <InputField id="create-form-menu-container__name" name="tenmonan" form={form} type="text"></InputField>
             </div>
             <div className="create-form-menu-container__line">
               <div className="create-form-menu-container__line__lable">Mô tả:</div>
@@ -84,7 +133,7 @@ const CreateForm = (props) => {
             </div>
             <div className="create-form-menu-container__line">
               <div className="create-form-menu-container__line__lable">Nhóm món ăn:</div>
-              <DropDown listItem={listDish}></DropDown>
+              <DropDown name={"name-dish"} selected={typeDish} listItem={listDish} onSelected={onSelectDish}></DropDown>
             </div>
             <div className="create-form-menu-container__line">
               <div className="create-form-menu-container__line__lable">Giá(VNĐ):</div>
@@ -101,4 +150,4 @@ const CreateForm = (props) => {
   )
 }
 
-export default CreateForm
+export default CreateFormMenu

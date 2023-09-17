@@ -2,6 +2,16 @@ import axiosClient from './AxiosClient';
 
 const customerApi = {
   async getAll(params) {
+    return {
+      data: [],
+      paginition: {
+        page: 1,
+        limit: 1,
+        total_pages: 1,
+        total_records: 1
+      }
+    }
+
     const formData = new FormData();
     params.idhoadon = ""
     const menuList = await axiosClient.get('/timkiemkhachhang', {params});

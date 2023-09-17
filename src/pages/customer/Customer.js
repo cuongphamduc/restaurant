@@ -8,6 +8,7 @@ import CreateForm from './components/create-form/CreateForm'
 import customerApi from '../../api/CustomerApi';
 import UpdateForm from './components/update-form/UpdateForm';
 import DetailForm from './components/detail-form/DetailForm';
+import { useNavigate } from 'react-router-dom';
 
 const dataTest = [{
   ten: "vu tuan anh",
@@ -18,6 +19,18 @@ const dataTest = [{
 
 const Customer = () => {
   const columns = [
+    {
+      title: 'ID khách hàng',
+      dataIndex: 'idkhachhang',
+      render: (text, data) => {
+        return (
+          <span>
+            {text}
+          </span>
+        );
+      },
+      width: '20%',
+    },
     {
       title: 'Tên khách hàng',
       dataIndex: 'ten',
@@ -52,7 +65,7 @@ const Customer = () => {
           </span>
         );
       },
-      width: '45%',
+      width: '25%',
     },
     {
       title: '',
@@ -76,6 +89,8 @@ const Customer = () => {
     },
   ]
 
+  const [isShowAddCustomer, setIsShowAddCustomer] = useState(false)
+  const [nameCustomer, setNameCustomer] = useState(null)
   const [isVisibleCreateForm, setIsVisibleCreateForm] = useState(false)
   const [isVisibleUpdateForm, setIsVisibleUpdateForm] = useState(false)
   const [isVisibleDetailForm, setIsVisibleDetailForm] = useState(false)
@@ -188,6 +203,10 @@ const Customer = () => {
           totalPage: paginition.total_pages,
           totalItem: paginition.total_records
         })
+        if (!data || data.length < 1){
+          setNameCustomer(value)
+          setIsShowAddCustomer(true)
+        }
       } catch (error) {
         console.log('Failed to fetch customer list: ', error);
       }
@@ -221,8 +240,45 @@ const Customer = () => {
     document.body.removeChild(link);
   }
 
+  const handleShorcutCustomer = (e) => {
+    // Neu la Alt + O
+    if (e.altKey && e.which == 79) {
+        if (window.location.pathname == "/customer"){
+            setIsVisibleCreateForm(true)
+        }
+    }
+  }
+
   useEffect(() => {
+    document.addEventListener("keyup", handleShorcutCustomer)
     getCustomerData()
+  }, [])
+
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    function doc_keyUp_1(e) {
+
+        // this would test for whichever key is 40 (down arrow) and the ctrl key at the same time
+        if (e.altKey && e.which == 49) {
+            // call your function to do the thing
+            navigate("/")
+        }
+        if (e.altKey && e.which == 50) {
+        // call your function to do the thing
+        navigate("/menu")
+        }
+        if (e.altKey && e.which == 51) {
+        // call your function to do the thing
+        navigate("/customer")
+        }
+        if (e.altKey && e.which == 52) {
+        // call your function to do the thing
+        navigate("/bill")
+        }
+    }
+
+    document.addEventListener('keyup', doc_keyUp_1)
   }, [])
 
   return (
@@ -233,6 +289,12 @@ const Customer = () => {
           <div className="customer-container__search">
             <input className="customer-container__input-search" onChange={onChangeSearch}></input>
           </div>
+          {isShowAddCustomer &&  <button className="menu-container__add"
+            onClick={() => {
+              setIsVisibleCreateForm(true)
+              setIsShowAddCustomer(false)
+            }}
+          >Thêm món vừa nhập</button>}
           <button className="customer-container__add" onClick={() => setIsVisibleCreateForm(true)}>Thêm mới</button>
           <button className="menu-container__export"
             onClick={() => handleExport()}
@@ -243,6 +305,7 @@ const Customer = () => {
       <Table onNumberItemChange={onNumberItemChange} onPageChange={handlePageChange} paginition={customerpaginition} isShowPaginition={true} columns={columns} dataSource={listCustomer}></Table>
       </div>
       <CreateForm
+        name={nameCustomer}
         getCustomerData={getCustomerData}
         visible={isVisibleCreateForm}
         setVisible={setIsVisibleCreateForm}

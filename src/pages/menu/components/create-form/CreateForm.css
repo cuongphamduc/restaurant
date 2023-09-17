@@ -40,6 +40,7 @@
     box-sizing: border-box;
 }
 
-.dropdown-container {
+.create-form-menu-container .dropdown-container__header{
+    border: 1px solid #BDBDBD;
     width: 400px;
 }
