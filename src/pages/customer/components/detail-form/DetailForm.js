@@ -16,12 +16,20 @@ const DetailForm = (props) => {
         >
         <div className='create-form-customer-container'>
             <div className="create-form-customer-container__line">
+              <div className="create-form-customer-container__line__lable">ID Khách hàng:</div>
+              <div className="">{props.data.idkhachhang}</div>
+            </div>
+            <div className="create-form-customer-container__line">
               <div className="create-form-customer-container__line__lable">Tên khách hàng:</div>
               <div className="">{props.data.ten}</div>
             </div>
             <div className="create-form-customer-container__line">
               <div className="create-form-customer-container__line__lable">Số điện thoại:</div>
               <div className="">{props.data.sdt}</div>
+            </div>
+            <div className="create-form-customer-container__line">
+              <div className="create-form-customer-container__line__lable">Danh xưng:</div>
+              <div className="">{props.data.danhxung}</div>
             </div>
             <div className="create-form-customer-container__line">
               <div className="create-form-customer-container__line__lable">Ngày sinh:</div>

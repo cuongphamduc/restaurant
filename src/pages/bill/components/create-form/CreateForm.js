@@ -23,15 +23,19 @@ import CreateFormCustomer from '../../../customer/components/create-form/CreateF
 const CreateForm = (props) => {
     const [isVisibleCreateFormMenu, setIsVisibleCreateFormMenu] = useState(false)
     const [isShowAddCustomer, setIsShowAddCustomer] = useState(false)
-    const [nameCustomer, setNameCustomer] = useState(null)
+    // const [nameCustomer, setNameCustomer] = useState(null)
     const [visibleSelectCustomer, setVisibleSelectCustomer] = useState(false)
     const [visibleSelectDish, setVisibleSelectDish] = useState(false)
-    const [lishDish, setListDish] = useState([{dish:{
-        tenmonan: "Ga",
-        hinhanh: "", 
-        gia: 100000,
-        mota: "Ga nuong"
-    }}])
+    const [nameCustomer, setNameCustomer] = useState("")
+    const [numberCustomer, setNumberCustomer] = useState("")
+    const [companyCustomer, setCompanyCustomer] = useState("")
+    // const [lishDish, setListDish] = useState([{dish:{
+    //     tenmonan: "Ga",
+    //     hinhanh: "", 
+    //     gia: 100000,
+    //     mota: "Ga nuong"
+    // }}])
+    const [lishDish, setListDish] =useState([])
 
     const getTotalMoney = () => {
         let total = 0
@@ -144,6 +148,9 @@ const CreateForm = (props) => {
       if (item !== null && item !== undefined)
       console.log(item)
       setValuePhoneNumber(item.sdt)
+      setNameCustomer(item.ten)
+      setNumberCustomer(item.sdt)
+      setCompanyCustomer(item.congty)
       // setValueCustomerName(item.ten)
     }
 
@@ -252,15 +259,15 @@ const CreateForm = (props) => {
             </div>
             <div className="create-form-bill-container__line">
               <div className="create-form-bill-container__line__lable">Tên:</div>
-              <div className="">Vu Tuan Anh</div>
+              <div className="">{nameCustomer}</div>
             </div>
             <div className="create-form-bill-container__line">
               <div className="create-form-bill-container__line__lable">Sđt:</div>
-              <div className="">012346679</div>
+              <div className="">{numberCustomer}</div>
             </div>
             <div className="create-form-bill-container__line">
               <div className="create-form-bill-container__line__lable">Công ty:</div>
-              <div className="">Cong ty ABC</div>
+              <div className="">{companyCustomer}</div>
             </div>
             <div className="create-form-bill-container__list">
               <div className="create-form-bill-container__header">

@@ -174,7 +174,7 @@ const Menu = () => {
   }
 
   const handleExport = () => {
-    var uri = "";
+    var uri = "http://localhost:8000/xuatmonan";
     var name = "danhsachmonan"
     var link = document.createElement("a");
     link.download = name;
@@ -186,9 +186,14 @@ const Menu = () => {
 
   const handleShorcutMenu = (e) => {
     // Neu la Alt + O
-    if (e.altKey && e.which == 79) {
+    if (e.altKey && e.keyCode == 79) {
         if (window.location.pathname == "/menu"){
             dispatch(setIsCreateFormMenu(true))
+        }
+    }
+    if (e.altKey && e.keyCode == 80) {
+        if (window.location.pathname == "/menu"){
+            handleExport()
         }
     }
   }
@@ -255,7 +260,7 @@ const Menu = () => {
         console.log("ok")
 
         const { data, paginition } = await menuApi.getAll({
-          key: value,
+          key: search,
           lower: "",
           upper: "",
           idhoadon: "",

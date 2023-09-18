@@ -17,6 +17,7 @@ const InputSearch = (props) => {
 
     const handleSelect = (item) => {
         props.onSelect(item)
+        setCurrentItem(null)
         setIsOpen(false)
     }
 
@@ -30,10 +31,9 @@ const InputSearch = (props) => {
     }
 
     const handleMove = (e) => {
-        console.log("input search", e.keyCode)
         if(e.keyCode == '13'){
             // e.preventDefault()
-            handleSelect(data[currentItem])
+            handleSelect(props.data[currentItem])
         }
         if (e.keyCode == '38'){
             if (currentItem === null){
@@ -41,14 +41,16 @@ const InputSearch = (props) => {
             }
             else if (currentItem > 0){
                 setCurrentItem(currentItem - 1)
+                document.getElementById("search-item-" + String(currentItem - 1)).scrollIntoView();
             }
         }
         if (e.keyCode == '40'){
             if (currentItem === null){
                 setCurrentItem(0)
             }
-            else if (currentItem < data.length - 1){
+            else if (currentItem < props.data.length - 1){
                 setCurrentItem(currentItem + 1)
+                document.getElementById("search-item-" + String(currentItem + 1)).scrollIntoView();
             }
         }
     }
@@ -89,8 +91,9 @@ const InputSearch = (props) => {
                     <div className="select-box__header-company">Công ty</div>
                 </div>
             }
-            {isOpen && data?.map((item, index) => (
+            {isOpen && props.data?.map((item, index) => (
                 <div
+                    id={`search-item-${index}`}
                     key={index}
                     className={`inputsearch-container__select-box__item ocr-designer__tooltip ${currentItem == Number(index) ? "inputsearch-container__active-item" : ""}`}
                     data-style="tooltip"

@@ -230,7 +230,7 @@ const Customer = () => {
   }
 
   const handleExport = () => {
-    var uri = "";
+    var uri = "http://localhost:8000/xuatkhachhang";
     var name = "danhsachmonan"
     var link = document.createElement("a");
     link.download = name;
@@ -242,9 +242,14 @@ const Customer = () => {
 
   const handleShorcutCustomer = (e) => {
     // Neu la Alt + O
-    if (e.altKey && e.which == 79) {
+    if (e.altKey && e.keyCode == 79) {
         if (window.location.pathname == "/customer"){
             setIsVisibleCreateForm(true)
+        }
+    }
+    if (e.altKey && e.keyCode == 80) {
+        if (window.location.pathname == "/customer"){
+            handleExport()
         }
     }
   }
