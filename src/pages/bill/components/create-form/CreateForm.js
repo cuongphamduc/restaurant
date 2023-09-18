@@ -17,18 +17,19 @@ import billApi from '../../../../api/BillApi';
 import customerApi from '../../../../api/CustomerApi';
 import InputSearch from '../../../../components/input-search/InputSearch';
 import { event } from 'jquery';
-import CreateFormMenu from '../../../menu/components/create-form/CreateForm';
-import CreateFormCustomer from '../../../customer/components/create-form/CreateForm';
+import CreateFormCustomer from '../create-form-customer/CreateForm';
 
 const CreateForm = (props) => {
-    const [isVisibleCreateFormMenu, setIsVisibleCreateFormMenu] = useState(false)
+    const [isVisibleCreateFormCustomer, setIsVisibleCreateFormCustomer] = useState(false)
     const [isShowAddCustomer, setIsShowAddCustomer] = useState(false)
     // const [nameCustomer, setNameCustomer] = useState(null)
     const [visibleSelectCustomer, setVisibleSelectCustomer] = useState(false)
     const [visibleSelectDish, setVisibleSelectDish] = useState(false)
+    const [searchCustomer, setSearchCustomer] = useState(null)
     const [nameCustomer, setNameCustomer] = useState("")
     const [numberCustomer, setNumberCustomer] = useState("")
     const [companyCustomer, setCompanyCustomer] = useState("")
+    const [note, setNote] = useState("")
     // const [lishDish, setListDish] = useState([{dish:{
     //     tenmonan: "Ga",
     //     hinhanh: "", 
@@ -79,6 +80,11 @@ const CreateForm = (props) => {
           list_soluong: _list_soluong,
           tennguoidung: "admin"
         });
+        const { data1 } = await billApi.note(
+          {
+            ghichu: note
+          }
+        )
       } catch (error) {
         console.log('Failed to fetch bill list: ', error);
       }
@@ -86,12 +92,17 @@ const CreateForm = (props) => {
     props.getBillData()
     form.reset()
     setListDish([])
+    setNote("")
     props.setVisible(false)
   }
 
   const handleCancel = () => {
     // document.getElementById("create-form-bill-input-phone-number").value = '';
     // document.getElementById("create-form-bill-input-name").value = '';
+    setValuePhoneNumber("")
+    setListCustomer([])
+    setIsShowAddCustomer(false)
+    setIsVisibleCreateFormCustomer(false)
     form.reset()
     setListDish([])
     props.setVisible(false)
@@ -168,7 +179,7 @@ const CreateForm = (props) => {
                 setListCustomer(data);
                 if (!data || data.length < 1){
                   if (value !== ""){
-                    setNameCustomer(value)
+                    setSearchCustomer(value)
                     setIsShowAddCustomer(true)
                   }
                   else{
@@ -204,31 +215,52 @@ const CreateForm = (props) => {
       if (window.location.pathname == "/bill"){
         // Neu la nut ESC
         if (e.which == 27){
-          handleCancel()
+          if (props.visible){
+            if (isVisibleCreateFormCustomer == false){
+              handleCancel()
+            }
+            // let createCustomer = document.getElementById("create-customer-in-bill-button-add-customer")
+            // console.log("esc", createCustomer)
+            // if (createCustomer == null || createCustomer == undefined){
+            //   handleCancel()
+            // }
+          }
         }
         // Neu la Alt + S
         if (e.altKey && e.which == 83) {
             if (props.visible){
-              let createCustomer = document.getElementById("create-customer-in-bill")
-              console.log(createCustomer)
-              if (createCustomer === null || createCustomer === undefined){
-                // document.getElementById("button-add-bill").click()
+                document.getElementById("button-add-bill").click()
               }
-            }
         }
+        if (e.altKey && e.which == 65) {
+          if (props.visible){
+              setVisibleSelectDish(true)
+            }
+      }
       }
     }
   
     useEffect(() => {
-        document.removeEventListener("keyup", handleShorcutCreateBill)
-        document.addEventListener("keyup", handleShorcutCreateBill)
+        // document.removeEventListener("keyup", handleShorcutCreateBill)
+        // document.addEventListener("keyup", handleShorcutCreateBill)
         var textbox = document.getElementById("create-form-bill-container__name");
         textbox.focus();
     }, [props.visible])
 
+    useEffect(() => {
+      if (!isVisibleCreateFormCustomer && !visibleSelectDish){
+        var textbox = document.getElementById("create-form-bill-container");
+        textbox.focus();
+      }
+  }, [isVisibleCreateFormCustomer, visibleSelectDish])
+
+    
+    const onCreateCustomerDone = () => {
+      setIsShowAddCustomer(false)
+    }
 
   return (
-    // <form onSubmit={form.handleSubmit(handleSubmit)}>
+    <form onSubmit={form.handleSubmit(handleSubmit)}>
       <Modal
           title={`Thêm mới hóa đơn`}
           visible={props.visible}
@@ -248,14 +280,13 @@ const CreateForm = (props) => {
             </div>
           )}
         >
-        <div className='create-form-bill-container'>
+        <div id="create-form-bill-container" className='create-form-bill-container' onKeyDown={handleShorcutCreateBill} tabIndex={"0"}>
             <div className="create-form-bill-container__line">
               <div className="create-form-bill-container__line__lable">Tên/ Số điện thoại:</div>
               <InputSearch id="create-form-bill-container__name" setValue={setValuePhoneNumber} onChange={handleChangePhoneNumber} onSelect={handleOnSelectPhoneNumber} value={valuePhoneNumber} data={listCustomer}></InputSearch>
-              {/* {isShowAddCustomer && <button onClick={() => {
-                setIsVisibleCreateFormMenu(true)
-                setIsShowAddCustomer(false)
-              }}>Thêm khách hàng</button>} */}
+              {isShowAddCustomer && <button type='button' className='button-add-customer' onClick={() => {
+                setIsVisibleCreateFormCustomer(true)
+              }}>Thêm khách hàng</button>}
             </div>
             <div className="create-form-bill-container__line">
               <div className="create-form-bill-container__line__lable">Tên:</div>
@@ -307,6 +338,10 @@ const CreateForm = (props) => {
                     <div className="total-money__value">{Intl.NumberFormat().format(getTotalMoney())} VNĐ</div>
                 </div>
             </div>
+            <div className="create-form-bill-container__line">
+              <div className="create-form-bill-container__line__lable">Ghi chú:</div>
+              <input value={note} onChange={(e) => {setNote(e.target.value)}}></input>
+            </div>
             <button type='submit' id="button-submit-form-bill" style={{display: "none"}}></button>
         </div>
         <Modal
@@ -320,26 +355,22 @@ const CreateForm = (props) => {
                 close={() => setVisibleSelectCustomer(false)}
             ></SelectCustomer>
         </Modal>
-        <Modal
-          title={`Danh sách món ăn`}
-          visible={visibleSelectDish}
-          width={"900px"}
-          onCancel={() => setVisibleSelectDish(false)}
-        >
-            <SelectDish
-                onSelect={handleSelectDish}
-                close={() => setVisibleSelectDish(false)}
-            ></SelectDish>
-        </Modal>
-          {/* {isVisibleCreateFormMenu &&  <CreateFormCustomer
+
+          {visibleSelectDish && <SelectDish
+              onSelect={handleSelectDish}
+              visible={visibleSelectDish}
+              setVisible={setVisibleSelectDish}
+          ></SelectDish>}
+          {isVisibleCreateFormCustomer &&  <CreateFormCustomer
               id="create-customer-in-bill"
-              name={nameCustomer}
+              name={searchCustomer}
               getCustomerData={() => {}}
-              visible={isVisibleCreateFormMenu}
-              setVisible={setIsVisibleCreateFormMenu}
-          ></CreateFormCustomer>} */}
+              visible={isVisibleCreateFormCustomer}
+              setVisible={setIsVisibleCreateFormCustomer}
+              onCreateDone={onCreateCustomerDone}
+          ></CreateFormCustomer>}
       </Modal>
-    // </form>
+    </form>
   )
 }
 

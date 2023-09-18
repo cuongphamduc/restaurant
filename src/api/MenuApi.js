@@ -3,7 +3,13 @@ import axiosClient from './AxiosClient';
 const menuApi = {
   async getAll(params) {
     // return {
-    //   data: [],
+    //   data: [{
+    //     tenmonan: 'vta',
+    //     mota: '',
+    //     gia: 1,
+    //     nhommonan: 0,
+    //     hinhanh: ''
+    //   }],
     //   paginition: {
     //     page: 1,
     //     limit: 1,
@@ -53,6 +59,7 @@ const menuApi = {
     formData.append("tenmonan", data.tenmonan)
     formData.append("gia", data.gia)
     formData.append("mota", data.mota)
+    formData.append("nhommonan", data.nhommonan)
     if (file !== undefined){
       formData.append("in_file", file)
     }

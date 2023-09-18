@@ -1,0 +1,65 @@
+.create-form-customer-container{
+    width: 100%;
+    padding-left: 50px;
+    padding-right: 50px;
+    font-family: "Nunito",sans-serif;
+    font-size: 14px;
+}
+
+.create-form-customer-container__line{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.create-form-customer-container__line__lable{
+    width: 150px;
+    text-align: left;
+    font-weight: 500;
+
+    color: #0F172B;
+}
+
+
+.create-form-customer-container__line input{
+    width: 400px;
+    border: 1px solid #BDBDBD;
+    border-radius: 6px;
+    padding: 5px;
+    box-sizing: border-box;
+}
+
+.create-form-customer-container__line input:focus{
+    background-color: #CFD8DC;
+    outline: none;
+    border: 1px solid #0F172B;
+    box-sizing: border-box;
+}
+
+.create-form-customer-footer{
+    width: 100%;
+    height: 100%;
+}
+
+.create-form-customer-footer button{
+    width: 100px;
+    height: 100%;
+
+    margin-left: 10px;
+    margin-right: 10px;
+
+    border-radius: 6px;
+    border: none;
+    color: white;
+}
+
+.create-form-customer-footer .button-add{
+    background-color: #00796B;
+}
+
+.create-form-customer-footer .button-cancel{
+    background-color: #6c757d;
+}

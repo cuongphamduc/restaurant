@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import InputField from '../../../../components/form-controls/input-field/InputField'
+import './CreateForm.css'
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import Modal from '../../../../components/modal/Modal';
 import menuApi from '../../../../api/MenuApi';
 import UploadFileField from '../../../../components/form-controls/upload-file-field/UploadFileField';
 import DropDown from '../../../../components/dropdown/DropDown';
+import { useDispatch } from 'react-redux';
 
-const UpdateForm = (props) => {
+const CreateFormMenu = (props) => {
   const schema = yup.object().shape({
     tenmonan: yup.string().required('Chưa nhập tên món ăn!'),
     gia: yup.number("Giá phải là số!").integer().min(1, "Giá phải lớn hơn 0!").required('Chưa nhập giá!'),
@@ -19,37 +21,39 @@ const UpdateForm = (props) => {
 
   const form = useForm({
     defaultValues: {
-      tenmonan: props.data.temmonan,
-      mota: props.data.mota,
-      gia: props.data.gia,
-      hinhanh: props.data.hinhanh
+      tenmonan: '',
+      mota: '',
+      gia: 1,
+      hinhanh: ''
     },
     resolver: yupResolver(schema),
   })
 
   const handleSubmit = (values) => {
-    try {
-      let imagefile = document.getElementById("update-menu-upload-file")
-      let _typeDish = 0
-      if (typeDish == "Đồ ăn"){
-        _typeDish = 0
-      }
-      if (typeDish == "Đồ ăn kèm"){
-        _typeDish = 1
-      }
-      if (typeDish == "Đồ uống"){
-        _typeDish = 2
-      }
+    (async () => {
+      try {
+        let imagefile = document.getElementById("create-menu-upload-file")
+        let _typeDish = 0
+        if (typeDish == "Đồ ăn"){
+          _typeDish = 0
+        }
+        if (typeDish == "Đồ ăn kèm"){
+          _typeDish = 1
+        }
+        if (typeDish == "Đồ uống"){
+          _typeDish = 2
+        }
 
-      let formData = {...values, ...{nhommonan: _typeDish}}
-      const { data } = menuApi.update(props.data.tenmonan, formData, imagefile.files[0]).then((data) => {
-          props.getMenuData()
-          form.reset()
-          props.setVisible(false)
-      })
-    } catch (error) {
-      console.log('Failed to fetch menu list: ', error);
-    }
+        let formData = {...values, ...{nhommonan: _typeDish}}
+        console.log(formData)
+        const { data } = await menuApi.add(formData, imagefile.files[0]);
+      } catch (error) {
+        console.log('Failed to fetch menu list: ', error);
+      }
+    })();
+    props.getMenuData()
+    form.reset()
+    props.setVisible(false)
   }
 
   const handleCancel = () => {
@@ -67,36 +71,59 @@ const UpdateForm = (props) => {
     setTypeDish(value)
   }
 
+  const dispatch = useDispatch()
+
+  const handleShorcutCreateMenu = (e) => {
+    if (window.location.pathname == "/bill"){
+      // Neu la nut ESC
+      if (e.which == 27){
+        handleCancel()
+      }
+      // Neu la Alt + S
+      if (e.altKey && e.which == 83) {
+          if (props.visible){
+              document.getElementById("button-add-dish").click()
+          }
+      }
+    }
+  }
+
   useEffect(() => {
-    form.setValue('tenmonan', props.data.tenmonan)
-    form.setValue('mota', props.data.mota)
-    form.setValue('gia', props.data.gia)
-    let _typeDish = ""
-    if (props.data.nhommonan == 0){
-      _typeDish = "Đồ ăn"
+      // document.removeEventListener("keyup", handleShorcutCreateMenu)
+      // document.addEventListener("keyup", handleShorcutCreateMenu)
+      var textbox = document.getElementById("create-form-menu-container__name");
+      textbox.focus();
+  }, [props.visible])
+
+  useEffect(() => {
+    if (props.name !== null && props.name !== ""){
+      form.setValue("tenmonan", props.name)
     }
-    if (props.data.nhommonan == 1){
-      _typeDish = "Đồ ăn kèm"
-    }
-    if (props.data.nhommonan == 2){
-      _typeDish = "ồ uống"
-    }
-    setTypeDish(_typeDish)
-  }, [props.data])
+  }, [props.name])
+
+  const handleCreateDish = () => {
+    form.handleSubmit(() => {
+      handleSubmit(form.getValues)
+    })();
+  }
 
   return (
-    <form onSubmit={form.handleSubmit(handleSubmit)}>
+    <form>
       <Modal
-          title={`Cập nhật món ăn`}
+          title={`Thêm mới món ăn`}
           visible={props.visible}
           width={"900px"}
           onCancel={handleCancel}
           footer={(
             <div className='create-form-menu-footer'>
               <button
+                id="button-add-dish"
                 className='button-add'
-                type='submit'
-              >Cập nhật</button>
+                type='button'
+                onClick={form.handleSubmit((values) => {
+                  handleSubmit(values)
+                })}
+              >Thêm</button>
               <button
                 className='button-cancel'
                 onClick={handleCancel}
@@ -104,10 +131,10 @@ const UpdateForm = (props) => {
             </div>
           )}
         >
-        <div className='create-form-menu-container'>
+        <div id="create-form-menu-container" className='create-form-menu-container' onKeyDown={handleShorcutCreateMenu} tabIndex={"0"}>
             <div className="create-form-menu-container__line">
               <div className="create-form-menu-container__line__lable">Tên:</div>
-              <InputField name="tenmonan" form={form} type="text"></InputField>
+              <InputField id="create-form-menu-container__name" name="tenmonan" form={form} type="text"></InputField>
             </div>
             <div className="create-form-menu-container__line">
               <div className="create-form-menu-container__line__lable">Mô tả:</div>
@@ -123,7 +150,7 @@ const UpdateForm = (props) => {
             </div>
             <div className="create-form-menu-container__line">
               <div className="create-form-menu-container__line__lable">Ảnh:</div>
-              <UploadFileField id="update-menu-upload-file" name="hinhanh" form={form} type="file"></UploadFileField>
+              <UploadFileField id="create-menu-upload-file" name="hinhanh" form={form} type="file"></UploadFileField>
             </div>
             <button type='submit' id="button-submit-form-menu" style={{display: "none"}}></button>
         </div>
@@ -132,4 +159,4 @@ const UpdateForm = (props) => {
   )
 }
 
-export default UpdateForm
+export default CreateFormMenu

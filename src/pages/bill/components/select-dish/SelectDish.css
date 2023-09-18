@@ -1,5 +1,6 @@
 .select-dish-container{
     width: 100%;
+    min-height: 400px;
 }
 
 .select-dish-container__search{
@@ -16,10 +17,11 @@
     border-radius: 6px;
     padding: 5px;
     box-sizing: border-box;
+    margin-left: 10px;
 }
 
 .select-dish-container__search button{
-    width: 30px;
+    width: 150px;
     height: 30px;
     margin-left: 10px;
     border: 1px solid #BDBDBD;

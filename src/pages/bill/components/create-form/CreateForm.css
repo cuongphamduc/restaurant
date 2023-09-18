@@ -4,6 +4,7 @@
     padding-right: 50px;
     font-family: "Nunito",sans-serif;
     font-size: 14px;
+    outline: none;
 }
 
 .create-form-bill-container__line{
@@ -215,4 +216,20 @@
     flex-direction: row-reverse;
     align-items: center;
     text-align: right;
+}
+
+.create-form-bill-container .button-add-customer{
+    width: 150px;
+    height: 40px;
+
+    margin-left: 10px;
+
+    border-radius: 6px;
+    border: none;
+    background-color: #BDBDBD;
+}
+
+.create-form-bill-container .button-add-customer:hover{
+    background-color: #0F172B;
+    color: #CFD8DC;
 }

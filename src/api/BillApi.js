@@ -36,6 +36,17 @@ const billApi = {
     return response
   },
 
+  async note(data) {
+    const url = '/ghichu';
+    const response = await axiosClient.post(url, data).catch(function (error) {
+      if (error.response) {
+        console.log(error.response.data);
+        console.log(error.response.status);
+      }
+    });
+    return response
+  },
+
   update(data) {
     const url = `/products/${data.id}`;
     return axiosClient.patch(url, data);

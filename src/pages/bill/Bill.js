@@ -8,6 +8,7 @@ import CreateForm from './components/create-form/CreateForm';
 import { DatePicker } from 'antd';
 import billApi from '../../api/BillApi';
 import DetailForm from '../bill/components/detail-form/DetailForm';
+import axios from 'axios';
 
 
 const Bill = () => {
@@ -246,14 +247,21 @@ for (let i = 0; i < 5; i++) {
   }
 
   const handleExport = () => {
-    var uri = "";
-    var name = "danhsachmonan"
-    var link = document.createElement("a");
-    link.download = name;
-    link.href = uri;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    axios.post('api/downloadMyFile', {
+      key:search,
+      lower: fromTime,
+      upper: toTime,
+      page: 1,
+      limit: 0,
+    }, { responseType: 'blob' }).then(blob=>{
+      const url = window.URL.createObjectURL(blob.data); 
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = "danhsachhoadon"  
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+    })
   }
 
   const handleShorcutBill = (e) => {
@@ -263,6 +271,11 @@ for (let i = 0; i < 5; i++) {
             setIsVisibleCreateForm(true)
         }
     }
+    if (e.altKey && e.keyCode == 80) {
+      if (window.location.pathname == "/bill"){
+          handleExport()
+      }
+  }
   }
 
   useEffect(() => {

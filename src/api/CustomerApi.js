@@ -2,15 +2,22 @@ import axiosClient from './AxiosClient';
 
 const customerApi = {
   async getAll(params) {
-    // return {
-    //   data: [],
-    //   paginition: {
-    //     page: 1,
-    //     limit: 1,
-    //     total_pages: 1,
-    //     total_records: 1
-    //   }
-    // }
+    return {
+      data: [{
+        ten: "vta",
+        sdt: "123",
+        congty: "",
+        danhxung: "Anh",
+        ngaysinh: "23/09/2023",
+        diachi: "123"
+      }],
+      paginition: {
+        page: 1,
+        limit: 1,
+        total_pages: 1,
+        total_records: 1
+      }
+    }
 
     const formData = new FormData();
     params.idhoadon = ""

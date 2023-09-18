@@ -1,47 +1,50 @@
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import InputField from '../../../../components/form-controls/input-field/InputField'
-import './UpdateForm.css'
+import './CreateForm.css'
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import Modal from '../../../../components/modal/Modal';
 import customerApi from '../../../../api/CustomerApi';
+import UploadFileField from '../../../../components/form-controls/upload-file-field/UploadFileField';
 import { DatePicker } from 'antd';
-import dayjs from 'dayjs';
-import 'dayjs/locale/zh-cn';
 import DropDown from '../../../../components/dropdown/DropDown';
 
-const UpdateForm = (props) => {
+const CreateFormCustomer = (props) => {
   const schema = yup.object().shape({
     ten: yup.string().required('Chưa nhập tên!'),
     sdt: yup.string().required('Chưa nhập số điện thoại!').matches(/(0[3|5|7|8|9])+([0-9]{8})\b/g, "Nhập sai định dạng!"),
-    email: yup.string()
-      
-  });
+    email: yup.string(),
+    congty: yup.string()
+  },  [['email']]);
 
   const form = useForm({
     defaultValues: {
-      ten: props.data.ten,
-      sdt: props.data.sdt,
-      diachi: props.data.diachi,
-      email: props.data.email,
-      congty: props.data.congty
+      ten: '',
+      sdt: '',
+      ngaysinh: '',
+      diachi: '',
+      email: '',
+      congty: ''
     },
     resolver: yupResolver(schema),
   })
 
   const handleSubmit = (values) => {
-    (async () => {
-      try {
-        let formData = {...values, ...{old_sdt: props.data.sdt, ngaysinh: birthday, danhxung: sex}}
-        const { data } = await customerApi.update(formData);
-      } catch (error) {
-        console.log('Failed to fetch customer list: ', error);
-      }
-    })();
-    props.getCustomerData()
-    form.reset()
-    props.setVisible(false)
+    // console.log("event", event)
+    // event.preventDefault()
+    // event.stopPropagation();
+    try {
+      let formData = {...values, ...{ngaysinh: birthday, danhxung: sex}}
+      const { data } = customerApi.add(formData).then((data) => {
+            props.getCustomerData()
+            form.reset()
+            props.onCreateDone()
+            props.setVisible(false)
+      })
+    } catch (error) {
+      console.log('Failed to fetch customer list: ', error);
+    }
   }
 
   const handleCancel = () => {
@@ -50,7 +53,7 @@ const UpdateForm = (props) => {
   }
 
   const [sex, setSex] = useState('Anh')
-  const [birthday, setBirthday] = useState('2000-10-10')
+  const [birthday, setBirthday] = useState('')
   const onChangeDate = (dayjs, dayString) => {
     setBirthday(dayString)
   }
@@ -64,29 +67,67 @@ const UpdateForm = (props) => {
     setSex(value)
   }
 
+  const handleShorcutCreateCustomer = (e) => {
+    if (window.location.pathname == "/bill"){
+      // Neu la nut ESC
+      if (e.which == 27){
+        if (props.visible){
+          handleCancel()
+        }
+      }
+      // Neu la Alt + S
+      if (e.altKey && e.which == 83) {
+          if (props.visible){
+              document.getElementById(props.id ? props.id + "-button-add-customer" : "button-add-customer").click()
+          }
+      }
+    }
+  }
+
+
   useEffect(() => {
-    form.setValue('ten', props.data.ten)
-    form.setValue('sdt', props.data.sdt)
-    form.setValue('diachi', props.data.diachi)
-    form.setValue('email', props.data.email)
-    form.setValue('congty', props.data.congty)
-    setBirthday(props.data.ngaysinh)
-    setSex(props.data.danhxung)
-  }, [props.data])
+      document.removeEventListener("keyup", handleShorcutCreateCustomer)
+      document.addEventListener("keyup", handleShorcutCreateCustomer)
+      var textbox = document.getElementById("create-form-customer-container__name");
+      textbox.focus();
+  }, [props.visible])
+
+  useEffect(() => {
+    if (props.name !== null && props.name !== ""){
+
+      const regex = new RegExp("^[0-9]{1,45}$")
+      if (regex.test(props.name)){
+        form.setValue("sdt", props.name)
+      }
+      else{
+        form.setValue("ten", props.name)
+      }
+    }
+  }, [props.name])
+
+  const handleCreateCustomer = () => {
+    form.handleSubmit(() => {
+      handleSubmit(form.getValues)
+    })();
+  }
 
   return (
-    <form onSubmit={form.handleSubmit(handleSubmit)}>
+    <form>
       <Modal
-          title={`Cập nhật thông tin khách hàng`}
+          title={`Thêm mới khách hàng`}
           visible={props.visible}
           width={"900px"}
           onCancel={handleCancel}
           footer={(
             <div className='create-form-customer-footer'>
               <button
+                id={props.id ? props.id + "-button-add-customer" : "button-add-customer"}
                 className='button-add'
-                type='submit'
-              >Cập nhật</button>
+                type='button'
+                onClick={form.handleSubmit((values) => {
+                  handleSubmit(values)
+                })}
+              >Thêm</button>
               <button
                 className='button-cancel'
                 onClick={handleCancel}
@@ -94,10 +135,10 @@ const UpdateForm = (props) => {
             </div>
           )}
         >
-        <div className='create-form-customer-container'>
+        <div className='create-form-customer-container' id={props.id ? props.id : ""}>
             <div className="create-form-customer-container__line">
               <div className="create-form-customer-container__line__lable">Tên khách hàng:</div>
-              <InputField name="ten" form={form} type="text"></InputField>
+              <InputField id="create-form-customer-container__name" name="ten" form={form} type="text"></InputField>
             </div>
             <div className="create-form-customer-container__line">
               <div className="create-form-customer-container__line__lable">Số điện thoại:</div>
@@ -109,7 +150,7 @@ const UpdateForm = (props) => {
             </div>
             <div className="create-form-customer-container__line">
               <div className="create-form-customer-container__line__lable">Ngày sinh:</div>
-              {birthday != "" ? <DatePicker value={dayjs(birthday, 'YYYY-MM-DD')} placeholder="Chọn ngày" onChange={onChangeDate}/> : <DatePicker placeholder="Chọn ngày" onChange={onChangeDate}/>}
+              <DatePicker placeholder="Chọn ngày" onChange={onChangeDate}/>
             </div>
             <div className="create-form-customer-container__line">
               <div className="create-form-customer-container__line__lable">Địa chỉ:</div>
@@ -123,11 +164,11 @@ const UpdateForm = (props) => {
               <div className="create-form-customer-container__line__lable">Công ty:</div>
               <InputField name="congty" form={form} type="text"></InputField>
             </div>
-            <button type='submit' id="button-submit-form-customer" style={{display: "none"}}></button>
+            <button type='submit' id="create-submit-form-customer" style={{display: "none"}}></button>
         </div>
       </Modal>
     </form>
   )
 }
 
-export default UpdateForm
+export default CreateFormCustomer
