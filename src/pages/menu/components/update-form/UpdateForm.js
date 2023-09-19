@@ -79,7 +79,7 @@ const UpdateForm = (props) => {
       _typeDish = "Đồ ăn kèm"
     }
     if (props.data.nhommonan == 2){
-      _typeDish = "ồ uống"
+      _typeDish = "Đồ uống"
     }
     setTypeDish(_typeDish)
   }, [props.data])

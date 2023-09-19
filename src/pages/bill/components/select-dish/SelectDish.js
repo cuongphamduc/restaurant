@@ -196,9 +196,9 @@ const SelectDish = ({onSelect, visible, setVisible}) => {
                   <DropDown headerClassName="menu-container-filter" selected={typeDish} listItem={listDish} onSelected={onSelectDish}></DropDown>
                     <input id="select-dish-container__search" onChange={onChangeSearch}></input>
                     {/* <button onClick={handleSearch}><FontAwesomeIcon icon={faSearch} /></button> */}
-                    {isShowAddDish && <button type='button' className='button-add-customer' onClick={() => {
+                    <button type='button' className='button-add-customer' onClick={() => {
                         setIsVisibleCreateFormDish(true)
-                    }}>Thêm khách hàng</button>}
+                    }}>Thêm món ăn</button>
                 </div>
                 <div className="select-dish-container__content">
                     <div className="select-dish-container__list">

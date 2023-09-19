@@ -37,7 +37,7 @@ const billApi = {
   },
 
   async note(data) {
-    const url = '/ghichu';
+    const url = '/inghichu';
     const response = await axiosClient.post(url, data).catch(function (error) {
       if (error.response) {
         console.log(error.response.data);

@@ -247,21 +247,29 @@ for (let i = 0; i < 5; i++) {
   }
 
   const handleExport = () => {
-    axios.post('api/downloadMyFile', {
-      key:search,
-      lower: fromTime,
-      upper: toTime,
-      page: 1,
-      limit: 0,
-    }, { responseType: 'blob' }).then(blob=>{
-      const url = window.URL.createObjectURL(blob.data); 
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = "danhsachhoadon"  
-      document.body.appendChild(a);
-      a.click();
-      window.URL.revokeObjectURL(url);
-    })
+    // axios.get("http://localhost:8000/xuathoadon", { params:{
+    //   key:search,
+    //   lower: fromTime,
+    //   upper: toTime,
+    //   page: 1,
+    //   limit: 0,
+    // }}, { responseType: 'blob' }).then(blob=>{
+    //   const url = window.URL.createObjectURL(blob.data); 
+    //   const a = document.createElement('a');
+    //   a.href = url;
+    //   a.download = "danhsachhoadon"  
+    //   document.body.appendChild(a);
+    //   a.click();
+    //   window.URL.revokeObjectURL(url);
+    // })
+    var uri = `http://localhost:8000/xuathoadon?key=${search}&lower=${fromTime}&upper=${toTime}&page=1&limit=0`;
+    var name = "danhsachmonan"
+    var link = document.createElement("a");
+    link.download = name;
+    link.href = uri;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   }
 
   const handleShorcutBill = (e) => {

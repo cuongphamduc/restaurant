@@ -158,7 +158,7 @@ const CreateForm = (props) => {
     const handleOnSelectPhoneNumber = (item) => {
       if (item !== null && item !== undefined)
       console.log(item)
-      setValuePhoneNumber(item.sdt)
+      // setValuePhoneNumber(item.sdt)
       setNameCustomer(item.ten)
       setNumberCustomer(item.sdt)
       setCompanyCustomer(item.congty)
@@ -256,6 +256,21 @@ const CreateForm = (props) => {
 
     
     const onCreateCustomerDone = () => {
+      (async () => {
+              try {
+                const { data, paginition } = await customerApi.getAll({
+                  key: searchCustomer,
+                  lower: "",
+                  upper: "",
+                  idhoadon: "",
+                  page: 1,
+                  limit: 0
+                });
+                setListCustomer(data);
+              } catch (error) {
+                console.log('Failed to fetch customer list: ', error);
+              }
+            })();
       setIsShowAddCustomer(false)
     }
 
@@ -284,9 +299,9 @@ const CreateForm = (props) => {
             <div className="create-form-bill-container__line">
               <div className="create-form-bill-container__line__lable">Tên/ Số điện thoại:</div>
               <InputSearch id="create-form-bill-container__name" setValue={setValuePhoneNumber} onChange={handleChangePhoneNumber} onSelect={handleOnSelectPhoneNumber} value={valuePhoneNumber} data={listCustomer}></InputSearch>
-              {isShowAddCustomer && <button type='button' className='button-add-customer' onClick={() => {
+              <button type='button' className='button-add-customer' onClick={() => {
                 setIsVisibleCreateFormCustomer(true)
-              }}>Thêm khách hàng</button>}
+              }}>Thêm khách hàng</button>
             </div>
             <div className="create-form-bill-container__line">
               <div className="create-form-bill-container__line__lable">Tên:</div>
@@ -340,7 +355,7 @@ const CreateForm = (props) => {
             </div>
             <div className="create-form-bill-container__line">
               <div className="create-form-bill-container__line__lable">Ghi chú:</div>
-              <input value={note} onChange={(e) => {setNote(e.target.value)}}></input>
+              <textarea value={note} onChange={(e) => {setNote(e.target.value)}}></textarea>
             </div>
             <button type='submit' id="button-submit-form-bill" style={{display: "none"}}></button>
         </div>
