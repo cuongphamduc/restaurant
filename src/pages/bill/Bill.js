@@ -9,6 +9,7 @@ import { DatePicker } from 'antd';
 import billApi from '../../api/BillApi';
 import DetailForm from '../bill/components/detail-form/DetailForm';
 import axios from 'axios';
+import ConfirmRemove from '../../components/confirm-remove/ConfirmRemove';
 
 
 const Bill = () => {

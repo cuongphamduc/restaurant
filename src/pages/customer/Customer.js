@@ -9,6 +9,7 @@ import customerApi from '../../api/CustomerApi';
 import UpdateForm from './components/update-form/UpdateForm';
 import DetailForm from './components/detail-form/DetailForm';
 import { useNavigate } from 'react-router-dom';
+import ConfirmRemove from '../../components/confirm-remove/ConfirmRemove';
 
 const dataTest = [{
   ten: "vu tuan anh",
@@ -81,7 +82,10 @@ const Customer = () => {
               setCurrentCustomer(data)
               setIsVisibleUpdateForm(true)
             }}><i class="bi bi-pencil-square"></i></button>
-            <button className='bill-container__action-button bg-danger' onClick={() => handleRemove(data.sdt)}><i class="bi bi-trash"></i></button>
+            <button className='bill-container__action-button bg-danger' onClick={() => {
+              setCurrentCustomer(data)
+              setIsConfirm(true)
+            }}><i class="bi bi-trash"></i></button>
           </div>
         );
       },
@@ -89,6 +93,7 @@ const Customer = () => {
     },
   ]
 
+  const [isConfirm, setIsConfirm] = useState(false)
   const [isShowAddCustomer, setIsShowAddCustomer] = useState(false)
   const [nameCustomer, setNameCustomer] = useState(null)
   const [isVisibleCreateForm, setIsVisibleCreateForm] = useState(false)
@@ -221,6 +226,7 @@ const Customer = () => {
   const handleRemove = (sdt) => {
     (async () => {
       try {
+        console.log("remove", sdt)
         const { data } = await customerApi.remove(sdt);
       } catch (error) {
         console.log('Failed to remove customer: ', error);
@@ -322,6 +328,12 @@ const Customer = () => {
         setVisible={setIsVisibleUpdateForm}
       ></UpdateForm>
       <DetailForm data={currentCustomer} visible={isVisibleDetailForm} setVisible={setIsVisibleDetailForm}></DetailForm>
+      <ConfirmRemove
+          code={currentCustomer.sdt}
+          visible={isConfirm}
+          setVisible={setIsConfirm}
+          onConfirm={handleRemove}
+        ></ConfirmRemove>
     </div>
   )
 }

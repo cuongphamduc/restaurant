@@ -1,8 +1,11 @@
-import React from 'react'
+import React, { useState } from 'react'
 import './Dish.css'
 import avater from './../../../../assets/img/about-4.jpg'
+import ConfirmRemove from '../../../../components/confirm-remove/ConfirmRemove'
 
 const Dish = ({isEdit, data, onClick, onRemove, onEdit}) => {
+  const [isConfirm, setIsConfirm] = useState(false)
+
   const handleClick = () => {
     if (onClick){
       onClick()
@@ -30,12 +33,17 @@ const Dish = ({isEdit, data, onClick, onRemove, onEdit}) => {
                 {
                   isEdit && <div>
                     <button type='button' onClick={handleEdit} className="dish-container__add bg-success">Sửa</button>
-                    <button type='button' onClick={handleRemove} className="dish-container__add bg-danger">Xóa</button>
+                    <button type='button' onClick={() => setIsConfirm(true)} className="dish-container__add bg-danger">Xóa</button>
                   </div>
                 }
             </div>
 
         </div>
+        <ConfirmRemove
+          visible={isConfirm}
+          setVisible={setIsConfirm}
+          onConfirm={handleRemove}
+        ></ConfirmRemove>
     </div>
   )
 }

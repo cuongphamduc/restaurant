@@ -378,7 +378,7 @@ const CreateForm = (props) => {
           ></SelectDish>}
           {isVisibleCreateFormCustomer &&  <CreateFormCustomer
               id="create-customer-in-bill"
-              name={searchCustomer}
+              name={valuePhoneNumber}
               getCustomerData={() => {}}
               visible={isVisibleCreateFormCustomer}
               setVisible={setIsVisibleCreateFormCustomer}

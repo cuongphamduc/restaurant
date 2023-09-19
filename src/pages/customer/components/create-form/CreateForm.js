@@ -37,7 +37,7 @@ const CreateFormCustomer = (props) => {
     try {
       let formData = {...values, ...{ngaysinh: birthday, danhxung: sex}}
       const { data } = customerApi.add(formData).then((data) => {
-          props.getCustomerData()
+            props.getCustomerData()
             form.reset()
             props.setVisible(false)
             event.preventDefault()

@@ -13,6 +13,7 @@ import { useNavigate } from 'react-router-dom'
 import { Shortcut } from '../../App'
 import { useDispatch, useSelector } from 'react-redux'
 import { setIsCreateFormMenu } from './MenuSlice'
+import ConfirmRemove from '../../components/confirm-remove/ConfirmRemove'
 
 const Menu = () => {
   const [isShowAddDish, setIsShowAddDish] = useState(false)
@@ -27,6 +28,7 @@ const Menu = () => {
   })
   const isVisibleCreateForm = useSelector((state) => state.menu.isCreateFormMenu)
   const [isVisibleUpdateForm, setIsVisibleUpdateForm] = useState(false)
+  
   const [currentDish, setCurrentDish] = useState('')
   const dispatch = useDispatch()
 
@@ -95,12 +97,25 @@ const Menu = () => {
   const getMenuData = () => {
     (async () => {
       try {
+        let _typeDish = 10
+        if (typeDish == "Đồ ăn"){
+          _typeDish = 0
+        }
+        if (typeDish == "Đồ ăn kèm"){
+          _typeDish = 1
+        }
+        if (typeDish == "Đồ uống"){
+          _typeDish = 2
+        }
+        if (typeDish == "Tất cả"){
+          _typeDish = 10
+        }
         const { data, paginition } = await menuApi.getAll({
           key: search,
           lower: "",
           upper: "",
           idhoadon: "",
-          nhommonan: 10,
+          nhommonan: _typeDish,
           page: menuPaginition.page,
           limit: menuPaginition.limit
         });
@@ -128,11 +143,25 @@ const Menu = () => {
   function doneTyping (value) {
     (async () => {
       try {
+        let _typeDish = 0
+        if (typeDish == "Đồ ăn"){
+          _typeDish = 0
+        }
+        if (typeDish == "Đồ ăn kèm"){
+          _typeDish = 1
+        }
+        if (typeDish == "Đồ uống"){
+          _typeDish = 2
+        }
+        if (typeDish == "Tất cả"){
+          _typeDish = 10
+        }
         const { data, paginition } = await menuApi.getAll({
           key: value,
           lower: "",
           upper: "",
           idhoadon: "",
+          nhommonan: _typeDish,
           page: 1,
           limit: menuPaginition.limit
         });
@@ -257,7 +286,6 @@ const Menu = () => {
         if (value == "Tất cả"){
           _typeDish = 10
         }
-        console.log("ok")
 
         const { data, paginition } = await menuApi.getAll({
           key: search,

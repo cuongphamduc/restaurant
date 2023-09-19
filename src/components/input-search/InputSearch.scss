@@ -66,6 +66,7 @@
       overflow: hidden;
       display: flex;
       flex-direction: row;
+      font-size: 12px !important;
 
       &:hover {
         background-color: #CFD8DC;
@@ -97,9 +98,10 @@
   display: flex;
   flex-direction: row;
   background-color: #CFD8DC;
+  font-size: 12px !important;
 
   &-name{
-    width: 20%;
+    width: 35%;
     display: flex;
     align-items: center;
     margin-left: 5px;
@@ -111,16 +113,18 @@
     margin-left: 5px;
   }
   &-company{
-    width: 20%;
+    width: 45%;
     display: flex;
     align-items: center;
     margin-left: 5px;
+    overflow: hidden;
   }
 }
 
 .item{
+  font-size: 12px !important;
   &__name{
-    width: 20%;
+    width: 35%;
     display: flex;
     align-items: center;
     margin-left: 5px;
@@ -132,7 +136,7 @@
     margin-left: 5px;
   }
   &__company{
-    width: 20%;
+    width: 45%;
     display: flex;
     align-items: center;
     margin-left: 5px;
