@@ -10,6 +10,7 @@ import UpdateForm from './components/update-form/UpdateForm';
 import DetailForm from './components/detail-form/DetailForm';
 import { useNavigate } from 'react-router-dom';
 import ConfirmRemove from '../../components/confirm-remove/ConfirmRemove';
+import DropDown from '../../components/dropdown/DropDown';
 
 const dataTest = [{
   ten: "vu tuan anh",
@@ -110,6 +111,14 @@ const Customer = () => {
   })
   var typingTimer;
 
+  const listSort = [
+    "Mã khách hàng",
+    "Họ",
+    "Tên"
+  ]
+
+  const [typeSort, setTypeSort] = useState("Mã khách hàng")
+
   const getCustomerData = () => {
     (async () => {
       try {
@@ -130,6 +139,42 @@ const Customer = () => {
         })
       } catch (error) {
         console.log('Failed to fetch customer list: ', error);
+      }
+    })();
+  }
+
+  const onSelectSort = (name, value) => {
+    setTypeSort(value);
+    (async () => {
+      try {
+        let _typeSort = 0
+        if (value == "Mã khách hàng"){
+          _typeSort = 0
+        }
+        if (value == "Họ"){
+          _typeSort = 1
+        }
+        if (value == "Tên"){
+          _typeSort = 2
+        }
+
+        const { data, paginition } = await customerApi.getAll({
+          key: search,
+          lower: "",
+          upper: "",
+          idhoadon: "",
+          page: customerpaginition.page,
+          limit: customerpaginition.limit
+        });
+        setListCustomer(data);
+        setCustomerPaginition({
+          page: paginition.page,
+          limit: paginition.limit,
+          totalPage: paginition.total_pages,
+          totalItem: paginition.total_records
+        })
+      } catch (error) {
+        console.log('Failed to fetch menu list: ', error);
       }
     })();
   }
@@ -298,6 +343,7 @@ const Customer = () => {
         <div className="customer-container__title">Danh sách khách hàng</div>
         <div className="customer-container__tool-bar">
           <div className="customer-container__search">
+            <DropDown headerClassName="menu-container-filter" selected={typeSort} listItem={listSort} onSelected={onSelectSort}></DropDown>
             <input className="customer-container__input-search" onChange={onChangeSearch}></input>
           </div>
           {isShowAddCustomer &&  <button className="menu-container__add"

@@ -13,6 +13,8 @@ import DropDown from '../../../../components/dropdown/DropDown';
 
 const UpdateForm = (props) => {
   const schema = yup.object().shape({
+    ho: yup.string().required('Chưa nhập họ!'),
+    tendem: yup.string().required('Chưa nhập tên đệm!'),
     ten: yup.string().required('Chưa nhập tên!'),
     sdt: yup.string().required('Chưa nhập số điện thoại!').matches(/(0[3|5|7|8|9])+([0-9]{8})\b/g, "Nhập sai định dạng!"),
     email: yup.string()
@@ -21,6 +23,8 @@ const UpdateForm = (props) => {
 
   const form = useForm({
     defaultValues: {
+      ho: props.data.ho,
+      tendem: props.data.tendem,
       ten: props.data.ten,
       sdt: props.data.sdt,
       diachi: props.data.diachi,
@@ -65,6 +69,8 @@ const UpdateForm = (props) => {
   }
 
   useEffect(() => {
+    form.setValue('ho', props.data.ho)
+    form.setValue('tendem', props.data.tendem)
     form.setValue('ten', props.data.ten)
     form.setValue('sdt', props.data.sdt)
     form.setValue('diachi', props.data.diachi)
@@ -96,7 +102,15 @@ const UpdateForm = (props) => {
         >
         <div className='create-form-customer-container'>
             <div className="create-form-customer-container__line">
-              <div className="create-form-customer-container__line__lable">Tên khách hàng:</div>
+              <div className="create-form-customer-container__line__lable">Họ:</div>
+              <InputField name="ho" form={form} type="text"></InputField>
+            </div>
+            <div className="create-form-customer-container__line">
+              <div className="create-form-customer-container__line__lable">Tên đệm:</div>
+              <InputField name="tendem" form={form} type="text"></InputField>
+            </div>
+            <div className="create-form-customer-container__line">
+              <div className="create-form-customer-container__line__lable">Tên:</div>
               <InputField name="ten" form={form} type="text"></InputField>
             </div>
             <div className="create-form-customer-container__line">

@@ -6,15 +6,20 @@ import Toasts from '../components/toasts/Toasts'
 import Login from '../pages/login/Login'
 import { useSelector, useDispatch } from 'react-redux'
 import { BrowserRouter, useNavigate } from "react-router-dom";
+import loginApi from '../api/LoginApi'
 
 const Layout = () => {
   const isLogin = useSelector((state) => state.login.isLogin)
 
-  if (!isLogin){
-    return <Login></Login>
-  }
+  // if (!isLogin){
+  //   return <Login></Login>
+  // }
   
+  function reconnect() {
+    loginApi.reconnect()
+  }
 
+  let display = setInterval(reconnect, 5000);
   
 
   return (

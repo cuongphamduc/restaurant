@@ -242,3 +242,13 @@
     background-color: #0F172B;
     color: #CFD8DC;
 }
+
+.create-form-bill-container__line__radio{
+    width: 30%;
+    display: flex;
+    flex-direction: row;
+}
+
+.create-form-bill-container__line__radio input{
+    width: 40px;
+}

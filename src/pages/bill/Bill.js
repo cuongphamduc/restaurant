@@ -10,6 +10,7 @@ import billApi from '../../api/BillApi';
 import DetailForm from '../bill/components/detail-form/DetailForm';
 import axios from 'axios';
 import ConfirmRemove from '../../components/confirm-remove/ConfirmRemove';
+import DropDown from '../../components/dropdown/DropDown';
 
 
 const Bill = () => {
@@ -91,6 +92,14 @@ const Bill = () => {
   },
 ]
 
+const listSort = [
+  "Mã hóa đơn",
+  "Họ",
+  "Tên"
+]
+
+const [typeSort, setTypeSort] = useState("Mã khách hàng")
+
 const data = [];
 for (let i = 0; i < 5; i++) {
   data.push({
@@ -134,6 +143,41 @@ for (let i = 0; i < 5; i++) {
         })
       } catch (error) {
         console.log('Failed to fetch bill list: ', error);
+      }
+    })();
+  }
+
+  const onSelectSort = (name, value) => {
+    setTypeSort(value);
+    (async () => {
+      try {
+        let _typeSort = 0
+        if (value == "Mã hóa đơn"){
+          _typeSort = 0
+        }
+        if (value == "Họ"){
+          _typeSort = 1
+        }
+        if (value == "Tên"){
+          _typeSort = 2
+        }
+
+        const { data, paginition } = await billApi.getAll({
+          key:search,
+          lower: fromTime,
+          upper: toTime,
+          page: billPaginition.page,
+          limit: billPaginition.limit,
+        });
+        setListBill(data);
+        setBillPaginition({
+          page: paginition.page,
+          limit: paginition.limit,
+          totalPage: paginition.total_pages,
+          totalItem: paginition.total_records
+        })
+      } catch (error) {
+        console.log('Failed to fetch menu list: ', error);
       }
     })();
   }
@@ -298,6 +342,7 @@ for (let i = 0; i < 5; i++) {
         <div className="bill-container__title">Danh sách hóa đơn</div>
         <div className="bill-container__tool-bar">
           <div className="bill-container__search">
+            <DropDown headerClassName="bill-container-filter" selected={typeSort} listItem={listSort} onSelected={onSelectSort}></DropDown>
             <DatePicker.RangePicker onChange={onChangeDate} status="warning" style={{ width: '100%', "background-color": "#b7b9bf"}}/>
             <input onChange={onChangeSearch} className="bill-container__input-search"></input>
           </div>

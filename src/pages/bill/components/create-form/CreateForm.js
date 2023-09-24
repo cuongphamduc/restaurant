@@ -31,6 +31,7 @@ const CreateForm = (props) => {
     const [numberCustomer, setNumberCustomer] = useState("")
     const [companyCustomer, setCompanyCustomer] = useState("")
     const [note, setNote] = useState("")
+    const [typePay, setTypePay] = useState(0) 
     // const [lishDish, setListDish] = useState([{dish:{
     //     tenmonan: "Ga",
     //     hinhanh: "", 
@@ -80,7 +81,8 @@ const CreateForm = (props) => {
           ten: nameCustomer,
           list_monan: _list_monan,
           list_soluong: _list_soluong,
-          tennguoidung: userName
+          tennguoidung: userName,
+          kieuthanhtoan: typePay
         });
         const { data1 } = await billApi.note(
           {
@@ -276,6 +278,11 @@ const CreateForm = (props) => {
       setIsShowAddCustomer(false)
     }
 
+    const handleChandeRadioButton = (e) => {
+      console.log(e.target.value)
+      setTypePay(Number(e.target.value))
+    }
+
   return (
     <form onSubmit={form.handleSubmit(handleSubmit)}>
       <Modal
@@ -354,6 +361,22 @@ const CreateForm = (props) => {
                     <div className="total-money__label">Tổng tiền:</div>
                     <div className="total-money__value">{Intl.NumberFormat().format(getTotalMoney())} VNĐ</div>
                 </div>
+            </div>
+            <div className="create-form-bill-container__line">
+              <div className="create-form-bill-container__line__lable">Kiểu thanh toán:</div>
+              <div className="create-form-bill-container__line__radio">
+                <input onChange={handleChandeRadioButton} type="radio" id="huey" name="drone" value="0" defaultChecked />
+                <label for="huey">Chuyển khoản</label>
+              </div>
+
+              <div className="create-form-bill-container__line__radio">
+                <input onChange={handleChandeRadioButton} type="radio" id="dewey" name="drone" value="1" />
+                <label for="dewey">Tiền mặt</label>
+              </div>
+            </div>
+            <div className="create-form-bill-container__line">
+              <div className="create-form-bill-container__line__lable">Loại món ăn:</div>
+              <input></input>
             </div>
             <div className="create-form-bill-container__line">
               <div className="create-form-bill-container__line__lable">Ghi chú:</div>

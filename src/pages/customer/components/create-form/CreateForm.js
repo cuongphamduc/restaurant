@@ -12,6 +12,8 @@ import DropDown from '../../../../components/dropdown/DropDown';
 
 const CreateFormCustomer = (props) => {
   const schema = yup.object().shape({
+    ho: yup.string().required('Chưa nhập họ!'),
+    tendem: yup.string().required('Chưa nhập tên đệm!'),
     ten: yup.string().required('Chưa nhập tên!'),
     sdt: yup.string().required('Chưa nhập số điện thoại!').matches(/(0[3|5|7|8|9])+([0-9]{8})\b/g, "Nhập sai định dạng!"),
     email: yup.string(),
@@ -20,6 +22,8 @@ const CreateFormCustomer = (props) => {
 
   const form = useForm({
     defaultValues: {
+      ho: '',
+      tendem: '',
       ten: '',
       sdt: '',
       ngaysinh: '',
@@ -125,8 +129,16 @@ const CreateFormCustomer = (props) => {
           )}
         >
         <div className='create-form-customer-container' id={props.id ? props.id : ""}>
+        <div className="create-form-customer-container__line">
+              <div className="create-form-customer-container__line__lable">Họ:</div>
+              <InputField id="create-form-customer-container__name" name="ho" form={form} type="text"></InputField>
+            </div>
             <div className="create-form-customer-container__line">
-              <div className="create-form-customer-container__line__lable">Tên khách hàng:</div>
+              <div className="create-form-customer-container__line__lable">Tên đệm:</div>
+              <InputField id="create-form-customer-container__name" name="tendem" form={form} type="text"></InputField>
+            </div>
+            <div className="create-form-customer-container__line">
+              <div className="create-form-customer-container__line__lable">Tên:</div>
               <InputField id="create-form-customer-container__name" name="ten" form={form} type="text"></InputField>
             </div>
             <div className="create-form-customer-container__line">

@@ -20,7 +20,15 @@ const DetailForm = (props) => {
               <div className="">{props.data.idkhachhang}</div>
             </div>
             <div className="create-form-customer-container__line">
-              <div className="create-form-customer-container__line__lable">Tên khách hàng:</div>
+              <div className="create-form-customer-container__line__lable">Họ:</div>
+              <div className="">{props.data.ho}</div>
+            </div>
+            <div className="create-form-customer-container__line">
+              <div className="create-form-customer-container__line__lable">Tên đệm:</div>
+              <div className="">{props.data.tendem}</div>
+            </div>
+            <div className="create-form-customer-container__line">
+              <div className="create-form-customer-container__line__lable">Tên:</div>
               <div className="">{props.data.ten}</div>
             </div>
             <div className="create-form-customer-container__line">

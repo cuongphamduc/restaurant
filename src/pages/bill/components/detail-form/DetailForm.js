@@ -123,6 +123,20 @@ const DetailForm = (props) => {
                         </div>
                     </div>
                 </div>
+                <div className="detail-form-container__bill-info">
+                  <div className="customer-line">
+                      <div className="customer-line__label">Phương thức thanh toán:</div>
+                      <div className="customer-line__content">{customerInfo.email}</div>
+                  </div>
+                  <div className="customer-line">
+                      <div className="customer-line__label">Loại món ăn:</div>
+                      <div className="customer-line__content">{customerInfo.email}</div>
+                  </div>
+                  <div className="customer-line">
+                      <div className="customer-line__label">Ghi chú:</div>
+                      <div className="customer-line__content">{customerInfo.email}</div>
+                  </div>
+                </div>
                 <div className="detail-form-container__list-dish">
                     <div className="dish-lable">
                         Món ăn
