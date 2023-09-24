@@ -6,7 +6,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import loginApi from '../../api/LoginApi';
 import InputField from '../../components/form-controls/input-field/InputField';
 import { useSelector, useDispatch } from 'react-redux'
-import { setIsLogin } from './LoginSlice';
+import { setIsLogin, setRole, setUserName } from './LoginSlice';
 
 const Login = () => {
   const isLogin = useSelector((state) => state.login.isLogin)
@@ -42,8 +42,11 @@ const Login = () => {
           tennguoidung: values.tennguoidung,
           matkhau: values.matkhau
         }
-        const { data } = await loginApi.login(formData);
+        const data = await loginApi.login(formData);
+        console.log(data)
         dispatch(setIsLogin())
+        dispatch(setRole(data.quyen))
+        dispatch(setUserName(values.tennguoidung))
         setIsError(false)
       } catch (error) {
         setIsError(true)

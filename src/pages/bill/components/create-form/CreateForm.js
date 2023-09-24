@@ -18,6 +18,7 @@ import customerApi from '../../../../api/CustomerApi';
 import InputSearch from '../../../../components/input-search/InputSearch';
 import { event } from 'jquery';
 import CreateFormCustomer from '../create-form-customer/CreateForm';
+import { useSelector, useDispatch } from 'react-redux'
 
 const CreateForm = (props) => {
     const [isVisibleCreateFormCustomer, setIsVisibleCreateFormCustomer] = useState(false)
@@ -37,6 +38,7 @@ const CreateForm = (props) => {
     //     mota: "Ga nuong"
     // }}])
     const [lishDish, setListDish] =useState([])
+    const userName = useSelector((state) => state.login.userName)
 
     const getTotalMoney = () => {
         let total = 0
@@ -74,11 +76,11 @@ const CreateForm = (props) => {
     (async () => {
       try {
         const { data } = await billApi.add({
-          sdt: valuePhoneNumber,
-          ten: valueCustomerName,
+          sdt: numberCustomer,
+          ten: nameCustomer,
           list_monan: _list_monan,
           list_soluong: _list_soluong,
-          tennguoidung: "admin"
+          tennguoidung: userName
         });
         const { data1 } = await billApi.note(
           {

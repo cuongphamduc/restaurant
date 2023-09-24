@@ -2,21 +2,21 @@ import axiosClient from './AxiosClient';
 
 const menuApi = {
   async getAll(params) {
-    return {
-      data: [{
-        tenmonan: 'vta',
-        mota: '',
-        gia: 1,
-        nhommonan: 0,
-        hinhanh: ''
-      }],
-      paginition: {
-        page: 1,
-        limit: 1,
-        total_pages: 1,
-        total_records: 1
-      }
-    }
+    // return {
+    //   data: [{
+    //     tenmonan: 'vta',
+    //     mota: '',
+    //     gia: 1,
+    //     nhommonan: 0,
+    //     hinhanh: ''
+    //   }],
+    //   paginition: {
+    //     page: 1,
+    //     limit: 1,
+    //     total_pages: 1,
+    //     total_records: 1
+    //   }
+    // }
 
     const menuList = await axiosClient.get('/timkiemmonan', {params});
 
