@@ -31,7 +31,7 @@ const Customer = () => {
           </span>
         );
       },
-      width: '20%',
+      width: '10%',
     },
     {
       title: 'Tên khách hàng',
@@ -39,7 +39,7 @@ const Customer = () => {
       render: (text, data) => {
         return (
           <span>
-            {text}
+            {((data?.danhxung == "") ? "" : data?.danhxung) + ((data?.ho == "") ? "" : (" " + data?.ho)) + ((data?.tendem == "") ? "" : (" " + data?.tendem)) + ((data?.ten == "") ? "" : (" " + data?.ten))}
           </span>
         );
       },
@@ -55,7 +55,19 @@ const Customer = () => {
           </span>
         );
       },
-      width: '15%',
+      width: '10%',
+    },
+    {
+      title: 'Địa chỉ',
+      dataIndex: 'diachi',
+      render: (text, data) => {
+        return (
+          <span>
+            {text}
+          </span>
+        );
+      },
+      width: '25%',
     },
     {
       title: 'Công ty',
@@ -126,6 +138,7 @@ const Customer = () => {
           key: search,
           lower: "",
           upper: "",
+          kieusx: 0,
           idhoadon: "",
           page: customerpaginition.page,
           limit: customerpaginition.limit
@@ -162,6 +175,7 @@ const Customer = () => {
           key: search,
           lower: "",
           upper: "",
+          kieusx: _typeSort,
           idhoadon: "",
           page: customerpaginition.page,
           limit: customerpaginition.limit
@@ -181,11 +195,22 @@ const Customer = () => {
 
   function handlePageChange(newPage){
     (async () => {
+      let _typeSort = 0
+      if (typeSort == "Mã hóa đơn"){
+        _typeSort = 0
+      }
+      if (typeSort == "Họ"){
+        _typeSort = 1
+      }
+      if (typeSort == "Tên"){
+        _typeSort = 2
+      }
       try {
         const { data, paginition } = await customerApi.getAll({
           key: search,
           lower: "",
           upper: "",
+          kieusx: _typeSort,
           idhoadon: "",
           page: newPage,
           limit: customerpaginition.limit
@@ -206,10 +231,21 @@ const Customer = () => {
   function onNumberItemChange(newNumberItem){
     (async () => {
       try {
+        let _typeSort = 0
+        if (typeSort == "Mã hóa đơn"){
+          _typeSort = 0
+        }
+        if (typeSort == "Họ"){
+          _typeSort = 1
+        }
+        if (typeSort == "Tên"){
+          _typeSort = 2
+        }
         const { data, paginition } = await customerApi.getAll({
           key: search,
           lower: "",
           upper: "",
+          kieusx: _typeSort,
           idhoadon: "",
           page: 1,
           limit: newNumberItem
@@ -238,10 +274,21 @@ const Customer = () => {
   function doneTyping (value) {
     (async () => {
       try {
+        let _typeSort = 0
+        if (typeSort == "Mã hóa đơn"){
+          _typeSort = 0
+        }
+        if (typeSort == "Họ"){
+          _typeSort = 1
+        }
+        if (typeSort == "Tên"){
+          _typeSort = 2
+        }
         const { data, paginition } = await customerApi.getAll({
           key: value,
           lower: "",
           upper: "",
+          kieusx: _typeSort,
           idhoadon: "",
           page: 1,
           limit: customerpaginition.limit
@@ -271,7 +318,6 @@ const Customer = () => {
   const handleRemove = (sdt) => {
     (async () => {
       try {
-        console.log("remove", sdt)
         const { data } = await customerApi.remove(sdt);
       } catch (error) {
         console.log('Failed to remove customer: ', error);
@@ -292,13 +338,13 @@ const Customer = () => {
   }
 
   const handleShorcutCustomer = (e) => {
-    // Neu la Alt + O
-    if (e.altKey && e.keyCode == 79) {
+    // Neu la Alt + a
+    if (e.altKey && e.keyCode == 65) {
         if (window.location.pathname == "/customer"){
             setIsVisibleCreateForm(true)
         }
     }
-    if (e.altKey && e.keyCode == 80) {
+    if (e.altKey && e.ctrlKey && e.keyCode == 69) {
         if (window.location.pathname == "/customer"){
             handleExport()
         }
@@ -351,7 +397,7 @@ const Customer = () => {
               setIsVisibleCreateForm(true)
               setIsShowAddCustomer(false)
             }}
-          >Thêm món vừa nhập</button>}
+          >Thêm KH vừa nhập</button>}
           <button className="customer-container__add" onClick={() => setIsVisibleCreateForm(true)}>Thêm mới</button>
           <button className="menu-container__export"
             onClick={() => handleExport()}

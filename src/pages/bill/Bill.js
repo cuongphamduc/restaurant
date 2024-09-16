@@ -33,7 +33,7 @@ const Bill = () => {
     render: (text, data) => {
       return (
         <span>
-          {text}
+          {((data?.danhxung == "" || data?.danhxung == undefined) ? "" : data?.danhxung) + ((data?.ho == "") ? "" : (" " + data?.ho)) + ((data?.tendem == "") ? "" : (" " + data?.tendem)) + ((data?.ten == "") ? "" : (" " + data?.ten))}
         </span>
       );
     },
@@ -57,7 +57,7 @@ const Bill = () => {
     render: (text, data) => {
       return (
         <span>
-          {text}
+          {Intl.NumberFormat().format(text)}
         </span>
       );
     },
@@ -98,7 +98,7 @@ const listSort = [
   "Tên"
 ]
 
-const [typeSort, setTypeSort] = useState("Mã khách hàng")
+const [typeSort, setTypeSort] = useState("Mã hóa đơn")
 
 const data = [];
 for (let i = 0; i < 5; i++) {
@@ -131,6 +131,7 @@ for (let i = 0; i < 5; i++) {
           key:search,
           lower: fromTime,
           upper: toTime,
+          kieusx: 0,
           page: billPaginition.page,
           limit: billPaginition.limit,
         });
@@ -166,6 +167,7 @@ for (let i = 0; i < 5; i++) {
           key:search,
           lower: fromTime,
           upper: toTime,
+          kieusx: _typeSort,
           page: billPaginition.page,
           limit: billPaginition.limit,
         });
@@ -185,10 +187,22 @@ for (let i = 0; i < 5; i++) {
   function handlePageChange(newPage){
     (async () => {
       try {
+        let _typeSort = 0
+        if (typeSort == "Mã hóa đơn"){
+          _typeSort = 0
+        }
+        if (typeSort == "Họ"){
+          _typeSort = 1
+        }
+        if (typeSort == "Tên"){
+          _typeSort = 2
+        }
+
         const { data, paginition } = await billApi.getAll({
           key: search,
-          lower: "",
-          upper: "",
+          lower: fromTime,
+          upper: toTime,
+          kieusx: _typeSort,
           idhoadon: "",
           page: newPage,
           limit: billPaginition.limit
@@ -209,10 +223,21 @@ for (let i = 0; i < 5; i++) {
   function onNumberItemChange(newNumberItem){
     (async () => {
       try {
+        let _typeSort = 0
+        if (typeSort == "Mã hóa đơn"){
+          _typeSort = 0
+        }
+        if (typeSort == "Họ"){
+          _typeSort = 1
+        }
+        if (typeSort == "Tên"){
+          _typeSort = 2
+        }
         const { data, paginition } = await billApi.getAll({
           key: search,
-          lower: "",
-          upper: "",
+          lower: fromTime,
+          upper: toTime,
+          kieusx: _typeSort,
           idhoadon: "",
           page: 1,
           limit: newNumberItem
@@ -242,10 +267,21 @@ for (let i = 0; i < 5; i++) {
   function doneTyping (value) {
     (async () => {
       try {
+        let _typeSort = 0
+        if (typeSort == "Mã hóa đơn"){
+          _typeSort = 0
+        }
+        if (typeSort == "Họ"){
+          _typeSort = 1
+        }
+        if (typeSort == "Tên"){
+          _typeSort = 2
+        }
         const { data, paginition } = await billApi.getAll({
           key:value,
           lower: fromTime,
           upper: toTime,
+          kieusx: _typeSort,
           page: 1,
           limit: billPaginition.limit,
         });
@@ -267,10 +303,21 @@ for (let i = 0; i < 5; i++) {
     setToTime(dayString[1]);
     (async () => {
       try {
+        let _typeSort = 0
+        if (typeSort == "Mã hóa đơn"){
+          _typeSort = 0
+        }
+        if (typeSort == "Họ"){
+          _typeSort = 1
+        }
+        if (typeSort == "Tên"){
+          _typeSort = 2
+        }
         const { data, paginition } = await billApi.getAll({
           key:search,
           lower: dayString[0],
           upper: dayString[1],
+          kieusx: _typeSort,
           page: 1,
           limit: billPaginition.limit,
         });
@@ -307,7 +354,18 @@ for (let i = 0; i < 5; i++) {
     //   a.click();
     //   window.URL.revokeObjectURL(url);
     // })
-    var uri = `http://localhost:8000/xuathoadon?key=${search}&lower=${fromTime}&upper=${toTime}&page=1&limit=0`;
+    let _typeSort = 0
+        if (typeSort == "Mã hóa đơn"){
+          _typeSort = 0
+        }
+        if (typeSort == "Họ"){
+          _typeSort = 1
+        }
+        if (typeSort == "Tên"){
+          _typeSort = 2
+        }
+
+    var uri = `http://localhost:8000/xuathoadon?key=${search}&lower=${fromTime}&upper=${toTime}&kieusx=${_typeSort}&page=1&limit=0`;
     var name = "danhsachmonan"
     var link = document.createElement("a");
     link.download = name;
@@ -318,15 +376,15 @@ for (let i = 0; i < 5; i++) {
   }
 
   const handleShorcutBill = (e) => {
-    // Neu la Alt + O
-    if (e.altKey && e.which == 79) {
+    // Neu la Alt + a
+    if (e.altKey && e.which == 65) {
         if (window.location.pathname == "/bill"){
             setIsVisibleCreateForm(true)
         }
     }
-    if (e.altKey && e.keyCode == 80) {
+    if (e.altKey && e.ctrlKey && e.keyCode == 69) {
       if (window.location.pathname == "/bill"){
-          handleExport()
+          document.getElementById("exportBill").click()
       }
   }
   }
@@ -342,14 +400,14 @@ for (let i = 0; i < 5; i++) {
         <div className="bill-container__title">Danh sách hóa đơn</div>
         <div className="bill-container__tool-bar">
           <div className="bill-container__search">
-            <DropDown headerClassName="bill-container-filter" selected={typeSort} listItem={listSort} onSelected={onSelectSort}></DropDown>
+            <DropDown className="bill-container-dropdown" headerClassName="bill-container-filter" selected={typeSort} listItem={listSort} onSelected={onSelectSort}></DropDown>
             <DatePicker.RangePicker onChange={onChangeDate} status="warning" style={{ width: '100%', "background-color": "#b7b9bf"}}/>
             <input onChange={onChangeSearch} className="bill-container__input-search"></input>
           </div>
           <button className="bill-container__add"
             onClick={() => setIsVisibleCreateForm(true)}
           >Thêm mới</button>
-          <button className="menu-container__export"
+          <button className="menu-container__export" id="exportBill"
             onClick={() => handleExport()}
           >Trích xuất dữ liệu</button>
         </div>

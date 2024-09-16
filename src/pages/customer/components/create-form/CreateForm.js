@@ -12,10 +12,10 @@ import DropDown from '../../../../components/dropdown/DropDown';
 
 const CreateFormCustomer = (props) => {
   const schema = yup.object().shape({
-    ho: yup.string().required('Chưa nhập họ!'),
-    tendem: yup.string().required('Chưa nhập tên đệm!'),
+    ho: yup.string(),
+    tendem: yup.string(),
     ten: yup.string().required('Chưa nhập tên!'),
-    sdt: yup.string().required('Chưa nhập số điện thoại!').matches(/(0[3|5|7|8|9])+([0-9]{8})\b/g, "Nhập sai định dạng!"),
+    sdt: yup.string().required('Chưa nhập số điện thoại!').matches(/((^0[3|5|7|8|9])+([0-9]{8}$))|(^(02)+([0-9]{8,9}$))/g, "Nhập sai định dạng!"),
     email: yup.string(),
     congty: yup.string()
   },  [['email']]);
@@ -45,8 +45,12 @@ const CreateFormCustomer = (props) => {
             form.reset()
             props.setVisible(false)
             event.preventDefault()
-      })
+      }).catch((error) => {
+        alert("Khach hang da ton tai!")
+      }
+      )
     } catch (error) {
+      alert("Khach hang da ton tai!")
       console.log('Failed to fetch customer list: ', error);
     }
   }
@@ -56,15 +60,19 @@ const CreateFormCustomer = (props) => {
     props.setVisible(false)
   }
 
-  const [sex, setSex] = useState('Anh')
+  const [sex, setSex] = useState('')
   const [birthday, setBirthday] = useState('')
   const onChangeDate = (dayjs, dayString) => {
     setBirthday(dayString)
   }
 
   const listSex = [
+    "",
     "Anh",
-    "Chị"
+    "Chị",
+    "Bạn",
+    "Ông",
+    "Bà"
   ]
 
   const onSelectSex = (name, value) => {
@@ -77,8 +85,8 @@ const CreateFormCustomer = (props) => {
       if (e.which == 27){
         handleCancel()
       }
-      // Neu la Alt + S
-      if (e.altKey && e.which == 83) {
+      // Neu la Alt + 9
+      if (e.altKey && e.which == 57) {
           if (props.visible){
               document.getElementById(props.id ? props.id + "-button-add-customer" : "button-add-customer").click()
           }
@@ -147,7 +155,7 @@ const CreateFormCustomer = (props) => {
             </div>
             <div className="create-form-customer-container__line">
               <div className="create-form-customer-container__line__lable">Danh xưng:</div>
-              <DropDown name={"name-dish"} selected={sex} listItem={listSex} onSelected={onSelectSex}></DropDown>
+              <DropDown className="dropdown" name={"name-dish"} selected={sex} listItem={listSex} onSelected={onSelectSex}></DropDown>
             </div>
             <div className="create-form-customer-container__line">
               <div className="create-form-customer-container__line__lable">Ngày sinh:</div>

@@ -13,8 +13,8 @@ import DropDown from '../../../../components/dropdown/DropDown';
 
 const UpdateForm = (props) => {
   const schema = yup.object().shape({
-    ho: yup.string().required('Chưa nhập họ!'),
-    tendem: yup.string().required('Chưa nhập tên đệm!'),
+    ho: yup.string(),
+    tendem: yup.string(),
     ten: yup.string().required('Chưa nhập tên!'),
     sdt: yup.string().required('Chưa nhập số điện thoại!').matches(/(0[3|5|7|8|9])+([0-9]{8})\b/g, "Nhập sai định dạng!"),
     email: yup.string()
@@ -53,15 +53,19 @@ const UpdateForm = (props) => {
     props.setVisible(false)
   }
 
-  const [sex, setSex] = useState('Anh')
+  const [sex, setSex] = useState('')
   const [birthday, setBirthday] = useState('2000-10-10')
   const onChangeDate = (dayjs, dayString) => {
     setBirthday(dayString)
   }
 
   const listSex = [
+    "",
     "Anh",
-    "Chị"
+    "Chị",
+    "Bạn",
+    "Ông",
+    "Bà"
   ]
 
   const onSelectSex = (name, value) => {
@@ -119,7 +123,7 @@ const UpdateForm = (props) => {
             </div>
             <div className="create-form-customer-container__line">
               <div className="create-form-customer-container__line__lable">Danh xưng:</div>
-              <DropDown name={"name-dish"} selected={sex} listItem={listSex} onSelected={onSelectSex}></DropDown>
+              <DropDown className="dropdown" name={"name-dish"} selected={sex} listItem={listSex} onSelected={onSelectSex}></DropDown>
             </div>
             <div className="create-form-customer-container__line">
               <div className="create-form-customer-container__line__lable">Ngày sinh:</div>

@@ -21,7 +21,8 @@ const billApi = {
     const menuList = await axiosClient.get(url, {params});
     return {
       customer: menuList.khachhang,
-      dish: menuList.monan
+      dish: menuList.monan,
+      bill: menuList.hoadon
     };
   },
 
@@ -38,7 +39,15 @@ const billApi = {
 
   async note(data) {
     const url = '/inghichu';
-    const response = await axiosClient.post(url, data).catch(function (error) {
+    const formData = new FormData();
+    formData.append("idhoadon", data.idhoadon)
+    formData.append("ten", data.ten)
+    formData.append("diachi", data.diachi)
+    formData.append("suatan", data.suatan)
+    formData.append("ghichu", data.ghichu)
+    const response = await axiosClient.post(url, formData, {headers: {
+      'Content-Type': 'multipart/form-data'
+    }}).catch(function (error) {
       if (error.response) {
         console.log(error.response.data);
         console.log(error.response.status);
@@ -56,6 +65,10 @@ const billApi = {
     const url = `/products/${id}`;
     return axiosClient.delete(url);
   },
+
+  print(data){
+
+  }
 };
 
 export default billApi;

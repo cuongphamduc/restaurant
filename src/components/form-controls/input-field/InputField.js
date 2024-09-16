@@ -1,5 +1,5 @@
 // import { Input } from 'antd';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Controller } from 'react-hook-form'
 import Input from '../../input/Input'
 
@@ -7,7 +7,11 @@ import Input from '../../input/Input'
 const InputField = (props) => {
     const { form, name, type, lable, disabled} = props
     const { formState } = form
-    const { errors } = formState
+    let { errors } = formState
+
+    useEffect(() => {
+        errors = formState
+    }, [form])
 
     return (
         <Controller

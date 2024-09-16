@@ -7,7 +7,7 @@ const loginApi = {
   },
 
   reconnect(data) {
-    const url = '/kiemtranguoidung';
+    const url = '/reconnect';
     return axiosClient.post(url, data);
   }
 };

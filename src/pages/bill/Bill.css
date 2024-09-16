@@ -36,6 +36,20 @@
     align-items: center;
 }
 
+.bill-container .dropdown-container__header__icon {
+    /* color: #b7b9bf !important; */
+}
+
+.bill-container-filter{
+    width: 150px !important;
+    height: 30px !important;
+    border: 1px solid #b7b9bf !important;
+}
+
+.bill-container-dropdown{
+    margin-right: 10px !important;
+}
+
 .bill-container__search{
     display: flex;
     flex-direction: row;

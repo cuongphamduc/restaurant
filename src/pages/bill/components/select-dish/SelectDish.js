@@ -47,7 +47,7 @@ const SelectDish = ({onSelect, visible, setVisible}) => {
     const [search, setSearch] = useState("")
     const [menuList, setMenuList] = useState([])
 
-    console.log("select dish render")
+    // console.log("select dish render")
 
     const getMenuData = () => {
         (async () => {
@@ -140,10 +140,9 @@ const SelectDish = ({onSelect, visible, setVisible}) => {
       "Đồ uống"
     ]
   
-    const [typeDish, setTypeDish] = useState("Tất cả")
+    const [typeDish, setTypeDish] = useState("Đồ ăn")
   
     const onSelectDish = (name, value) => {
-      console.log("change")
       setTypeDish(value);
       (async () => {
         try {
@@ -160,7 +159,6 @@ const SelectDish = ({onSelect, visible, setVisible}) => {
           if (value == "Tất cả"){
             _typeDish = 10
           }
-          console.log("ok")
   
           const { data, paginition } = await menuApi.getAll({
             key: search,

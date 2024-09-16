@@ -29,6 +29,7 @@ const CreateForm = (props) => {
     const [searchCustomer, setSearchCustomer] = useState(null)
     const [nameCustomer, setNameCustomer] = useState("")
     const [numberCustomer, setNumberCustomer] = useState("")
+    const [addressCustomer, setAddressCustomer] = useState("")
     const [companyCustomer, setCompanyCustomer] = useState("")
     const [note, setNote] = useState("")
     const [typePay, setTypePay] = useState(0) 
@@ -58,6 +59,7 @@ const CreateForm = (props) => {
     defaultValues: {
       sdt: '',
       ten: '',
+      suatan: '',
       list_monan: [],
       list_soluong: []
     },
@@ -79,24 +81,32 @@ const CreateForm = (props) => {
         const { data } = await billApi.add({
           sdt: numberCustomer,
           ten: nameCustomer,
+          suatan: values.suatan,
+          ghichu: note,
           list_monan: _list_monan,
           list_soluong: _list_soluong,
           tennguoidung: userName,
           kieuthanhtoan: typePay
         });
-        const { data1 } = await billApi.note(
-          {
-            ghichu: note
-          }
-        )
+        // const { data1 } = await billApi.note(
+        //   {
+        //     ghichu: note
+        //   }
+        // )
       } catch (error) {
         console.log('Failed to fetch bill list: ', error);
       }
     })();
     props.getBillData()
     form.reset()
+    setNameCustomer("")
+    setNumberCustomer("")
+    setAddressCustomer("")
+    setCompanyCustomer("")
     setListDish([])
     setNote("")
+    setValuePhoneNumber("")
+    setListCustomer([])
     props.setVisible(false)
   }
 
@@ -110,6 +120,15 @@ const CreateForm = (props) => {
     form.reset()
     setListDish([])
     props.setVisible(false)
+
+    // form.reset()
+    // setNameCustomer("")
+    // setNumberCustomer("")
+    // setCompanyCustomer("")
+    // setListDish([])
+    // setNote("")
+    // setValuePhoneNumber("")
+    // props.setVisible(false)
   }
 
   const handleSelectCustomer = (data) => {
@@ -127,6 +146,29 @@ const CreateForm = (props) => {
         })
         form.setValue('list_monan', newListDish)
         setListDish(newListDish)
+        
+        if (newListDish.length > 0)
+        {
+          try
+          {
+            document.getElementById("not_selected_dish").innerHTML = "";
+          }
+          catch(err)
+          {
+
+          }
+        }
+        else
+        {
+          try
+          {
+            document.getElementById("not_selected_dish").innerHTML = "Chưa chọn món ăn";
+          }
+          catch(err)
+          {
+
+          }
+        }
     }
 
     const handleAddNumberDish = (index) => {
@@ -134,6 +176,29 @@ const CreateForm = (props) => {
         newListDish[index].number = Number(newListDish[index].number) + 1
         form.setValue('list_monan', newListDish)
         setListDish(newListDish)
+
+        if (newListDish.length > 0)
+        {
+          try
+          {
+            document.getElementById("not_selected_dish").innerHTML = "";
+          }
+          catch(err)
+          {
+
+          }
+        }
+        else
+        {
+          try
+          {
+            document.getElementById("not_selected_dish").innerHTML = "Chưa chọn món ăn";
+          }
+          catch(err)
+          {
+
+          }
+        }
     }
 
     const handleSubNumberDish = (index) => {
@@ -144,6 +209,29 @@ const CreateForm = (props) => {
         }
         form.setValue('list_monan', newListDish)
         setListDish(newListDish)
+
+        if (newListDish.length > 0)
+        {
+          try
+          {
+            document.getElementById("not_selected_dish").innerHTML = "";
+          }
+          catch(err)
+          {
+
+          }
+        }
+        else
+        {
+          try
+          {
+            document.getElementById("not_selected_dish").innerHTML = "Chưa chọn món ăn";
+          }
+          catch(err)
+          {
+
+          }
+        }
     }
 
     const handleSetNumberDish = (index, number) => {
@@ -154,17 +242,39 @@ const CreateForm = (props) => {
       }
       form.setValue('list_monan', newListDish)
       setListDish(newListDish)
+
+      if (newListDish.length > 0)
+        {
+          try
+          {
+            document.getElementById("not_selected_dish").innerHTML = "";
+          }
+          catch(err)
+          {
+
+          }
+        }
+        else
+        {
+          try
+          {
+            document.getElementById("not_selected_dish").innerHTML = "Chưa chọn món ăn";
+          }
+          catch(err)
+          {
+
+          }
+        }
   }
 
     const [valuePhoneNumber, setValuePhoneNumber] = useState('')
     const [valueCustomerName, setValueCustomerName] = useState('')
     const [listCustomer, setListCustomer] = useState([])
     const handleOnSelectPhoneNumber = (item) => {
-      if (item !== null && item !== undefined)
-      console.log(item)
       // setValuePhoneNumber(item.sdt)
-      setNameCustomer(item.ten)
+      setNameCustomer(((item?.danhxung == "") ? "" : item?.danhxung) + ((item?.ho == "") ? "" : (" " + item?.ho)) + ((item?.tendem == "") ? "" : (" " + item?.tendem)) + ((item?.ten == "") ? "" : (" " + item?.ten)))
       setNumberCustomer(item.sdt)
+      setAddressCustomer(item.diachi)
       setCompanyCustomer(item.congty)
       // setValueCustomerName(item.ten)
     }
@@ -230,13 +340,29 @@ const CreateForm = (props) => {
             // }
           }
         }
-        // Neu la Alt + S
-        if (e.altKey && e.which == 83) {
+        // Neu la Alt + 9
+        if (e.altKey && e.which == 57) {
             if (props.visible){
                 document.getElementById("button-add-bill").click()
               }
         }
-        if (e.altKey && e.which == 65) {
+
+        if (e.altKey && e.which == 48) {
+          if (props.visible){
+              if (typePay == 0)
+              {
+                document.getElementById("dewey").checked = true
+                setTypePay(1)
+              }
+              else
+              {
+                document.getElementById("huey").checked = true
+                setTypePay(0)
+              }
+            }
+        }
+
+        if (e.altKey && e.which == 56) {
           if (props.visible){
               setVisibleSelectDish(true)
             }
@@ -259,7 +385,7 @@ const CreateForm = (props) => {
   }, [isVisibleCreateFormCustomer, visibleSelectDish])
 
     
-    const onCreateCustomerDone = () => {
+    const onCreateCustomerDone = (customer) => {
       (async () => {
               try {
                 const { data, paginition } = await customerApi.getAll({
@@ -275,11 +401,14 @@ const CreateForm = (props) => {
                 console.log('Failed to fetch customer list: ', error);
               }
             })();
+      setNameCustomer(customer.ten)
+      setNumberCustomer(customer.sdt)
+      setAddressCustomer(customer.diachi)
+      setCompanyCustomer(customer.congty)
       setIsShowAddCustomer(false)
     }
 
     const handleChandeRadioButton = (e) => {
-      console.log(e.target.value)
       setTypePay(Number(e.target.value))
     }
 
@@ -288,7 +417,7 @@ const CreateForm = (props) => {
       <Modal
           title={`Thêm mới hóa đơn`}
           visible={props.visible}
-          width={"900px"}
+          width={"1200px"}
           onCancel={handleCancel}
           footer={(
             <div className='create-form-bill-footer'>
@@ -321,6 +450,10 @@ const CreateForm = (props) => {
               <div className="">{numberCustomer}</div>
             </div>
             <div className="create-form-bill-container__line">
+              <div className="create-form-bill-container__line__lable">Địa chỉ:</div>
+              <div className="">{addressCustomer}</div>
+            </div>
+            <div className="create-form-bill-container__line">
               <div className="create-form-bill-container__line__lable">Công ty:</div>
               <div className="">{companyCustomer}</div>
             </div>
@@ -348,7 +481,7 @@ const CreateForm = (props) => {
                     })
                 }
             </div>
-            {form.formState.errors['list_monan'] && <i>Chưa chọn món ăn</i>}
+            <i id="not_selected_dish">Chưa chọn món ăn</i>
             <button
                 type='button'
                 className='button-add'
@@ -375,8 +508,8 @@ const CreateForm = (props) => {
               </div>
             </div>
             <div className="create-form-bill-container__line">
-              <div className="create-form-bill-container__line__lable">Loại món ăn:</div>
-              <input></input>
+              <div className="create-form-bill-container__line__lable">Loại suất ăn:</div>
+              <InputField id="create-form-customer-container__name" name="suatan" form={form} type="text"></InputField>
             </div>
             <div className="create-form-bill-container__line">
               <div className="create-form-bill-container__line__lable">Ghi chú:</div>

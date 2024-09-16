@@ -49,11 +49,26 @@ const Menu = () => {
   function handlePageChange(newPage){
     (async () => {
       try {
+        let _typeDish = 10
+        if (typeDish == "Đồ ăn"){
+          _typeDish = 0
+        }
+        if (typeDish == "Đồ ăn kèm"){
+          _typeDish = 1
+        }
+        if (typeDish == "Đồ uống"){
+          _typeDish = 2
+        }
+        if (typeDish == "Tất cả"){
+          _typeDish = 10
+        }
+
         const { data, paginition } = await menuApi.getAll({
           key: search,
           lower: "",
           upper: "",
           idhoadon: "",
+          nhommonan: _typeDish,
           page: newPage,
           limit: menuPaginition.limit
         });
@@ -73,11 +88,26 @@ const Menu = () => {
   function onNumberItemChange(newNumberItem){
     (async () => {
       try {
+        let _typeDish = 10
+        if (typeDish == "Đồ ăn"){
+          _typeDish = 0
+        }
+        if (typeDish == "Đồ ăn kèm"){
+          _typeDish = 1
+        }
+        if (typeDish == "Đồ uống"){
+          _typeDish = 2
+        }
+        if (typeDish == "Tất cả"){
+          _typeDish = 10
+        }
+
         const { data, paginition } = await menuApi.getAll({
           key: search,
           lower: "",
           upper: "",
           idhoadon: "",
+          nhommonan: _typeDish,
           page: 1,
           limit: newNumberItem
         });
@@ -214,13 +244,13 @@ const Menu = () => {
   }
 
   const handleShorcutMenu = (e) => {
-    // Neu la Alt + O
-    if (e.altKey && e.keyCode == 79) {
+    // Neu la Alt + a
+    if (e.altKey && e.keyCode == 65) {
         if (window.location.pathname == "/menu"){
             dispatch(setIsCreateFormMenu(true))
         }
     }
-    if (e.altKey && e.keyCode == 80) {
+    if (e.altKey && e.ctrlKey && e.keyCode == 69) {
         if (window.location.pathname == "/menu"){
             handleExport()
         }
@@ -269,7 +299,6 @@ const Menu = () => {
   const [typeDish, setTypeDish] = useState("Tất cả")
 
   const onSelectDish = (name, value) => {
-    console.log("change")
     setTypeDish(value);
     (async () => {
       try {

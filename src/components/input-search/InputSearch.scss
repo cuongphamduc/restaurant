@@ -41,7 +41,7 @@
   }
 
   &__select-box {
-    width: 600px;
+    width: 950px;
     margin-top: 10px;
     border-radius: 6px;
     border: none;
@@ -56,14 +56,12 @@
     overflow: auto;
 
     &__item {
-      height: 40px;
+      height: max-content;
+      padding: 5px;
       width: 100%;
-      padding: 0 10px;
-      line-height: 40px;
+      line-height: 20px;
       text-overflow: ellipsis;
       text-align: left;
-      white-space: nowrap;
-      overflow: hidden;
       display: flex;
       flex-direction: row;
       font-size: 12px !important;
@@ -101,19 +99,26 @@
   font-size: 12px !important;
 
   &-name{
-    width: 35%;
-    display: flex;
-    align-items: center;
-    margin-left: 5px;
-  }
-  &-phone-number{
     width: 20%;
     display: flex;
     align-items: center;
     margin-left: 5px;
   }
+  &-phone-number{
+    width: 10%;
+    display: flex;
+    align-items: center;
+    margin-left: 5px;
+  }
+  &-address{
+    width: 35%;
+    display: flex;
+    align-items: center;
+    margin-left: 5px;
+    overflow: hidden;
+  }
   &-company{
-    width: 45%;
+    width: 35%;
     display: flex;
     align-items: center;
     margin-left: 5px;
@@ -124,21 +129,29 @@
 .item{
   font-size: 12px !important;
   &__name{
-    width: 35%;
-    display: flex;
-    align-items: center;
-    margin-left: 5px;
-  }
-  &__phone-number{
     width: 20%;
     display: flex;
     align-items: center;
     margin-left: 5px;
   }
-  &__company{
-    width: 45%;
+  &__phone-number{
+    width: 10%;
     display: flex;
     align-items: center;
     margin-left: 5px;
+  }
+  &__address{
+    width: 35%;
+    display: flex;
+    align-items: center;
+    margin-left: 5px;
+    word-wrap: break-word;
+  }
+  &__company{
+    width: 35%;
+    display: flex;
+    align-items: center;
+    margin-left: 5px;
+    word-wrap: break-word;
   }
 }

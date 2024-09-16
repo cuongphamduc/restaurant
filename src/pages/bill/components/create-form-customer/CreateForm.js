@@ -13,13 +13,15 @@ import DropDown from '../../../../components/dropdown/DropDown';
 const CreateFormCustomer = (props) => {
   const schema = yup.object().shape({
     ten: yup.string().required('Chưa nhập tên!'),
-    sdt: yup.string().required('Chưa nhập số điện thoại!').matches(/(0[3|5|7|8|9])+([0-9]{8})\b/g, "Nhập sai định dạng!"),
+    sdt: yup.string().required('Chưa nhập số điện thoại!').matches(/((^0[3|5|7|8|9])+([0-9]{8}$))|(^(02)+([0-9]{8,9}$))/g, "Nhập sai định dạng!"),
     email: yup.string(),
     congty: yup.string()
   },  [['email']]);
 
   const form = useForm({
     defaultValues: {
+      ho: '',
+      tendem: '',
       ten: '',
       sdt: '',
       ngaysinh: '',
@@ -39,7 +41,11 @@ const CreateFormCustomer = (props) => {
       const { data } = customerApi.add(formData).then((data) => {
             props.getCustomerData()
             form.reset()
-            props.onCreateDone()
+            props.onCreateDone({
+              ten: sex + (values.ho != "" ? (" " + values.ho) : "") + (values.tendem != "" ? (" " + values.tendem) : "") + (values.ten != "" ? (" " + values.ten) : ""),
+              sdt: values.sdt,
+              congty: values.congty
+            })
             props.setVisible(false)
       })
     } catch (error) {
@@ -52,15 +58,19 @@ const CreateFormCustomer = (props) => {
     props.setVisible(false)
   }
 
-  const [sex, setSex] = useState('Anh')
+  const [sex, setSex] = useState('')
   const [birthday, setBirthday] = useState('')
   const onChangeDate = (dayjs, dayString) => {
     setBirthday(dayString)
   }
 
   const listSex = [
+    "",
     "Anh",
-    "Chị"
+    "Chị",
+    "Bạn",
+    "Ông",
+    "Bà"
   ]
 
   const onSelectSex = (name, value) => {
@@ -75,8 +85,8 @@ const CreateFormCustomer = (props) => {
           handleCancel()
         }
       }
-      // Neu la Alt + S
-      if (e.altKey && e.which == 83) {
+      // Neu la Alt + 9
+      if (e.altKey && e.which == 57) {
           if (props.visible){
               document.getElementById(props.id ? props.id + "-button-add-customer" : "button-add-customer").click()
           }
@@ -136,8 +146,16 @@ const CreateFormCustomer = (props) => {
           )}
         >
         <div className='create-form-customer-container' id={props.id ? props.id : ""}>
+        <div className="create-form-customer-container__line">
+              <div className="create-form-customer-container__line__lable">Họ:</div>
+              <InputField id="create-form-customer-container__name" name="ho" form={form} type="text"></InputField>
+            </div>
             <div className="create-form-customer-container__line">
-              <div className="create-form-customer-container__line__lable">Tên khách hàng:</div>
+              <div className="create-form-customer-container__line__lable">Tên đệm:</div>
+              <InputField id="create-form-customer-container__name" name="tendem" form={form} type="text"></InputField>
+            </div>
+            <div className="create-form-customer-container__line">
+              <div className="create-form-customer-container__line__lable">Tên:</div>
               <InputField id="create-form-customer-container__name" name="ten" form={form} type="text"></InputField>
             </div>
             <div className="create-form-customer-container__line">
@@ -146,7 +164,7 @@ const CreateFormCustomer = (props) => {
             </div>
             <div className="create-form-customer-container__line">
               <div className="create-form-customer-container__line__lable">Danh xưng:</div>
-              <DropDown name={"name-dish"} selected={sex} listItem={listSex} onSelected={onSelectSex}></DropDown>
+              <DropDown className="dropdown" name={"name-dish"} selected={sex} listItem={listSex} onSelected={onSelectSex}></DropDown>
             </div>
             <div className="create-form-customer-container__line">
               <div className="create-form-customer-container__line__lable">Ngày sinh:</div>

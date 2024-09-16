@@ -32,7 +32,7 @@
 }
 
 .dropdown-container .dropdown-container__header .dropdown-container__header__icon {
-      color: #0F172B;
+      color: inherit;
       padding-left: 5px;
 }
 

@@ -45,7 +45,6 @@ const CreateFormMenu = (props) => {
         }
 
         let formData = {...values, ...{nhommonan: _typeDish}}
-        console.log(formData)
         const { data } = await menuApi.add(formData, imagefile.files[0]);
       } catch (error) {
         console.log('Failed to fetch menu list: ', error);
@@ -79,8 +78,8 @@ const CreateFormMenu = (props) => {
       if (e.which == 27){
         handleCancel()
       }
-      // Neu la Alt + S
-      if (e.altKey && e.which == 83) {
+      // Neu la Alt + 9
+      if (e.altKey && e.which == 57) {
           if (props.visible){
               document.getElementById("button-add-dish").click()
           }

@@ -5,7 +5,6 @@ const InputSearch = (props) => {
     const [currentItem, setCurrentItem] = useState(null)
     const [isOpen, setIsOpen] = useState(false)  
 
-
     const data = [{
         sdt: "0123123",
         ten: "Vu Tuan Anh"
@@ -33,7 +32,9 @@ const InputSearch = (props) => {
     const handleMove = (e) => {
         if(e.keyCode == '13'){
             // e.preventDefault()
-            handleSelect(props.data[currentItem])
+            if (currentItem !== null && props.data.length > 0){
+                handleSelect(props.data[currentItem])
+            }
         }
         if (e.keyCode == '38'){
             if (currentItem === null){
@@ -86,8 +87,9 @@ const InputSearch = (props) => {
             className={`inputsearch-container__select-box open`}
             >
             {isOpen && <div className="select-box__header">
-                    <div className="select-box__header-name">Tên</div>
+                    <div className="select-box__header-name">Họ và tên</div>
                     <div className="select-box__header-phone-number">Sđt</div>
+                    <div className="select-box__header-address">Địa chỉ</div>
                     <div className="select-box__header-company">Công ty</div>
                 </div>
             }
@@ -101,8 +103,9 @@ const InputSearch = (props) => {
                     data-placement="bottom"
                     onClick={() => handleSelect(item)}
                 >
-                    <div className="item__name">{item.ten}</div>
+                    <div className="item__name">{((item?.danhxung == "") ? "" : item?.danhxung) + ((item?.ho == "") ? "" : (" " + item?.ho)) + ((item?.tendem == "") ? "" : (" " + item?.tendem)) + ((item?.ten == "") ? "" : (" " + item?.ten))}</div>
                     <div className="item__phone-number">{item.sdt}</div>
+                    <div className="item__address">{item.diachi}</div>
                     <div className="item__company">{item.congty}</div>
                 </div>
             ))}

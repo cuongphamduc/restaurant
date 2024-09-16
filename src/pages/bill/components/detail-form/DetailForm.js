@@ -3,6 +3,7 @@ import Modal from '../../../../components/modal/Modal'
 import './DetailForm.css'
 import Table from '../../../../components/table/Table'
 import billApi from './../../../../api/BillApi'
+import { Button } from 'antd'
 
 const columns = [
     {
@@ -35,7 +36,7 @@ const columns = [
       render: (text, data) => {
         return (
           <span>
-            {text}
+            {Intl.NumberFormat().format(text)}
           </span>
         );
       },
@@ -47,7 +48,7 @@ const columns = [
       render: (text, data) => {
         return (
           <span>
-            {text}
+            {Intl.NumberFormat().format(text)}
           </span>
         );
       },
@@ -58,6 +59,7 @@ const columns = [
 const DetailForm = (props) => {
     const [customerInfo, setCustomerInfo] = useState('')
     const [dishInfo, setDishInfo] = useState([])
+    const [billInfo, setBillInfo] = useState([])
 
     const handleCancel = () => {
         props.setVisible(false)
@@ -66,9 +68,10 @@ const DetailForm = (props) => {
     useEffect(() => {
         (async () => {
       try {
-        const { customer, dish } = await billApi.getDetail(props.data.idhoadon);
+        const { customer, dish, bill } = await billApi.getDetail(props.data.idhoadon);
         setCustomerInfo(customer)
         setDishInfo(dish)
+        setBillInfo(bill)
       } catch (error) {
         console.log('Failed to fetch customer list: ', error);
       }
@@ -82,6 +85,25 @@ const DetailForm = (props) => {
         });
 
         return total
+    }
+
+    const handlePrint = () => {
+      try {
+        const { data } = billApi.note({
+          idhoadon: props.data.idhoadon,
+          ten: customerInfo.ten,
+          diachi: customerInfo.diachi,
+          suatan: billInfo.suatan,
+          ghichu: billInfo.ghichu
+        });
+        // const { data1 } = await billApi.note(
+        //   {
+        //     ghichu: note
+        //   }
+        // )
+      } catch (error) {
+        console.log('Failed to print bill: ', error);
+      }
     }
 
     return (
@@ -123,20 +145,37 @@ const DetailForm = (props) => {
                         </div>
                     </div>
                 </div>
-                <div className="detail-form-container__bill-info">
+              <div className="detail-form-container__customer">
+                <div className="customer-lable">
+                    Hóa đơn
+                </div>
+                <div className="customer-content">
                   <div className="customer-line">
-                      <div className="customer-line__label">Phương thức thanh toán:</div>
-                      <div className="customer-line__content">{customerInfo.email}</div>
+                      <div className="customer-line__label">Thời gian:</div>
+                      <div className="customer-line__content">{billInfo.thoigian}</div>
                   </div>
                   <div className="customer-line">
-                      <div className="customer-line__label">Loại món ăn:</div>
-                      <div className="customer-line__content">{customerInfo.email}</div>
+                      <div className="customer-line__label">Phương thức thanh toán:</div>
+                      <div className="customer-line__content">{billInfo?.kieuthanhtoan == 0 ? "Chuyển khoản" : "Tiền mặt" }</div>
+                  </div>
+                  <div className="customer-line">
+                      <div className="customer-line__label">Loại suất ăn:</div>
+                      <div className="customer-line__content">{billInfo.suatan}</div>
                   </div>
                   <div className="customer-line">
                       <div className="customer-line__label">Ghi chú:</div>
-                      <div className="customer-line__content">{customerInfo.email}</div>
+                      <div className="customer-line__content">
+                          {billInfo.ghichu && String(billInfo.ghichu).split(`\n`).map((item) => {
+                            return (
+                              <p>{item}</p>
+                            )
+                          }
+                          )}
+                      </div>
                   </div>
                 </div>
+                
+              </div>
                 <div className="detail-form-container__list-dish">
                     <div className="dish-lable">
                         Món ăn
@@ -150,6 +189,12 @@ const DetailForm = (props) => {
                     <div className="total-content">
                         Tổng tiền: {Intl.NumberFormat().format(getTotalMoney())} VNĐ
                     </div>
+                </div>
+                <div className="detail-form-container__total">
+                    <div className="total-lable">
+                        
+                    </div>
+                    <button className='button-print' onClick={handlePrint}>In ghi chú</button>
                 </div>
             </div>
         </Modal>

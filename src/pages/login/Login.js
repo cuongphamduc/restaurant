@@ -35,24 +35,26 @@ const Login = () => {
     // else{
     //   setIsError(true)
     // }
-
-    (async () => {
-      try {
-        let formData = {
-          tennguoidung: values.tennguoidung,
-          matkhau: values.matkhau
-        }
-        const data = await loginApi.login(formData);
-        console.log(data)
-        dispatch(setIsLogin())
-        dispatch(setRole(data.quyen))
-        dispatch(setUserName(values.tennguoidung))
-        setIsError(false)
-      } catch (error) {
-        setIsError(true)
-        console.log('Failed to fetch customer list: ', error);
+    try {
+      let formData = {
+        tennguoidung: values.tennguoidung,
+        matkhau: values.matkhau
       }
-    })();
+      loginApi.login(formData).then((response) => {
+        if (response && response !== undefined){
+          dispatch(setIsLogin())
+          dispatch(setRole(response.quyen))
+          dispatch(setUserName(values.tennguoidung))
+          setIsError(false)
+        }
+        else{
+          setIsError(true)
+        }
+      }).catch((error) => {setIsError(true)})
+    } catch (error) {
+      setIsError(true)
+      console.log('Failed to fetch customer list: ', error);
+    }
     form.reset()
   }
 

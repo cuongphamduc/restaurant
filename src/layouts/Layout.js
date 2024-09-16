@@ -11,15 +11,15 @@ import loginApi from '../api/LoginApi'
 const Layout = () => {
   const isLogin = useSelector((state) => state.login.isLogin)
 
-  // if (!isLogin){
-  //   return <Login></Login>
-  // }
+  if (!isLogin){
+    return <Login></Login>
+  }
   
   function reconnect() {
     loginApi.reconnect()
   }
 
-  let display = setInterval(reconnect, 5000);
+  let display = setInterval(reconnect, 1000*60*60*4);
   
 
   return (

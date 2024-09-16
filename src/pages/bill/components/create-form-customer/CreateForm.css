@@ -63,3 +63,7 @@
 .create-form-customer-footer .button-cancel{
     background-color: #6c757d;
 }
+
+.dropdown{
+    min-width: 75px;
+}
