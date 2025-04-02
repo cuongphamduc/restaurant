@@ -5,15 +5,62 @@ import './Bill.css'
 // import { Table } from 'antd';
 import Table from './../../components/table/Table'
 import CreateForm from './components/create-form/CreateForm';
+import UpdateForm from './components/update-form/UpdateForm';
 import { DatePicker } from 'antd';
 import billApi from '../../api/BillApi';
 import DetailForm from '../bill/components/detail-form/DetailForm';
 import axios from 'axios';
 import ConfirmRemove from '../../components/confirm-remove/ConfirmRemove';
 import DropDown from '../../components/dropdown/DropDown';
-
+import { Modal, Button } from 'antd';
 
 const Bill = () => {
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [selectedBill, setSelectedBill] = useState(null);
+
+  const showModal = (bill) => {
+    setSelectedBill(bill);
+    setIsModalVisible(true);
+  };
+
+  const handleOk = () => {
+    setIsModalVisible(false);
+        (async () => {
+      try {
+        // console.log(selectedBill)
+        const { data } = await billApi.remove(selectedBill.idhoadon);
+      } catch (error) {
+        console.log('Failed to remove bill: ', error);
+      }
+    })();
+    getBillData()
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
+
+  const handleRemove = (bill) => {
+    showModal(bill);
+  };
+
+  // const handleRemove = (bill) => {
+  //   const userConfirmed = window.confirm("Bạn có chắc chắn muốn xoá hoá đơn?");
+  //   if (!userConfirmed) {
+  //       return
+  //   }
+
+  //   (async () => {
+  //     try {
+  //       console.log(bill)
+  //       const { data } = await billApi.remove(bill.idhoadon);
+  //     } catch (error) {
+  //       console.log('Failed to remove bill: ', error);
+  //     }
+  //   })();
+  //   getBillData()
+  // }
+
   const columns = [
   {
     title: 'Mã hóa đơn',
@@ -85,6 +132,27 @@ const Bill = () => {
               setCurrentBill(data)
               setIsVisibleDetailForm(true)
             }} className='bill-container__action-button bg-primary'><i class="bi bi-eye-fill"></i></button>
+            <button className='bill-container__action-button bg-success' onClick={() => {
+              setCurrentBill(data)
+              setIsVisibleUpdateForm(true)
+            }}><i class="bi bi-pencil-square"></i></button>
+            <button className='bill-container__action-button bg-danger' onClick={() => {
+              setCurrentBill(data)
+              // setIsConfirm(true)
+              handleRemove(data)
+            }}><i class="bi bi-trash"></i></button>
+            <Modal
+        title="Xác nhận xoá"
+        visible={isModalVisible}
+        mask={false} 
+        onOk={handleOk}
+        onCancel={handleCancel}
+        okText="Xoá"
+        cancelText="Huỷ"
+        centered
+      >
+        <p>Bạn có chắc chắn muốn xoá hoá đơn {selectedBill?.idhoadon} ?</p>
+      </Modal>
         </div>
       );
     },
@@ -110,7 +178,9 @@ for (let i = 0; i < 5; i++) {
   });
 }
 
+const [isConfirm, setIsConfirm] = useState(false)
   const [isVisibleCreateForm, setIsVisibleCreateForm] = useState(false)
+  const [isVisibleUpdateForm, setIsVisibleUpdateForm] = useState(false)
   const [isVisibleDetailForm, setIsVisibleDetailForm] = useState(false)
   const [currentBill, setCurrentBill] = useState('')
   const [search, setSearch] = useState('')
@@ -388,7 +458,6 @@ for (let i = 0; i < 5; i++) {
       }
   }
   }
-
   useEffect(() => {
     document.addEventListener("keyup", handleShorcutBill)
     getBillData()
@@ -415,11 +484,17 @@ for (let i = 0; i < 5; i++) {
       <div className="bill-container__content">
         <Table onNumberItemChange={onNumberItemChange} onPageChange={handlePageChange} paginition={billPaginition} isShowPaginition={true} columns={columns} dataSource={listBill}></Table>
       </div>
-      <CreateForm
+      {isVisibleCreateForm && <CreateForm
         getBillData={getBillData}
         visible={isVisibleCreateForm}
         setVisible={setIsVisibleCreateForm}
-      ></CreateForm>
+      ></CreateForm>}
+      {isVisibleUpdateForm && <UpdateForm
+      data={currentBill}
+        getBillData={getBillData}
+        visible={isVisibleUpdateForm}
+        setVisible={setIsVisibleUpdateForm}
+      ></UpdateForm>}
       <DetailForm
         visible={isVisibleDetailForm}
         setVisible={setIsVisibleDetailForm}
