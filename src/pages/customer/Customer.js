@@ -407,25 +407,25 @@ const Customer = () => {
       <div className="customer-container__content">
       <Table onNumberItemChange={onNumberItemChange} onPageChange={handlePageChange} paginition={customerpaginition} isShowPaginition={true} columns={columns} dataSource={listCustomer}></Table>
       </div>
-      <CreateForm
+      {isVisibleCreateForm && <CreateForm
         name={nameCustomer}
         getCustomerData={getCustomerData}
         visible={isVisibleCreateForm}
         setVisible={setIsVisibleCreateForm}
-      ></CreateForm>
-      <UpdateForm
+      ></CreateForm>}
+      {isVisibleUpdateForm && <UpdateForm
         data={currentCustomer}
         getCustomerData={getCustomerData}
         visible={isVisibleUpdateForm}
         setVisible={setIsVisibleUpdateForm}
-      ></UpdateForm>
-      <DetailForm data={currentCustomer} visible={isVisibleDetailForm} setVisible={setIsVisibleDetailForm}></DetailForm>
-      <ConfirmRemove
+      ></UpdateForm>}
+      {isVisibleDetailForm && <DetailForm data={currentCustomer} visible={isVisibleDetailForm} setVisible={setIsVisibleDetailForm}></DetailForm>}
+      {isConfirm && <ConfirmRemove
           code={currentCustomer.sdt}
           visible={isConfirm}
           setVisible={setIsConfirm}
           onConfirm={handleRemove}
-        ></ConfirmRemove>
+        ></ConfirmRemove>}
     </div>
   )
 }
