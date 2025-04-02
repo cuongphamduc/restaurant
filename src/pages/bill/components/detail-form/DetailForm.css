@@ -52,7 +52,7 @@
 
 .detail-form-container__total{
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
 }
 
 .detail-form-container__total .total-lable{
@@ -74,5 +74,16 @@
     border: none;
     border-radius: 6px;
     background-color: red;
+    color: white;
+}
+
+.button-print-bill{
+    margin-top: 20px;
+    margin-right: 20px;
+    height: 30px;
+    width: 100px;
+    border: none;
+    border-radius: 6px;
+    background-color: green;
     color: white;
 }

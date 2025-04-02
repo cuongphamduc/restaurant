@@ -23,6 +23,22 @@
     color: #0F172B;
 }
 
+.create-form-customer-container__line__radio{
+    width: 315px;
+    text-align: left;
+    font-weight: 500;
+
+    color: #0F172B;
+}
+
+.create-form-customer-container__line__radio input{
+    width: 30px !important;
+    text-align: left;
+    font-weight: 500;
+
+    color: #0F172B;
+}
+
 
 .create-form-customer-container__line input{
     width: 400px;
