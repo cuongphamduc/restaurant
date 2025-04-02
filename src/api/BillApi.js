@@ -37,6 +37,18 @@ const billApi = {
     return response
   },
 
+  async update(data) {
+    console.log("suahoadon", data)
+    const url = '/suahoadon';
+    const response = await axiosClient.post(url, data).catch(function (error) {
+      if (error.response) {
+        console.log(error.response.data);
+        console.log(error.response.status);
+      }
+    });
+    return response
+  },
+
   async note(data) {
     const url = '/inghichu';
     const formData = new FormData();
@@ -44,6 +56,7 @@ const billApi = {
     formData.append("ten", data.ten)
     formData.append("diachi", data.diachi)
     formData.append("suatan", data.suatan)
+    formData.append("loaihopcom", data.loaihopcom)
     formData.append("ghichu", data.ghichu)
     const response = await axiosClient.post(url, formData, {headers: {
       'Content-Type': 'multipart/form-data'
@@ -56,14 +69,24 @@ const billApi = {
     return response
   },
 
-  update(data) {
-    const url = `/products/${data.id}`;
-    return axiosClient.patch(url, data);
+  async bill(data) {
+    const url = '/inhoadon';
+    const formData = new FormData();
+    formData.append("idhoadon", data.idhoadon)
+    const response = await axiosClient.post(url, formData, {headers: {
+      'Content-Type': 'multipart/form-data'
+    }}).catch(function (error) {
+      if (error.response) {
+        console.log(error.response.data);
+        console.log(error.response.status);
+      }
+    });
+    return response
   },
 
   remove(id) {
-    const url = `/products/${id}`;
-    return axiosClient.delete(url);
+    const url = `/xoahoadon`;
+    return axiosClient.post(url, {idhoadon: id},);
   },
 
   print(data){
