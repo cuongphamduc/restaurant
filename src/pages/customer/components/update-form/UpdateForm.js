@@ -37,7 +37,12 @@ const UpdateForm = (props) => {
   const handleSubmit = (values) => {
     (async () => {
       try {
-        let formData = {...values, ...{old_sdt: props.data.sdt, ngaysinh: birthday, danhxung: sex}}
+        let formData = {...values, ...{
+          old_sdt: props.data.sdt,
+          ngaysinh: birthday,
+          danhxung: sex,
+          loaithanhtoan: typePay
+        }}
         const { data } = await customerApi.update(formData);
       } catch (error) {
         console.log('Failed to fetch customer list: ', error);
@@ -54,6 +59,7 @@ const UpdateForm = (props) => {
   }
 
   const [sex, setSex] = useState('')
+  const [typePay, setTypePay] = useState(0)
   const [birthday, setBirthday] = useState('2000-10-10')
   const onChangeDate = (dayjs, dayString) => {
     setBirthday(dayString)
@@ -68,11 +74,17 @@ const UpdateForm = (props) => {
     "Bà"
   ]
 
+  const handleChandeRadioButton = (e) => {
+    setTypePay(Number(e.target.value))
+  }
+
   const onSelectSex = (name, value) => {
     setSex(value)
   }
 
   useEffect(() => {
+    console.log("props.data", props.data)
+
     form.setValue('ho', props.data.ho)
     form.setValue('tendem', props.data.tendem)
     form.setValue('ten', props.data.ten)
@@ -82,6 +94,7 @@ const UpdateForm = (props) => {
     form.setValue('congty', props.data.congty)
     setBirthday(props.data.ngaysinh)
     setSex(props.data.danhxung)
+    setTypePay(props.data.loaithanhtoan)
   }, [props.data])
 
   return (
@@ -99,6 +112,7 @@ const UpdateForm = (props) => {
               >Cập nhật</button>
               <button
                 className='button-cancel'
+                type='button'
                 onClick={handleCancel}
               >Hủy</button>
             </div>
@@ -140,6 +154,18 @@ const UpdateForm = (props) => {
             <div className="create-form-customer-container__line">
               <div className="create-form-customer-container__line__lable">Công ty:</div>
               <InputField name="congty" form={form} type="text"></InputField>
+            </div>
+            <div className="create-form-customer-container__line">
+              <div className="create-form-customer-container__line__lable">Loại thanh toán:</div>
+              <div className="create-form-customer-container__line__radio">
+                <input onChange={handleChandeRadioButton} type="radio" id="huey" name="drone" value="0" checked={typePay == 0} />
+                <label for="huey">Thu tiền ngay</label>
+              </div>
+
+              <div className="create-form-customer-container__line__radio">
+                <input onChange={handleChandeRadioButton} type="radio" id="dewey" name="drone" value="1" checked={typePay == 1}/>
+                <label for="dewey">Công nợ</label>
+              </div>
             </div>
             <button type='submit' id="button-submit-form-customer" style={{display: "none"}}></button>
         </div>

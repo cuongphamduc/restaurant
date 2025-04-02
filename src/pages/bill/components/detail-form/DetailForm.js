@@ -94,6 +94,7 @@ const DetailForm = (props) => {
           ten: customerInfo.ten,
           diachi: customerInfo.diachi,
           suatan: billInfo.suatan,
+          loaihopcom: billInfo.loaihopcom,
           ghichu: billInfo.ghichu
         });
         // const { data1 } = await billApi.note(
@@ -101,6 +102,16 @@ const DetailForm = (props) => {
         //     ghichu: note
         //   }
         // )
+      } catch (error) {
+        console.log('Failed to print note: ', error);
+      }
+    }
+
+    const handlePrintBill = () => {
+      try {
+        const { data } = billApi.bill({
+          idhoadon: props.data.idhoadon,
+        });
       } catch (error) {
         console.log('Failed to print bill: ', error);
       }
@@ -143,6 +154,10 @@ const DetailForm = (props) => {
                             <div className="customer-line__label">Công ty:</div>
                             <div className="customer-line__content">{customerInfo.congty}</div>
                         </div>
+                        <div className="customer-line">
+                            <div className="customer-line__label">Kiểu thanh toán:</div>
+                            <div className="customer-line__content">{customerInfo?.loaithanhtoan == 0 ? "Thu tiền ngay" : "Công nợ" }</div>
+                        </div>
                     </div>
                 </div>
               <div className="detail-form-container__customer">
@@ -161,6 +176,10 @@ const DetailForm = (props) => {
                   <div className="customer-line">
                       <div className="customer-line__label">Loại suất ăn:</div>
                       <div className="customer-line__content">{billInfo.suatan}</div>
+                  </div>
+                  <div className="customer-line">
+                      <div className="customer-line__label">Loại hộp cơm:</div>
+                      <div className="customer-line__content">{billInfo?.loaihopcom == 0 ? "Khay inox" : "Hộp nhựa"}</div>
                   </div>
                   <div className="customer-line">
                       <div className="customer-line__label">Ghi chú:</div>
@@ -194,6 +213,7 @@ const DetailForm = (props) => {
                     <div className="total-lable">
                         
                     </div>
+                    <button className='button-print-bill' onClick={handlePrintBill}>In hoá đơn</button>
                     <button className='button-print' onClick={handlePrint}>In ghi chú</button>
                 </div>
             </div>

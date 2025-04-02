@@ -33,6 +33,7 @@ const CreateForm = (props) => {
     const [companyCustomer, setCompanyCustomer] = useState("")
     const [note, setNote] = useState("")
     const [typePay, setTypePay] = useState(0) 
+    const [typeBox, setTypeBox] = useState(0) 
     // const [lishDish, setListDish] = useState([{dish:{
     //     tenmonan: "Ga",
     //     hinhanh: "", 
@@ -86,7 +87,8 @@ const CreateForm = (props) => {
           list_monan: _list_monan,
           list_soluong: _list_soluong,
           tennguoidung: userName,
-          kieuthanhtoan: typePay
+          kieuthanhtoan: typePay,
+          loaihopcom: typeBox
         });
         // const { data1 } = await billApi.note(
         //   {
@@ -411,6 +413,9 @@ const CreateForm = (props) => {
     const handleChandeRadioButton = (e) => {
       setTypePay(Number(e.target.value))
     }
+    const handleChangeTypeBox = (e) => {
+      setTypeBox(Number(e.target.value))
+    }
 
   return (
     <form onSubmit={form.handleSubmit(handleSubmit)}>
@@ -505,6 +510,18 @@ const CreateForm = (props) => {
               <div className="create-form-bill-container__line__radio">
                 <input onChange={handleChandeRadioButton} type="radio" id="dewey" name="drone" value="1" />
                 <label for="dewey">Tiền mặt</label>
+              </div>
+            </div>
+            <div className="create-form-bill-container__line">
+              <div className="create-form-bill-container__line__lable">Loại hộp cơm:</div>
+              <div className="create-form-bill-container__line__radio">
+                <input onChange={handleChangeTypeBox} type="radio" id="khayinox" name="khay" value="0" defaultChecked />
+                <label for="khayinox">Khay inox</label>
+              </div>
+
+              <div className="create-form-bill-container__line__radio">
+                <input onChange={handleChangeTypeBox} type="radio" id="hopnhua" name="khay" value="1" />
+                <label for="hopnhua">Hộp nhựa</label>
               </div>
             </div>
             <div className="create-form-bill-container__line">

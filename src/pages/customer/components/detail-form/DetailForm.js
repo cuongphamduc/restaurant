@@ -55,6 +55,10 @@ const DetailForm = (props) => {
               <div className="create-form-customer-container__line__lable">Công ty:</div>
               <div className="">{props.data.congty}</div>
             </div>
+            <div className="create-form-customer-container__line">
+              <div className="create-form-customer-container__line__lable">Loại thanh toán:</div>
+              <div className="">{props.data.loaithanhtoan == 0 ? "Thanh toán ngay" : "Công nợ"}</div>
+            </div>
             <button type='submit' id="button-submit-form-customer" style={{display: "none"}}></button>
         </div>
       </Modal>

@@ -29,7 +29,8 @@ const CreateFormCustomer = (props) => {
       ngaysinh: '',
       diachi: '',
       email: '',
-      congty: ''
+      congty: '',
+      loaithanhtoan: 0
     },
     resolver: yupResolver(schema),
   })
@@ -39,7 +40,7 @@ const CreateFormCustomer = (props) => {
     // event.preventDefault()
     // event.stopPropagation();
     try {
-      let formData = {...values, ...{ngaysinh: birthday, danhxung: sex}}
+      let formData = {...values, ...{ngaysinh: birthday, danhxung: sex, loaithanhtoan: typePay}}
       const { data } = customerApi.add(formData).then((data) => {
             props.getCustomerData()
             form.reset()
@@ -61,6 +62,7 @@ const CreateFormCustomer = (props) => {
   }
 
   const [sex, setSex] = useState('')
+  const [typePay, setTypePay] = useState(0)
   const [birthday, setBirthday] = useState('')
   const onChangeDate = (dayjs, dayString) => {
     setBirthday(dayString)
@@ -77,6 +79,10 @@ const CreateFormCustomer = (props) => {
 
   const onSelectSex = (name, value) => {
     setSex(value)
+  }
+
+  const handleChandeRadioButton = (e) => {
+    setTypePay(Number(e.target.value))
   }
 
   const handleShorcutCreateCustomer = (e) => {
@@ -172,6 +178,18 @@ const CreateFormCustomer = (props) => {
             <div className="create-form-customer-container__line">
               <div className="create-form-customer-container__line__lable">Công ty:</div>
               <InputField name="congty" form={form} type="text"></InputField>
+            </div>
+            <div className="create-form-customer-container__line">
+              <div className="create-form-customer-container__line__lable">Loại thanh toán:</div>
+              <div className="create-form-customer-container__line__radio">
+                <input onChange={handleChandeRadioButton} type="radio" id="huey" name="drone" value="0" defaultChecked />
+                <label for="huey">Thu tiền ngay</label>
+              </div>
+
+              <div className="create-form-customer-container__line__radio">
+                <input onChange={handleChandeRadioButton} type="radio" id="dewey" name="drone" value="1" />
+                <label for="dewey">Công nợ</label>
+              </div>
             </div>
             <button type='submit' id="create-submit-form-customer" style={{display: "none"}}></button>
         </div>
