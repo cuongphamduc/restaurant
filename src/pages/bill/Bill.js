@@ -435,7 +435,7 @@ const [isConfirm, setIsConfirm] = useState(false)
           _typeSort = 2
         }
 
-    var uri = `http://localhost:8000/xuathoadon?key=${search}&lower=${fromTime}&upper=${toTime}&kieusx=${_typeSort}&page=1&limit=0`;
+    var uri = `http://192.168.1.13:8000/xuathoadon?key=${search}&lower=${fromTime}&upper=${toTime}&kieusx=${_typeSort}&page=1&limit=0`;
     var name = "danhsachmonan"
     var link = document.createElement("a");
     link.download = name;
